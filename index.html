@@ -131,7 +131,7 @@
 
     // Mảng chứa các giọt mưa
     const raindrops = [];
-    const maxRaindrops = 150; // Số lượng giọt mưa trên màn hình
+    const maxRaindrops = 400; // Số lượng giọt mưa trên màn hình
 
     // Khởi tạo các giọt mưa ban đầu
     for (let i = 0; i < maxRaindrops; i++) {
@@ -139,7 +139,7 @@
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
             length: Math.random() * 15 + 10, // Độ dài giọt mưa (10px - 25px)
-            speed: Math.random() * 8 + 6,     // Tốc độ rơi (6px - 14px mỗi khung hình)
+            speed: Math.random() * 10 + 12,     // Tốc độ rơi (6px - 14px mỗi khung hình)
             opacity: Math.random() * 0.4 + 0.1 // Độ mờ/đậm ngẫu nhiên
         });
     }
