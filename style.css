@@ -226,53 +226,77 @@ body {
     font-weight: 600;
 }
 
-/* TÙY BIẾN THANH TRƯỢT (SLIDER INPUT) TRÊN TRÌNH DUYỆT */
+/* Khung bọc khu vực âm lượng (Tăng khoảng cách đệm cho dễ bấm) */
+.volume-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 14px 18px; /* Tăng padding từ 10px lên 14px để khung to hơn */
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    transform: translateZ(30px);
+    transition: all 0.3s ease;
+}
+
+/* TÙY BIẾN THANH TRƯỢT TRÊN ĐIỆN THOẠI */
 #volume-slider {
     -webkit-appearance: none;
     appearance: none;
-    width: 65%;
-    height: 6px;
-    background: #1a1d24;
+    width: 60%; /* Thu nhỏ bớt chiều ngang để chừa không gian cho ngón tay */
+    height: 10px; /* Tăng độ dày thanh từ 6px lên 10px cho dễ nhìn, dễ chạm */
     border-radius: 10px;
+    background: #1a1d24;
     outline: none;
     cursor: pointer;
-    overflow: hidden; /* Hiệu ứng tô màu phần đã trượt qua */
+    overflow: hidden;
+    /* Mẹo cốt lõi: Tăng vùng đệm vô hình xung quanh thanh trượt để ngón tay chạm trúng dễ hơn */
+    padding: 10px 0; 
 }
 
-/* Thiết kế nút tròn kéo (Thumb) trên Chrome/Edge/Safari */
+/* Nút tròn kéo (Thumb) trên Điện thoại (Chrome / Safari / Edge) */
 #volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 14px;
-    height: 14px;
+    width: 24px; /* Tăng đường kính nút từ 14px lên 24px (Chuẩn kích thước touch của mobile) */
+    height: 24px; /* Tăng từ 14px lên 24px */
     border-radius: 50%;
     background: #00f2fe;
-    box-shadow: -407px 0 0 400px #00f2fe, 0 0 8px #00f2fe; /* Đổ màu Neon vệt dài phía sau nút */
+    /* Cập nhật lại đổ bóng Neon cho vừa kích thước mới */
+    box-shadow: -407px 0 0 400px #00f2fe, 0 0 10px #00f2fe; 
     transition: all 0.1s ease;
 }
 
-#volume-slider::-webkit-slider-thumb:hover {
+/* Hiệu ứng khi ngón tay chạm vào giữ (Active) trên điện thoại */
+#volume-slider::-webkit-slider-thumb:active {
     background: #ffffff;
-    box-shadow: -407px 0 0 400px #00f2fe, 0 0 15px #ffffff;
-    transform: scale(1.2); /* Nút to lên nhẹ khi di chuột vào */
+    box-shadow: -407px 0 0 400px #00f2fe, 0 0 20px #ffffff;
+    transform: scale(1.1);
 }
 
-/* Thiết kế nút kéo dành cho Firefox */
+/* Nút kéo dành cho Firefox Mobile */
 #volume-slider::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
+    width: 24px;
+    height: 24px;
     border: none;
     border-radius: 50%;
     background: #00f2fe;
-    box-shadow: 0 0 8px #00f2fe;
+    box-shadow: 0 0 10px #00f2fe;
     transition: all 0.1s ease;
 }
-#volume-slider::-moz-range-thumb:hover {
-    transform: scale(1.2);
+#volume-slider::-moz-range-thumb:active {
+    transform: scale(1.1);
     background: #fff;
 }
 #volume-slider::-moz-range-progress {
-    background-color: #00f2fe; /* Phần đã trượt qua trên Firefox */
-    height: 6px;
+    height: 10px; /* Khớp với độ dày thanh trượt mới */
     border-radius: 10px;
+}
+
+/* Phóng to nhẹ Icon Loa và Chữ % để không bị lệch tông */
+#volume-icon {
+    font-size: 18px; /* Tăng từ 16px lên 18px */
+}
+#volume-text {
+    font-size: 13px; /* Tăng từ 12px lên 13px */
 }
