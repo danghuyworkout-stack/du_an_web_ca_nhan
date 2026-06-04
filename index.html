@@ -3,39 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kochehe - Profile</title>
+    <title>AiuMinhAnh - Profile</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Nhúng font chữ và bộ icon tương tự trang gốc -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Hiệu ứng hạt bụi/tuyết rơi mờ phía sau nếu có -->
-    <div class="bg-animation"></div>
+    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
 
-    <div class="profile-card">
-        <!-- Khung Avatar phát sáng -->
-        <div class="avatar-container">
-            <img src="https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-1/710831308_122117362106811031_2565089623435386484_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeGkp1QkPg6HC0X-hYqxYlvQ8B5U-G_sLR3wHlT4b-wtHUCu_wtjIGkyPPHfeotBFd0Pd1hLpTyBbR54diTyb0zN&_nc_ohc=kbGXRDwy-icQ7kNvwFxyCTV&_nc_oc=AdrOs8FuUQB0jWR4nLwyf7hVaAz0c-sGMNpCiAasqwPQi7SBAq141gfYnfIA0LXTcqUOXH3zVRvB9VnGLUdosvOj&_nc_zt=24&_nc_ht=scontent.fdad3-4.fna&_nc_gid=JFItUgIdb3j-4kNMBBcRmw&_nc_ss=7b2a8&oh=00_Af_K2Rg44mAOsQj-ms4IVa_eYFmR8o_QRRtwfvU4JxYvZQ&oe=6A2750ED" alt="Avatar" class="avatar">
+    <div class="music-toast"><i class="fa-solid fa-music"></i> Click bất kỳ đâu để bật nhạc</div>
+
+    <div id="particles-js"></div>
+
+    <div class="profile-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+        
+        <div class="avatar-box">
+            <div class="avatar-gradient"></div>
+            <img src="https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-1/710831308_122117362106811031_2565089623435386484_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeGkp1QkPg6HC0X-hYqxYlvQ8B5U-G_sLR3wHlT4b-wtHUCu_wtjIGkyPPHfeotBFd0Pd1hLpTyBbR54diTyb0zN&_nc_ohc=kbGXRDwy-icQ7kNvwFxyCTV&_nc_oc=AdrOs8FuUQB0jWR4nLwyf7hVaAz0c-sGMNpCiAasqwPQi7SBAq141gfYnfIA0LXTcqUOXH3zVRvB9VnGLUdosvOj&_nc_zt=24&_nc_ht=scontent.fdad3-4.fna&_nc_gid=jtcMldtQpRt3lzkXHjXDig&_nc_ss=7b2a8&oh=00_Af8TT9-68Q3l722LsovwyMJiuH-Z8KNB7Yk5bL-rvWp-NQ&oe=6A2750EDc" alt="Avatar" class="avatar">
         </div>
 
-        <!-- Tên và Tích xanh -->
-        <h1 class="name">Đăng Huy<i class="fa-solid fa-circle-check verified-badge"></i></h1>
+        <h1 class="name">Đăng Huy <i class="fa-solid fa-circle-check verified-badge"></i></h1>
         <p class="subtitle">Fullstack Developer / Student</p>
 
-        <!-- Danh sách các công nghệ (Skills) -->
         <div class="skills-container">
             <span class="skill-tag"><i class="fa-brands fa-html5"></i> HTML5</span>
             <span class="skill-tag"><i class="fa-brands fa-css3-alt"></i> CSS3</span>
             <span class="skill-tag"><i class="fa-brands fa-js"></i> JavaScript</span>
             <span class="skill-tag"><i class="fa-brands fa-python"></i> Python</span>
             <span class="skill-tag"><i class="fa-code"></i> C++</span>
-            <span class="skill-tag"><i class="fa-solid fa-database"></i> MySQL</span>
-            <span class="skill-tag"><i class="fa-brands fa-git-alt"></i> Git</span>
         </div>
 
-        <!-- Khung thông tin cá nhân chính -->
         <div class="info-box">
             <div class="info-item">
                 <i class="fa-solid fa-calendar-days"></i>
@@ -43,7 +41,7 @@
             </div>
             <div class="info-item">
                 <i class="fa-solid fa-school"></i>
-                <span>Trường: <strong>THPT TỐ HỮU</strong></span>
+                <span>Trường: <strong>THPT Tố Hữu</strong></span>
             </div>
             <div class="info-item">
                 <i class="fa-brands fa-discord"></i>
@@ -51,12 +49,42 @@
             </div>
         </div>
 
-        <!-- Các nút bấm mạng xã hội phía dưới -->
         <div class="social-links">
             <a href="https://www.facebook.com/danghuydangsuy/" class="social-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
             <a href="#" class="social-btn github"><i class="fa-brands fa-github"></i> GitHub</a>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    
+    <script>
+        // Cấu hình hạt bay nền
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#00f2fe" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.4, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00f2fe", "opacity": 0.15, "width": 1 },
+                "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } } },
+            "retina_detect": true
+        });
+
+        // Xử lý tự động phát nhạc khi tương tác
+        const music = document.getElementById('bg-music');
+        const toast = document.querySelector('.music-toast');
+        
+        window.addEventListener('click', () => {
+            if (music.paused) {
+                music.play().then(() => {
+                    toast.style.opacity = '0'; // Ẩn thông báo đi khi nhạc đã phát
+                }).catch(err => console.log("Chưa thể phát nhạc: ", err));
+            }
+        });
+    </script>
 </body>
 </html>
