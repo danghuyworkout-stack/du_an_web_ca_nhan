@@ -5,8 +5,12 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #08090c;
+    font-family: 'Comfortaa', 'Inter', sans-serif;
+    /* CHÈN HÌNH NỀN TẠI ĐÂY (Thay link ảnh bằng ảnh bạn muốn) */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     color: #e2e8f0;
     display: flex;
     justify-content: center;
@@ -20,39 +24,115 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;
-    left: 0;
     z-index: 1;
 }
 
-/* KHUNG PROFILE CARD VỚI HIỆU ỨNG DI CHUỘT 3D */
+/* ==================== GIAO DIỆN MÀN HÌNH CHÀO (INTRO) ==================== */
+#intro-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, #251635 0%, #0d0614 100%); /* Nền tím tối mờ ảo giống ảnh */
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+    cursor: pointer;
+}
+
+#intro-screen.fade-out {
+    opacity: 0;
+}
+
+.terminal-window {
+    background: #1a1a1a;
+    width: 90%;
+    max-width: 550px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+.terminal-header {
+    background: #262626;
+    padding: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.red { background: #ff5f56; }
+.yellow { background: #ffbd2e; }
+.green { background: #27c93f; }
+
+.terminal-content {
+    padding: 25px;
+    text-align: center;
+    font-size: 14px;
+    color: #f0f0f0;
+}
+
+.ascii-cat {
+    font-family: monospace;
+    white-space: pre;
+    color: #ffffff;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.ascii-art {
+    font-family: monospace;
+    font-size: 10px;
+    line-height: 1.1;
+    color: #ffffff;
+    margin-bottom: 15px;
+    overflow-x: auto;
+}
+
+.status-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.blink-text {
+    margin-top: 10px;
+    color: #a78bfa;
+    animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+.continue-btn {
+    margin-top: 15px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* ==================== CẤU HÌNH KHUNG PROFILE CHÍNH ==================== */
 .profile-card {
-    background: rgba(15, 17, 23, 0.65);
+    background: rgba(18, 11, 28, 0.6); /* Đổi sang màu tím đen trong suốt cho hợp hình nền */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 40px 30px;
     border-radius: 24px;
     width: 380px;
     text-align: center;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
     z-index: 2;
-    transform-style: preserve-3d; /* Giúp các thành phần bên trong nổi khối 3D */
+    transform-style: preserve-3d;
     perspective: 1000px;
-    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.profile-card:hover {
-    border-color: rgba(0, 242, 254, 0.4);
-    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 242, 254, 0.2);
-}
-
-/* Đẩy các thành phần nổi lên khi nghiêng */
-.avatar-box, .name, .skills-container, .info-box, .social-links {
-    transform: translateZ(30px);
-}
-
-/* Hiệu ứng viền Avatar RGB xoay liên tục */
 .avatar-box {
     position: relative;
     width: 115px;
@@ -67,7 +147,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     border-radius: 50%;
-    background: linear-gradient(45deg, #00f2fe, #4facfe, #ff007f, #00f2fe);
+    background: linear-gradient(45deg, #00f2fe, #bc34fa, #ff007f);
     background-size: 300% 300%;
     animation: rotateRGB 3s linear infinite;
     z-index: 1;
@@ -77,10 +157,9 @@ body {
     width: 105px;
     height: 105px;
     border-radius: 50%;
-    object-fit: cover;
     position: relative;
     z-index: 2;
-    background: #0f1117;
+    background: #120b1c;
     padding: 4px;
 }
 
@@ -90,132 +169,24 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* Chữ và Huy hiệu tích xanh */
 .name {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
 }
 
-.verified-badge {
-    color: #00f2fe;
-    font-size: 18px;
-    text-shadow: 0 0 10px #00f2fe;
-}
+.verified-badge { color: #00f2fe; margin-left: 5px; }
+.subtitle { font-size: 12px; color: #94a3b8; margin-bottom: 24px; letter-spacing: 1px; }
 
-.subtitle {
-    font-size: 12px;
-    color: #748094;
-    margin-bottom: 24px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-}
-
-/* Tags công nghệ */
-.skills-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 25px;
-}
-
-.skill-tag {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 6px 12px;
-    border-radius: 10px;
-    font-size: 12px;
-    color: #cbd5e1;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: 0.2s;
-}
-
-.skill-tag:hover {
-    background: rgba(0, 242, 254, 0.15);
-    border-color: #00f2fe;
-    transform: translateZ(40px) scale(1.05);
-}
-
+.skills-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 25px; }
+.skill-tag { background: rgba(255, 255, 255, 0.05); padding: 6px 12px; border-radius: 10px; font-size: 12px; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; gap: 6px;}
 .skill-tag i { color: #00f2fe; }
 
-/* Hộp thông tin */
-.info-box {
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 16px;
-    padding: 18px;
-    text-align: left;
-    margin-bottom: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.02);
-}
+.info-box { background: rgba(0, 0, 0, 0.3); border-radius: 16px; padding: 18px; text-align: left; margin-bottom: 25px; display: flex; flex-direction: column; gap: 12px; }
+.info-item { display: flex; align-items: center; gap: 12px; font-size: 14px; color: #cbd5e1; }
+.info-item i { color: #00f2fe; }
 
-.info-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 14px;
-    color: #94a3b8;
-}
-
-.info-item i { color: #00f2fe; width: 18px; text-align: center; }
-.info-item strong { color: #ffffff; }
-
-/* Nút liên kết */
-.social-links {
-    display: flex;
-    gap: 12px;
-}
-
-.social-btn {
-    flex: 1;
-    padding: 12px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: 0.3s;
-}
-
+.social-links { display: flex; gap: 12px; }
+.social-btn { flex: 1; padding: 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 600; color: #fff; text-align: center; }
 .facebook { background: #1877f2; }
-.github { background: #1e2327; border: 1px solid rgba(255,255,255,0.08); }
-
-.social-btn:hover {
-    filter: brightness(1.2);
-    transform: translateZ(35px) scale(1.03);
-}
-
-/* Dòng chữ báo bật nhạc xinh xắn ở góc */
-.music-toast {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(0, 242, 254, 0.1);
-    border: 1px solid #00f2fe;
-    padding: 10px 16px;
-    border-radius: 30px;
-    font-size: 12px;
-    color: #00f2fe;
-    z-index: 10;
-    pointer-events: none;
-    animation: floating 2s ease-in-out infinite alternate;
-    transition: opacity 0.5s ease;
-}
-
-@keyframes floating {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-6px); }
-}
+.github { background: #24292e; }
