@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #0d0e12; /* Màu nền tối huyền bí của trang gốc */
+    background-color: #08090c;
     color: #e2e8f0;
     display: flex;
     justify-content: center;
@@ -16,46 +16,84 @@ body {
     position: relative;
 }
 
-/* Thẻ bọc toàn bộ Profile */
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* KHUNG PROFILE CARD VỚI HIỆU ỨNG DI CHUỘT 3D */
 .profile-card {
-    background: rgba(25, 28, 36, 0.85);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(15, 17, 23, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     padding: 40px 30px;
     border-radius: 24px;
     width: 380px;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
     z-index: 2;
-    transition: transform 0.3s ease;
+    transform-style: preserve-3d; /* Giúp các thành phần bên trong nổi khối 3D */
+    perspective: 1000px;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .profile-card:hover {
-    transform: translateY(-5px);
+    border-color: rgba(0, 242, 254, 0.4);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 242, 254, 0.2);
 }
 
-/* Khung viền Avatar phát sáng đổi màu nhẹ */
-.avatar-container {
+/* Đẩy các thành phần nổi lên khi nghiêng */
+.avatar-box, .name, .skills-container, .info-box, .social-links {
+    transform: translateZ(30px);
+}
+
+/* Hiệu ứng viền Avatar RGB xoay liên tục */
+.avatar-box {
     position: relative;
-    width: 110px;
-    height: 110px;
+    width: 115px;
+    height: 115px;
     margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-gradient {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #00f2fe, #4facfe, #ff007f, #00f2fe);
+    background-size: 300% 300%;
+    animation: rotateRGB 3s linear infinite;
+    z-index: 1;
 }
 
 .avatar {
-    width: 100%;
-    height: 100%;
+    width: 105px;
+    height: 105px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #00f2fe;
-    box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe;
+    position: relative;
+    z-index: 2;
+    background: #0f1117;
+    padding: 4px;
 }
 
-/* Tên và Tích xanh */
+@keyframes rotateRGB {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Chữ và Huy hiệu tích xanh */
 .name {
     font-size: 24px;
     font-weight: 700;
-    letter-spacing: -0.5px;
     margin-bottom: 4px;
     display: flex;
     align-items: center;
@@ -66,17 +104,18 @@ body {
 .verified-badge {
     color: #00f2fe;
     font-size: 18px;
+    text-shadow: 0 0 10px #00f2fe;
 }
 
 .subtitle {
-    font-size: 13px;
-    color: #94a3b8;
+    font-size: 12px;
+    color: #748094;
     margin-bottom: 24px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
 }
 
-/* Khu vực hiển thị icon công nghệ */
+/* Tags công nghệ */
 .skills-container {
     display: flex;
     flex-wrap: wrap;
@@ -86,32 +125,37 @@ body {
 }
 
 .skill-tag {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
     padding: 6px 12px;
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 12px;
-    font-weight: 500;
     color: #cbd5e1;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     gap: 6px;
+    transition: 0.2s;
 }
 
-.skill-tag i {
-    color: #00f2fe;
+.skill-tag:hover {
+    background: rgba(0, 242, 254, 0.15);
+    border-color: #00f2fe;
+    transform: translateZ(40px) scale(1.05);
 }
 
-/* Khung chứa thông tin */
+.skill-tag i { color: #00f2fe; }
+
+/* Hộp thông tin */
 .info-box {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.4);
     border-radius: 16px;
-    padding: 16px;
+    padding: 18px;
     text-align: left;
     margin-bottom: 25px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 .info-item {
@@ -122,17 +166,10 @@ body {
     color: #94a3b8;
 }
 
-.info-item i {
-    color: #00f2fe;
-    width: 18px;
-    text-align: center;
-}
+.info-item i { color: #00f2fe; width: 18px; text-align: center; }
+.info-item strong { color: #ffffff; }
 
-.info-item strong {
-    color: #ffffff;
-}
-
-/* Các nút liên kết mạng xã hội */
+/* Nút liên kết */
 .social-links {
     display: flex;
     gap: 12px;
@@ -150,13 +187,35 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all 0.2s ease;
+    transition: 0.3s;
 }
 
 .facebook { background: #1877f2; }
-.github { background: #24292e; }
+.github { background: #1e2327; border: 1px solid rgba(255,255,255,0.08); }
 
 .social-btn:hover {
-    opacity: 0.9;
-    transform: scale(1.02);
+    filter: brightness(1.2);
+    transform: translateZ(35px) scale(1.03);
+}
+
+/* Dòng chữ báo bật nhạc xinh xắn ở góc */
+.music-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 242, 254, 0.1);
+    border: 1px solid #00f2fe;
+    padding: 10px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    color: #00f2fe;
+    z-index: 10;
+    pointer-events: none;
+    animation: floating 2s ease-in-out infinite alternate;
+    transition: opacity 0.5s ease;
+}
+
+@keyframes floating {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-6px); }
 }
