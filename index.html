@@ -69,6 +69,11 @@
                 <i class="fa-solid fa-school"></i>
                 <span>Trường: <strong>THPT Tố Hữu</strong></span>
             </div>
+            <div class="volume-container">
+    <i class="fa-solid fa-volume-high" id="volume-icon"></i>
+    <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
+    <span id="volume-text">100%</span>
+</div>
         </div>
         <div class="social-links">
             <a href="https://www.facebook.com/danghuydangsuy/" class="social-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
@@ -103,7 +108,34 @@
             // Bật nhạc
             music.play().catch(err => console.log(err));
         }
-
+// Hàm điều chỉnh âm lượng thực tế cho bài nhạc
+function changeVolume(volumeValue) {
+    const music = document.getElementById('bg-music');
+    const volumeIcon = document.getElementById('volume-icon');
+    const volumeText = document.getElementById('volume-text');
+    
+    // Chuyển đổi giá trị từ 0-100 sang dạng toán học 0.0 - 1.0 của thẻ audio
+    const volumeDecimal = volumeValue / 100;
+    music.volume = volumeDecimal;
+    
+    // Hiển thị phần trăm chữ
+    volumeText.innerText = volumeValue + '%';
+    
+    // Tự động thay đổi icon loa theo mức độ to/nhỏ của âm thanh
+    if (volumeValue == 0) {
+        volumeIcon.className = "fa-solid fa-volume-xmark"; // Loa tắt
+        volumeIcon.style.color = "#ff5f56";
+    } else if (volumeValue < 40) {
+        volumeIcon.className = "fa-solid fa-volume-off"; // Loa nhỏ
+        volumeIcon.style.color = "#94a3b8";
+    } else if (volumeValue < 80) {
+        volumeIcon.className = "fa-solid fa-volume-low"; // Loa vừa
+        volumeIcon.style.color = "#00f2fe";
+    } else {
+        volumeIcon.className = "fa-solid fa-volume-high"; // Loa to
+        volumeIcon.style.color = "#00f2fe";
+    }
+}
         // Nhấn phím Enter để vào
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
