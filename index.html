@@ -3,29 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Cá Nhân</title>
+    <title>Kochehe - Profile</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Nhúng font chữ và bộ icon tương tự trang gốc -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="profile-container">
-        <div class="avatar-frame">
-            <img src="https://www.facebook.com/photo/?fbid=988343367242551&set=a.131987622878134" alt="Avatar" class="avatar">
+
+    <!-- Hiệu ứng hạt bụi/tuyết rơi mờ phía sau nếu có -->
+    <div class="bg-animation"></div>
+
+    <div class="profile-card">
+        <!-- Khung Avatar phát sáng -->
+        <div class="avatar-container">
+            <img src="https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-1/710831308_122117362106811031_2565089623435386484_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeGkp1QkPg6HC0X-hYqxYlvQ8B5U-G_sLR3wHlT4b-wtHUCu_wtjIGkyPPHfeotBFd0Pd1hLpTyBbR54diTyb0zN&_nc_ohc=kbGXRDwy-icQ7kNvwFxyCTV&_nc_oc=AdrOs8FuUQB0jWR4nLwyf7hVaAz0c-sGMNpCiAasqwPQi7SBAq141gfYnfIA0LXTcqUOXH3zVRvB9VnGLUdosvOj&_nc_zt=24&_nc_ht=scontent.fdad3-4.fna&_nc_gid=JFItUgIdb3j-4kNMBBcRmw&_nc_ss=7b2a8&oh=00_Af_K2Rg44mAOsQj-ms4IVa_eYFmR8o_QRRtwfvU4JxYvZQ&oe=6A2750ED" alt="Avatar" class="avatar">
         </div>
 
-        <h1>Đăng Huy <span class="badge">✓</span></h1>
-        
-        <div class="skills">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>Python</span>
-            <span>C++</span>
+        <!-- Tên và Tích xanh -->
+        <h1 class="name">Đăng Huy<i class="fa-solid fa-circle-check verified-badge"></i></h1>
+        <p class="subtitle">Fullstack Developer / Student</p>
+
+        <!-- Danh sách các công nghệ (Skills) -->
+        <div class="skills-container">
+            <span class="skill-tag"><i class="fa-brands fa-html5"></i> HTML5</span>
+            <span class="skill-tag"><i class="fa-brands fa-css3-alt"></i> CSS3</span>
+            <span class="skill-tag"><i class="fa-brands fa-js"></i> JavaScript</span>
+            <span class="skill-tag"><i class="fa-brands fa-python"></i> Python</span>
+            <span class="skill-tag"><i class="fa-code"></i> C++</span>
+            <span class="skill-tag"><i class="fa-solid fa-database"></i> MySQL</span>
+            <span class="skill-tag"><i class="fa-brands fa-git-alt"></i> Git</span>
         </div>
 
-        <div class="info">
-            <p>📅 Năm sinh: 2008</p>
-            <p>🏫 Trường: THPT Tố Hữu</p>
-            <p>💬 IG: tihuylaanh</p>
+        <!-- Khung thông tin cá nhân chính -->
+        <div class="info-box">
+            <div class="info-item">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Năm sinh: <strong>2008</strong></span>
+            </div>
+            <div class="info-item">
+                <i class="fa-solid fa-school"></i>
+                <span>Trường: <strong>THPT TỐ HỮU</strong></span>
+            </div>
+            <div class="info-item">
+                <i class="fa-brands fa-discord"></i>
+                <span>Instagram: <strong>tihuylaanh</strong></span>
+            </div>
+        </div>
+
+        <!-- Các nút bấm mạng xã hội phía dưới -->
+        <div class="social-links">
+            <a href="https://www.facebook.com/danghuydangsuy/" class="social-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="#" class="social-btn github"><i class="fa-brands fa-github"></i> GitHub</a>
         </div>
     </div>
+
 </body>
 </html>
