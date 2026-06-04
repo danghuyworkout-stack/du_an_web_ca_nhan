@@ -1,55 +1,162 @@
-body {
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212; /* Màu nền tối giống trang gốc */
-    color: #ffffff;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0d0e12; /* Màu nền tối huyền bí của trang gốc */
+    color: #e2e8f0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
 }
 
-.profile-container {
-    background: #1e1e1e;
-    padding: 30px;
-    border-radius: 15px;
+/* Thẻ bọc toàn bộ Profile */
+.profile-card {
+    background: rgba(25, 28, 36, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 40px 30px;
+    border-radius: 24px;
+    width: 380px;
     text-align: center;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    max-width: 350px;
-    width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    transition: transform 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Khung viền Avatar phát sáng đổi màu nhẹ */
+.avatar-container {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 20px;
 }
 
 .avatar {
-    width: 120px;
-    height: 120px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    border: 3px solid #00ffcc; /* Viền phát sáng */
+    object-fit: cover;
+    border: 3px solid #00f2fe;
+    box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe;
 }
 
-h1 {
+/* Tên và Tích xanh */
+.name {
     font-size: 24px;
-    margin: 15px 0 5px 0;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-.badge {
-    color: #00ffcc;
+.verified-badge {
+    color: #00f2fe;
     font-size: 18px;
 }
 
-.skills span {
-    background: #333;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    margin: 5px;
-    display: inline-block;
+.subtitle {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.info {
-    margin-top: 20px;
+/* Khu vực hiển thị icon công nghệ */
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 25px;
+}
+
+.skill-tag {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.skill-tag i {
+    color: #00f2fe;
+}
+
+/* Khung chứa thông tin */
+.info-box {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 16px;
     text-align: left;
-    background: #252525;
-    padding: 10px 15px;
-    border-radius: 8px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.info-item i {
+    color: #00f2fe;
+    width: 18px;
+    text-align: center;
+}
+
+.info-item strong {
+    color: #ffffff;
+}
+
+/* Các nút liên kết mạng xã hội */
+.social-links {
+    display: flex;
+    gap: 12px;
+}
+
+.social-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.facebook { background: #1877f2; }
+.github { background: #24292e; }
+
+.social-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
 }
