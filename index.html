@@ -3,21 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huy Test Web</title>
+    <title>Kochehe - Profile</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <audio id="bg-music" src="nhacnen.mp3" loop></audio>
+    <div id="intro-screen" onclick="startProfile()">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <div class="terminal-content">
+                <div class="ascii-cat">  /\_/\  <br> ( o.o ) <br>  > ^ <  </div>
+                
+                <pre class="ascii-art">
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⠿⠿⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠿⢿
+⣿....⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇....⣿
+⣿....⢸⣿⣿⣿⡟⠛⠛⢻⣿⣿⡟⠛⠛⢿⣿⣿⣿⡇....⣿
+⣿....⢸⣿⣿⣿⡇....⢸⣿⣿⡇....⢸⣿⣿⣿⡇....⣿
+⣿....⢸⣿⣿⣿⣷⣤⣤⣼⣿⣿⣧⣤⣤⣾⣿⣿⣿⡇....⣿
+⣿....⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇....⣿
+⣿⣷⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣶⣾
+                </pre>
+                
+                <p class="status-text">Mở trên web để tránh bị lỗi!</p>
+                <p>IP: <span id="user-ip">Loading...</span></p>
+                <p>System: <span id="user-os">Windows 11</span></p>
+                <p class="blink-text">Bio Loaded</p>
+                <p class="continue-btn">Press Enter/Click To Continue</p>
+            </div>
+        </div>
+    </div>
 
-    <div class="music-toast"><i class="fa-solid fa-music"></i> Click bất kỳ đâu để bật nhạc</div>
+    <audio id="bg-music" src="nhacnen.mp3" loop></audio>
 
     <div id="particles-js"></div>
 
     <div class="profile-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-        
         <div class="avatar-box">
             <div class="avatar-gradient"></div>
             <img src="kodoandc.jpg" alt="Avatar" class="avatar">
@@ -31,7 +58,6 @@
             <span class="skill-tag"><i class="fa-brands fa-css3-alt"></i> CSS3</span>
             <span class="skill-tag"><i class="fa-brands fa-js"></i> JavaScript</span>
             <span class="skill-tag"><i class="fa-brands fa-python"></i> Python</span>
-            <span class="skill-tag"><i class="fa-code"></i> C++</span>
         </div>
 
         <div class="info-box">
@@ -43,15 +69,11 @@
                 <i class="fa-solid fa-school"></i>
                 <span>Trường: <strong>THPT Tố Hữu</strong></span>
             </div>
-            <div class="info-item">
-                <i class="fa-brands fa-instagram"></i>
-                <span>Instagram: <strong>tihuylaanh</strong></span>
-            </div>
         </div>
 
         <div class="social-links">
             <a href="https://www.facebook.com/danghuydangsuy/" class="social-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
-            <a href="#" class="social-btn github"><i class="fa-brands fa-github"></i> GitHub</a>
+            <a href="https://github.com/danghuyworkout-stack/" class="social-btn github"><i class="fa-brands fa-github"></i> GitHub</a>
         </div>
     </div>
 
@@ -59,32 +81,80 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     
     <script>
-        // Cấu hình hạt bay nền
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#00f2fe" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.4, "random": true },
-                "size": { "value": 3, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#00f2fe", "opacity": 0.15, "width": 1 },
-                "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
-            },
-            "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } } },
-            "retina_detect": true
-        });
+        // Tự động lấy IP thật của người xem web giống trang gốc
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => document.getElementById('user-ip').innerText = data.ip)
+            .catch(() => document.getElementById('user-ip').innerText = "116.110.160.98");
 
-        // Xử lý tự động phát nhạc khi tương tác
-        const music = document.getElementById('bg-music');
-        const toast = document.querySelector('.music-toast');
-        
-        window.addEventListener('click', () => {
-            if (music.paused) {
-                music.play().then(() => {
-                    toast.style.opacity = '0'; // Ẩn thông báo đi khi nhạc đã phát
-                }).catch(err => console.log("Chưa thể phát nhạc: ", err));
+        // Nhận diện Hệ điều hành người dùng
+        const os = navigator.userAgent.includes("Windows") ? "Windows" : navigator.userAgent.includes("Mac") ? "MacOS" : "Linux/Android";
+        document.getElementById('user-os').innerText = os;
+
+        // Hàm click hoặc nhấn Enter để vào trang chính
+        function startProfile() {
+            const intro = document.getElementById('intro-screen');
+            const music = document.getElementById('bg-music');
+            
+            intro.classList.add('fade-out');
+            setTimeout(() => {
+                intro.style.display = 'none';
+            }, 500);
+
+            // Bật nhạc
+            music.play().catch(err => console.log(err));
+        }
+
+        // Nhấn phím Enter để vào
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                startProfile();
             }
         });
+
+        // Hạt bụi bay nền
+        particlesJS("particles-js", {
+    "particles": {
+        "number": { 
+            "value": 120, // Số lượng giọt mưa (tăng lên cho dày hạt)
+            "density": { "enable": true, "value_area": 800 } 
+        },
+        "color": { "value": "#ffffff" }, // Màu giọt mưa (trắng hoặc xanh nhạt #00f2fe)
+        "shape": { 
+            "type": "line" // Biến hạt tròn thành nét gạch (giọt mưa)
+        },
+        "opacity": { 
+            "value": 0.4, 
+            "random": true, // Giọt đậm giọt nhạt tạo chiều sâu
+            "anim": { "enable": false } 
+        },
+        "size": { 
+            "value": 4, // Độ dài của giọt mưa
+            "random": true, 
+            "anim": { "enable": false } 
+        },
+        "line_linked": { 
+            "enable": false // Tắt các đường nối giữa các hạt
+        },
+        "move": { 
+            "enable": true, 
+            "speed": 12, // Tốc độ rơi nhanh (giống mưa rơi)
+            "direction": "bottom", // Hướng rơi thẳng đứng từ trên xuống dưới
+            "random": false, 
+            "straight": true, // Rơi thẳng tắp, không bay loạng choạng
+            "out_mode": "out", // Rơi hết màn hình thì tự tạo giọt mới ở đỉnh
+            "bounce": false 
+        }
+    },
+    "interactivity": { 
+        "detect_on": "canvas", 
+        "events": { 
+            "onhover": { "enable": false }, // Tắt hiệu ứng khi di chuột trúng giọt mưa
+            "onclick": { "enable": false } 
+        } 
+    },
+    "retina_detect": true
+});
     </script>
 </body>
 </html>
