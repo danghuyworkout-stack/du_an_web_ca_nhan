@@ -190,3 +190,122 @@ body {
 .social-btn { flex: 1; padding: 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 600; color: #fff; text-align: center; }
 .facebook { background: #1877f2; }
 .github { background: #24292e; }
+/* Nút bấm SMS Spammer */
+.spam-btn {
+    width: 100%;
+    background: linear-gradient(45deg, #ff007f, #7928ca);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);
+    transition: all 0.3s ease;
+    transform: translateZ(30px);
+}
+.spam-btn:hover {
+    transform: translateZ(35px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(255, 0, 127, 0.5);
+    filter: brightness(1.2);
+}
+
+/* Giao diện khung bảng Pop-up (Modal) */
+.modal {
+    display: none; 
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background: #111318;
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    overflow: hidden;
+    animation: zoomIn 0.3s ease;
+}
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.modal-header {
+    background: #181b22;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #00f2fe;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.close-btn {
+    cursor: pointer;
+    font-size: 20px;
+    color: #6b7280;
+}
+.close-btn:hover { color: #fff; }
+.modal-body { padding: 20px; text-align: center; }
+
+/* Ô nhập số điện thoại */
+#target-phone {
+    width: 100%;
+    padding: 12px;
+    background: #08090c;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 15px;
+    outline: none;
+}
+#target-phone:focus { border-color: #00f2fe; }
+#start-spam-btn {
+    background: #00f2fe;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Khung hiển thị log chữ chạy */
+#spam-console {
+    background: #050608;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+#console-logs {
+    height: 150px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+/* Thanh phần trăm tiến trình */
+.progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background: #1a1d24;
+    border-radius: 10px;
+    overflow: hidden;
+}
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #00f2fe, #bc34fa);
+    transition: width 0.1s linear;
+}
