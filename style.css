@@ -190,3 +190,89 @@ body {
 .social-btn { flex: 1; padding: 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 600; color: #fff; text-align: center; }
 .facebook { background: #1877f2; }
 .github { background: #24292e; }
+/* Khung bọc khu vực âm lượng */
+.volume-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 16px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    transform: translateZ(30px);
+    transition: all 0.3s ease;
+}
+
+.volume-container:hover {
+    border-color: rgba(0, 242, 254, 0.3);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+}
+
+/* Icon Loa */
+#volume-icon {
+    font-size: 16px;
+    color: #00f2fe;
+    width: 20px;
+    transition: all 0.2s ease;
+}
+
+/* Chữ hiển thị % */
+#volume-text {
+    font-size: 12px;
+    color: #94a3b8;
+    width: 35px;
+    text-align: right;
+    font-weight: 600;
+}
+
+/* TÙY BIẾN THANH TRƯỢT (SLIDER INPUT) TRÊN TRÌNH DUYỆT */
+#volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 65%;
+    height: 6px;
+    background: #1a1d24;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    overflow: hidden; /* Hiệu ứng tô màu phần đã trượt qua */
+}
+
+/* Thiết kế nút tròn kéo (Thumb) trên Chrome/Edge/Safari */
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #00f2fe;
+    box-shadow: -407px 0 0 400px #00f2fe, 0 0 8px #00f2fe; /* Đổ màu Neon vệt dài phía sau nút */
+    transition: all 0.1s ease;
+}
+
+#volume-slider::-webkit-slider-thumb:hover {
+    background: #ffffff;
+    box-shadow: -407px 0 0 400px #00f2fe, 0 0 15px #ffffff;
+    transform: scale(1.2); /* Nút to lên nhẹ khi di chuột vào */
+}
+
+/* Thiết kế nút kéo dành cho Firefox */
+#volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: none;
+    border-radius: 50%;
+    background: #00f2fe;
+    box-shadow: 0 0 8px #00f2fe;
+    transition: all 0.1s ease;
+}
+#volume-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    background: #fff;
+}
+#volume-slider::-moz-range-progress {
+    background-color: #00f2fe; /* Phần đã trượt qua trên Firefox */
+    height: 6px;
+    border-radius: 10px;
+}
