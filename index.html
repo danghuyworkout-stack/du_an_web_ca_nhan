@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
+<canvas id="rain-canvas"></canvas>
     <div id="intro-screen" onclick="startProfile()">
         <div class="terminal-window">
             <div class="terminal-header">
@@ -41,8 +41,6 @@
     </div>
 
     <audio id="bg-music" src="hi.mp3" loop></audio>
-
-    <div id="particles-js"></div>
 
     <div class="profile-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
         <div class="avatar-box">
@@ -84,108 +82,105 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     
-    <script>
-        // Tự động lấy IP thật của người xem web giống trang gốc
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => document.getElementById('user-ip').innerText = data.ip)
-            .catch(() => document.getElementById('user-ip').innerText = "116.110.160.98");
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+<script>
+    // --- CODE TỰ ĐỘNG LẤY IP & HỆ ĐIỀU HÀNH ---
+    fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => document.getElementById('user-ip').innerText = data.ip)
+        .catch(() => document.getElementById('user-ip').innerText = "116.110.160.98");
 
-        // Nhận diện Hệ điều hành người dùng
-        const os = navigator.userAgent.includes("Windows") ? "Windows" : navigator.userAgent.includes("Mac") ? "MacOS" : "Linux/Android";
-        document.getElementById('user-os').innerText = os;
+    const os = navigator.userAgent.includes("Windows") ? "Windows" : navigator.userAgent.includes("Mac") ? "MacOS" : "Linux/Android";
+    document.getElementById('user-os').innerText = os;
 
-        // Hàm click hoặc nhấn Enter để vào trang chính
-        function startProfile() {
-            const intro = document.getElementById('intro-screen');
-            const music = document.getElementById('bg-music');
-            
-            intro.classList.add('fade-out');
-            setTimeout(() => {
-                intro.style.display = 'none';
-            }, 500);
-
-            // Bật nhạc
-            music.play().catch(err => console.log(err));
-        }
-// Hàm điều chỉnh âm lượng thực tế cho bài nhạc
-function changeVolume(volumeValue) {
-    const music = document.getElementById('bg-music');
-    const volumeIcon = document.getElementById('volume-icon');
-    const volumeText = document.getElementById('volume-text');
-    
-    // Chuyển đổi giá trị từ 0-100 sang dạng toán học 0.0 - 1.0 của thẻ audio
-    const volumeDecimal = volumeValue / 100;
-    music.volume = volumeDecimal;
-    
-    // Hiển thị phần trăm chữ
-    volumeText.innerText = volumeValue + '%';
-    
-    // Tự động thay đổi icon loa theo mức độ to/nhỏ của âm thanh
-    if (volumeValue == 0) {
-        volumeIcon.className = "fa-solid fa-volume-xmark"; // Loa tắt
-        volumeIcon.style.color = "#ff5f56";
-    } else if (volumeValue < 40) {
-        volumeIcon.className = "fa-solid fa-volume-off"; // Loa nhỏ
-        volumeIcon.style.color = "#94a3b8";
-    } else if (volumeValue < 80) {
-        volumeIcon.className = "fa-solid fa-volume-low"; // Loa vừa
-        volumeIcon.style.color = "#00f2fe";
-    } else {
-        volumeIcon.className = "fa-solid fa-volume-high"; // Loa to
-        volumeIcon.style.color = "#00f2fe";
+    function startProfile() {
+        document.getElementById('intro-screen').classList.add('fade-out');
+        setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 500);
+        document.getElementById('bg-music').play().catch(err => console.log(err));
     }
-}
-        // Nhấn phím Enter để vào
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                startProfile();
-            }
-        });
 
-        // Hạt bụi bay nền
-        particlesJS("particles-js", {
-    "particles": {
-        "number": { 
-            "value": 120, // Số lượng giọt mưa (tăng lên cho dày hạt)
-            "density": { "enable": true, "value_area": 800 } 
-        },
-        "color": { "value": "#ffffff" }, // Màu giọt mưa (trắng hoặc xanh nhạt #00f2fe)
-        "shape": { 
-            "type": "line" // Biến hạt tròn thành nét gạch (giọt mưa)
-        },
-        "opacity": { 
-            "value": 0.4, 
-            "random": true, // Giọt đậm giọt nhạt tạo chiều sâu
-            "anim": { "enable": false } 
-        },
-        "size": { 
-            "value": 4, // Độ dài của giọt mưa
-            "random": true, 
-            "anim": { "enable": false } 
-        },
-        "line_linked": { 
-            "enable": false // Tắt các đường nối giữa các hạt
-        },
-        "move": { 
-            "enable": true, 
-            "speed": 12, // Tốc độ rơi nhanh (giống mưa rơi)
-            "direction": "bottom", // Hướng rơi thẳng đứng từ trên xuống dưới
-            "random": false, 
-            "straight": true, // Rơi thẳng tắp, không bay loạng choạng
-            "out_mode": "out", // Rơi hết màn hình thì tự tạo giọt mới ở đỉnh
-            "bounce": false 
+    window.addEventListener('keydown', (e) => { if (e.key === 'Enter') startProfile(); });
+
+
+    // --- CODE HIỆU ỨNG MƯA NÉ CHUỘT (CANVAS) ---
+    const canvas = document.getElementById('rain-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Tự động thay đổi kích thước canvas theo màn hình
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Tọa độ của chuột (Lúc đầu để ngoài màn hình)
+    let mouse = { x: -1000, y: -1000, radius: 80 }; // radius = 80px là bán kính vùng né mưa xung quanh chuột
+
+    // Lắng nghe sự kiện di chuyển chuột
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    // Khi chuột rời khỏi màn hình thì đưa tọa độ ra xa để mưa rơi lại bình thường
+    window.addEventListener('mouseleave', () => {
+        mouse.x = -1000;
+        mouse.y = -1000;
+    });
+
+    // Mảng chứa các giọt mưa
+    const raindrops = [];
+    const maxRaindrops = 150; // Số lượng giọt mưa trên màn hình
+
+    // Khởi tạo các giọt mưa ban đầu
+    for (let i = 0; i < maxRaindrops; i++) {
+        raindrops.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            length: Math.random() * 15 + 10, // Độ dài giọt mưa (10px - 25px)
+            speed: Math.random() * 8 + 6,     // Tốc độ rơi (6px - 14px mỗi khung hình)
+            opacity: Math.random() * 0.4 + 0.1 // Độ mờ/đậm ngẫu nhiên
+        });
+    }
+
+    // Vòng lặp vẽ và cập nhật chuyển động của mưa
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Xóa bảng vẽ cũ
+
+        for (let i = 0; i < raindrops.length; i++) {
+            let drop = raindrops[i];
+
+            // Tính khoảng cách giữa giọt mưa hiện tại và con trỏ chuột (Dùng định lý Pitago)
+            let dx = drop.x - mouse.x;
+            let dy = drop.y - mouse.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            // CẬP NHẬT TRẠNG THÁI: Nếu giọt mưa nằm NGOÀI vùng né của chuột thì mới vẽ và cho rơi
+            if (distance > mouse.radius) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`; // Màu xanh neon mờ ảo giống web chính
+                ctx.lineWidth = 1.5; // Độ dày hạt mưa
+                ctx.moveTo(drop.x, drop.y);
+                ctx.lineTo(drop.x, drop.y + drop.length); // Vẽ nét gạch thẳng đứng
+                ctx.stroke();
+            }
+
+            // Cho mưa rơi xuống
+            drop.y += drop.speed;
+
+            // Nếu giọt mưa rơi chạm đáy màn hình thì reset lên lại đỉnh đầu để rơi tiếp
+            if (drop.y > canvas.height) {
+                drop.y = -20;
+                drop.x = Math.random() * canvas.width;
+                drop.speed = Math.random() * 8 + 6;
+            }
         }
-    },
-    "interactivity": { 
-        "detect_on": "canvas", 
-        "events": { 
-            "onhover": { "enable": false }, // Tắt hiệu ứng khi di chuột trúng giọt mưa
-            "onclick": { "enable": false } 
-        } 
-    },
-    "retina_detect": true
-});
-    </script>
+
+        requestAnimationFrame(animate); // Gọi lại hàm để tạo hiệu ứng chuyển động liên tục
+    }
+
+    animate(); // Chạy hiệu ứng
+</script>
 </body>
 </html>
