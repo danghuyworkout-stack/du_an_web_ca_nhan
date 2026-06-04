@@ -70,6 +70,33 @@
                 <span>Trường: <strong>THPT Tố Hữu</strong></span>
             </div>
         </div>
+        <button class="spam-btn" onclick="openSpamModal()">
+    <i class="fa-solid fa-bolt"></i> SMS Spammer (BETA)
+</button>
+
+<div id="spam-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span><i class="fa-solid fa-terminal"></i> SMS Exploit Tool v1.0</span>
+            <span class="close-btn" onclick="closeSpamModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="spam-input-group">
+                <p style="color: #6b7280; margin-bottom: 10px; font-size: 13px;">Nhập số điện thoại mục tiêu để bắt đầu exploit:</p>
+                <input type="number" id="target-phone" placeholder="Ví dụ: 0912345xxx...">
+                <button id="start-spam-btn" onclick="startFakeSpam()">START ATTACK</button>
+            </div>
+            
+            <div id="spam-console" style="display: none;">
+                <div id="console-logs"></div>
+                <div class="progress-bar-container">
+                    <div id="progress-bar"></div>
+                </div>
+                <p id="spam-status" style="color: #00f2fe; margin-top: 10px; font-size: 13px; font-weight: bold;"></p>
+            </div>
+        </div>
+    </div>
+</div>
 
         <div class="social-links">
             <a href="https://www.facebook.com/danghuydangsuy/" class="social-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
@@ -156,5 +183,93 @@
     "retina_detect": true
 });
     </script>
+    <script>
+function openSpamModal() {
+    document.getElementById('spam-modal').style.display = 'flex';
+}
+function closeSpamModal() {
+    document.getElementById('spam-modal').style.display = 'none';
+    // Reset lại trạng thái ban đầu khi đóng bảng
+    document.getElementById('spam-input-group').style.display = 'block';
+    document.getElementById('spam-console').style.display = 'none';
+    document.getElementById('console-logs').innerHTML = '';
+}
+
+function startFakeSpam() {
+    const phone = document.getElementById('target-phone').value;
+    if (!phone) {
+        alert('Vui lòng nhập số điện thoại để khè chứ!');
+        return;
+    }
+    
+    // Ẩn ô nhập, hiện màn hình console
+    document.getElementById('spam-input-group').style.display = 'none';
+    document.getElementById('spam-console').style.display = 'block';
+    
+    const logsContainer = document.getElementById('console-logs');
+    const progressBar = document.getElementById('progress-bar');
+    const statusText = document.getElementById('spam-status');
+    
+    // Danh sách các dòng log giả lập
+    const logs = [
+        `Connecting to bypass gateway server...`,
+        `[OK] Connected to API_Gateway_v4.2`,
+        `Fetching target info for: ${phone}...`,
+        `[SUCCESS] Vulnerability found in API_Tiki_OTP`,
+        `[SUCCESS] Vulnerability found in API_Shopee_Login`,
+        `[SUCCESS] Vulnerability found in API_Grab_Verify`,
+        `Starting multi-thread bypass...`,
+        `[THREAD 1] Sending SMS OTP (Tiki) -> Success!`,
+        `[THREAD 2] Sending SMS OTP (Shopee) -> Success!`,
+        `[THREAD 3] Sending SMS OTP (Grab) -> Success!`,
+        `[THREAD 1] Sending SMS OTP (GiaoHangNhanh) -> Success!`,
+        `[THREAD 2] Sending SMS OTP (Lazada) -> Success!`,
+        `[THREAD 3] Sending SMS OTP (Vinasun) -> Success!`,
+        `Looping exploit requests... Target queue full!`,
+    ];
+    
+    let currentLog = 0;
+    let progress = 0;
+    
+    // Hiển thị từng dòng chữ chạy vèo vèo
+    const logInterval = setInterval(() => {
+        if (currentLog < logs.length) {
+            const p = document.createElement('p');
+            p.style.margin = '4px 0';
+            p.style.fontFamily = 'monospace';
+            p.style.fontSize = '12px';
+            p.style.textAlign = 'left';
+            
+            // Đổi màu chữ cho giống hacker
+            if (logs[currentLog].includes('SUCCESS') || logs[currentLog].includes('OK')) {
+                p.style.color = '#27c93f';
+            } else if (logs[currentLog].includes('Sending SMS')) {
+                p.style.color = '#ffbd2e';
+            } else {
+                p.style.color = '#00f2fe';
+            }
+            
+            p.innerText = logs[currentLog];
+            logsContainer.appendChild(p);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+            currentLog++;
+        }
+    }, 400); // 0.4 giây hiện 1 dòng
+    
+    // Chạy thanh phần trăm %
+    const progressInterval = setInterval(() => {
+        if (progress < 100) {
+            progress += 2;
+            progressBar.style.width = progress + '%';
+            statusText.innerText = `Attacking: ${progress}% - Sent: ${Math.floor(progress * 1.5)} SMS`;
+        } else {
+            clearInterval(progressInterval);
+            clearInterval(logInterval);
+            statusText.style.color = '#ff5f56';
+            statusText.innerText = `✔️ ATTACK COMPLETED! ${phone} HAS BEEN CRASHED!`;
+        }
+    }, 150); // Tốc độ tăng thanh phần trăm
+}
+</script>
 </body>
 </html>
