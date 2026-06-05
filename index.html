@@ -114,288 +114,288 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
-    <script>
-     // ==========================================
-// 1. TỰ ĐỘNG LẤY THÔNG TIN HỆ THỐNG (INTRO)
-// ==========================================
-fetch('https://api.ipify.org?format=json')
-    .then(res => res.json())
-    .then(data => document.getElementById('user-ip').innerText = data.ip)
-    .catch(() => document.getElementById('user-ip').innerText = "116.110.160.98");
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+<script>
+    // ==========================================
+    // 1. TỰ ĐỘNG LẤY THÔNG TIN HỆ THỐNG (INTRO)
+    // ==========================================
+    fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => document.getElementById('user-ip').innerText = data.ip)
+        .catch(() => document.getElementById('user-ip').innerText = "116.110.160.98");
 
-const os = navigator.userAgent.includes("Windows") ? "Windows" : navigator.userAgent.includes("Mac") ? "MacOS" : "Linux/Android";
-document.getElementById('user-os').innerText = os;
+    const os = navigator.userAgent.includes("Windows") ? "Windows" : navigator.userAgent.includes("Mac") ? "MacOS" : "Linux/Android";
+    document.getElementById('user-os').innerText = os;
 
-// Logic bấm để vào trang chính
-function startProfile() {
-    document.getElementById('intro-screen').classList.add('fade-out');
-    setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 500);
-    document.getElementById('bg-music').play().catch(err => console.log(err));
-}
-window.addEventListener('keydown', (e) => { if (e.key === 'Enter') startProfile(); });
-
-
-// ==========================================
-// 2. LOGIC ĐIỀU KHIỂN ÂM LƯỢNG (DỌC + MUTE)
-// ==========================================
-let lastVolume = 100; // Lưu lại mức âm lượng trước khi tắt tiếng
-
-function changeVolume(volumeValue) {
-    const music = document.getElementById('bg-music');
-    const volumeIcon = document.getElementById('volume-icon');
-    const volumeText = document.getElementById('volume-text');
-    const volumeSlider = document.getElementById('volume-slider');
-    if (!music) return;
-
-    // Thay đổi âm lượng thực tế của thẻ audio
-    music.volume = volumeValue / 100;
-    volumeText.innerText = volumeValue + '%';
-    volumeSlider.value = volumeValue;
-    
-    // Thay đổi Icon và màu sắc tương ứng
-    if (volumeValue == 0) {
-        volumeIcon.className = "fa-solid fa-volume-xmark";
-        volumeIcon.style.color = "#ff5f56"; // Đỏ khi tắt tiếng
-    } else if (volumeValue < 50) {
-        volumeIcon.className = "fa-solid fa-volume-low";
-        volumeIcon.style.color = "#00f2fe";
-    } else {
-        volumeIcon.className = "fa-solid fa-volume-high";
-        volumeIcon.style.color = "#00f2fe";
+    // Logic bấm để vào trang chính
+    function startProfile() {
+        document.getElementById('intro-screen').classList.add('fade-out');
+        setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 500);
+        document.getElementById('bg-music').play().catch(err => console.log(err));
     }
-}
+    window.addEventListener('keydown', (e) => { if (e.key === 'Enter') startProfile(); });
 
-// Hàm click vào Icon Loa để Bật/Tắt tiếng nhanh
-function toggleMute() {
-    const volumeSlider = document.getElementById('volume-slider');
-    if (volumeSlider.value > 0) {
-        lastVolume = volumeSlider.value;
-        changeVolume(0); // Tắt tiếng
-    } else {
-        changeVolume(lastVolume); // Khôi phục lại tiếng cũ
+
+    // ==========================================
+    // 2. LOGIC ĐIỀU KHIỂN ÂM LƯỢNG (DỌC + MUTE)
+    // ==========================================
+    let lastVolume = 100; // Lưu lại mức âm lượng trước khi tắt tiếng
+
+    function changeVolume(volumeValue) {
+        const music = document.getElementById('bg-music');
+        const volumeIcon = document.getElementById('volume-icon');
+        const volumeText = document.getElementById('volume-text');
+        const volumeSlider = document.getElementById('volume-slider');
+        if (!music) return;
+
+        // Thay đổi âm lượng thực tế của thẻ audio
+        music.volume = volumeValue / 100;
+        volumeText.innerText = volumeValue + '%';
+        volumeSlider.value = volumeValue;
+        
+        // Thay đổi Icon và màu sắc tương ứng
+        if (volumeValue == 0) {
+            volumeIcon.className = "fa-solid fa-volume-xmark";
+            volumeIcon.style.color = "#ff5f56"; // Đỏ khi tắt tiếng
+        } else if (volumeValue < 50) {
+            volumeIcon.className = "fa-solid fa-volume-low";
+            volumeIcon.style.color = "#00f2fe";
+        } else {
+            volumeIcon.className = "fa-solid fa-volume-high";
+            volumeIcon.style.color = "#00f2fe";
+        }
     }
-}
 
-
-// ==========================================
-// ==========================================
-// 3. HIỆU ỨNG MƯA ĐA NỀN TẢNG TỐI ƯU CẤU HÌNH (CANVAS)
-// ==========================================
-const canvas = document.getElementById('rain-canvas');
-const ctx = canvas.getContext('2d');
-function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-// Cấu hình ban đầu
-let mouse = { x: -1000, y: -1000, radius: 90 }; // Mặc định PC là 90
-let isTouching = false; 
-
-// --- Sự kiện di chuột trên Máy tính (PC) ---
-window.addEventListener('mousemove', (e) => {
-    if (!isTouching) {
-        mouse.radius = 90; // Giữ nguyên bán kính to trên PC
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
+    // Hàm click vào Icon Loa để Bật/Tắt tiếng nhanh
+    function toggleMute() {
+        const volumeSlider = document.getElementById('volume-slider');
+        if (volumeSlider.value > 0) {
+            lastVolume = volumeSlider.value;
+            changeVolume(0); // Tắt tiếng
+        } else {
+            changeVolume(lastVolume); // Khôi phục lại tiếng cũ
+        }
     }
-});
-window.addEventListener('mouseleave', () => {
-    if (!isTouching) { mouse.x = -1000; mouse.y = -1000; }
-});
 
-// --- Sự kiện chạm tay trên Điện thoại (Mobile) ---
-window.addEventListener('touchstart', (e) => {
-    isTouching = true;
-    mouse.radius = 50; // THU NHỎ PHẠM VI KHIÊN TRÊN MOBILE CÒN 50PX ĐỂ ĐỠ LAG
-    mouse.x = e.touches[0].clientX;
-    mouse.y = e.touches[0].clientY;
-}, { passive: true });
 
-window.addEventListener('touchmove', (e) => {
-    if (isTouching) {
+    // ==========================================
+    // 3. HIỆU ỨNG MƯA ĐA NỀN TẢNG TỐI ƯU CẤU HÌNH (CANVAS)
+    // ==========================================
+    const canvas = document.getElementById('rain-canvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Cấu hình ban đầu
+    let mouse = { x: -1000, y: -1000, radius: 90 }; // Mặc định PC là 90
+    let isTouching = false; 
+
+    // --- Sự kiện di chuột trên Máy tính (PC) ---
+    window.addEventListener('mousemove', (e) => {
+        if (!isTouching) {
+            mouse.radius = 90; // Giữ nguyên bán kính to trên PC
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        }
+    });
+    window.addEventListener('mouseleave', () => {
+        if (!isTouching) { mouse.x = -1000; mouse.y = -1000; }
+    });
+
+    // --- Sự kiện chạm tay trên Điện thoại (Mobile) ---
+    window.addEventListener('touchstart', (e) => {
+        isTouching = true;
+        mouse.radius = 50; // THU NHỎ PHẠM VI KHIÊN TRÊN MOBILE CÒN 50PX ĐỂ ĐỠ LAG
         mouse.x = e.touches[0].clientX;
         mouse.y = e.touches[0].clientY;
-    }
-}, { passive: true });
+    }, { passive: true });
 
-window.addEventListener('touchend', () => {
-    isTouching = false;
-    mouse.x = -1000;
-    mouse.y = -1000; 
-});
-
-// Khởi tạo danh sách mưa
-const raindrops = [];
-const splashes = [];
-const maxRaindrops = 450; 
-
-for (let i = 0; i < maxRaindrops; i++) {
-    raindrops.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        length: Math.random() * 15 + 10,
-        speed: Math.random() * 10 + 12,
-        baseSpeed: 0,
-        opacity: Math.random() * 0.4 + 0.1
-    });
-    raindrops[i].baseSpeed = raindrops[i].speed;
-}
-
-function createSplash(x, y) {
-    const splashCount = Math.floor(Math.random() * 2) + 1; // Giảm số lượng hạt vỡ trên mobile xuống để mượt hơn
-    for (let i = 0; i < splashCount; i++) {
-        splashes.push({
-            x: x, y: y,
-            vx: (Math.random() - 0.5) * 3,
-            vy: -Math.random() * 3 - 1,
-            radius: Math.random() * 1 + 0.5,
-            alpha: 0.6, gravity: 0.2
-        });
-    }
-}
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // VẼ VIỀN LÁ CHẮN (CHỈ VẼ TRÊN PC, ĐIỆN THOẠI BỎ HOÀN TOÀN ĐỂ GIẢM LAG)
-    if (mouse.x !== -1000 && !isTouching) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
-        ctx.shadowBlur = 25;
-        ctx.shadowColor = "#00f2fe";
-        ctx.strokeStyle = "rgba(0, 242, 254, 0.25)";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.restore();
-    }
-
-    // 1. XỬ LÝ DI CHUYỂN CỦA GIỌT MƯA
-    for (let i = 0; i < raindrops.length; i++) {
-        let drop = raindrops[i];
-        let dx = drop.x - mouse.x;
-        let dy = drop.y - mouse.y;
-        let distance = Math.sqrt(dx * dx + dy * dy);
-
-        // HIỆU ỨNG HÚT MƯA: CHỈ HOẠT ĐỘNG KHI ĐANG CÓ TAY CHẠM TRÊN ĐIỆN THOẠI
-        if (isTouching && mouse.x !== -1000 && distance < mouse.radius * 2) { 
-            let force = (mouse.radius * 2 - distance) / (mouse.radius * 2);
-            let pullSpeed = 6 * force;
-            drop.x += (mouse.x - drop.x) * 0.1 * pullSpeed;
-            drop.y += (mouse.y - drop.y) * 0.1 * pullSpeed;
-
-            if (distance <= 12) {
-                createSplash(drop.x, drop.y);
-                drop.y = -20; drop.x = Math.random() * canvas.width;
-                drop.speed = drop.baseSpeed; continue;
-            }
-        } else {
-            // RƠI TỰ NHIÊN HOẶC NÉ TRÊN PC
-            drop.y += drop.speed;
-
-            if (!isTouching && distance <= mouse.radius && dy < 0) {
-                let angle = Math.atan2(dy, dx);
-                createSplash(mouse.x + Math.cos(angle) * mouse.radius, mouse.y + Math.sin(angle) * mouse.radius);
-                drop.y = -20; drop.x = Math.random() * canvas.width; continue;
-            }
-        }
-
-        // Vẽ nét giọt mưa (Bỏ shadow đổ bóng cho giọt mưa trên điện thoại)
-        ctx.beginPath();
-        ctx.strokeStyle = isTouching ? `rgba(188, 52, 250, ${drop.opacity + 0.3})` : `rgba(0, 242, 254, ${drop.opacity})`;
-        ctx.lineWidth = 1.5;
-        ctx.moveTo(drop.x, drop.y);
-        ctx.lineTo(drop.x, drop.y + drop.length);
-        ctx.stroke();
-
-        if (drop.y > canvas.height || drop.x < 0 || drop.x > canvas.width) {
-            drop.y = -20; drop.x = Math.random() * canvas.width; drop.speed = drop.baseSpeed;
-        }
-    }
-
-    // 2. XỬ LÝ CÁC TIA NƯỚC VĂNG (SPLASHES)
-    for (let i = splashes.length - 1; i >= 0; i--) {
-        let s = splashes[i];
+    window.addEventListener('touchmove', (e) => {
         if (isTouching) {
-            s.x += (mouse.x - s.x) * 0.04;
-            s.y += (mouse.y - s.y) * 0.04;
-        } else {
-            s.x += s.vx; s.y += s.vy; s.vy += s.gravity;
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
         }
-        s.alpha -= 0.02; // Hạt nước tan nhanh hơn để giải phóng bộ nhớ nhanh
+    }, { passive: true });
 
-        if (s.alpha <= 0) { splashes.splice(i, 1); continue; }
+    window.addEventListener('touchend', () => {
+        isTouching = false;
+        mouse.x = -1000;
+        mouse.y = -1000; 
+    });
 
-        ctx.beginPath();
-        ctx.fillStyle = isTouching ? `rgba(188, 52, 250, ${s.alpha})` : `rgba(0, 242, 254, ${s.alpha})`;
-        
-        // CHỈ ĐỔ BÓNG TRÊN PC, MOBILE BỎ QUA ĐỂ KHÔNG BỊ TRỄ NHỊP (LAG)
-        if (!isTouching) {
-            ctx.shadowBlur = 5;
-            ctx.shadowColor = "#00f2fe";
-        }
-        
-        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
+    // Khởi tạo danh sách mưa
+    const raindrops = [];
+    const splashes = [];
+    const maxRaindrops = 450; 
+
+    for (let i = 0; i < maxRaindrops; i++) {
+        raindrops.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            length: Math.random() * 15 + 10,
+            speed: Math.random() * 10 + 12,
+            baseSpeed: 0,
+            opacity: Math.random() * 0.4 + 0.1
+        });
+        raindrops[i].baseSpeed = raindrops[i].speed;
     }
-    requestAnimationFrame(animate);
-}
 
-
-// ==========================================
-// 4. LOGIC TOOL SPAM SMS (GIẢ LẬP CONSOLE)
-// ==========================================
-function openSpamModal() { document.getElementById('spam-modal').style.display = 'flex'; }
-function closeSpamModal() {
-    document.getElementById('spam-modal').style.display = 'none';
-    document.getElementById('spam-input-group').style.display = 'block';
-    document.getElementById('spam-console').style.display = 'none';
-    document.getElementById('console-logs').innerHTML = '';
-}
-
-function startFakeSpam() {
-    const phone = document.getElementById('target-phone').value;
-    if (!phone) { alert('Vui lòng nhập số điện thoại mục tiêu!'); return; }
-    
-    document.getElementById('spam-input-group').style.display = 'none';
-    document.getElementById('spam-console').style.display = 'block';
-    
-    const logsContainer = document.getElementById('console-logs');
-    const progressBar = document.getElementById('progress-bar');
-    const statusText = document.getElementById('spam-status');
-    
-    const logs = [
-        `Connecting to bypass gateway server...`, `[OK] Connected to API_Gateway_v4.2`,
-        `Fetching target info for: ${phone}...`, `[SUCCESS] Vulnerability found in API_Tiki_OTP`,
-        `[SUCCESS] Vulnerability found in API_Shopee_Login`, `Starting multi-thread bypass...`,
-        `[THREAD 1] Sending SMS OTP (Tiki) -> Success!`, `[THREAD 2] Sending SMS OTP (Shopee) -> Success!`,
-        `[THREAD 3] Sending SMS OTP (Grab) -> Success!`, `Looping exploit requests... Queue full!`
-    ];
-    
-    let currentLog = 0; let progress = 0;
-    
-    const logInterval = setInterval(() => {
-        if (currentLog < logs.length) {
-            const p = document.createElement('p');
-            p.style.margin = '4px 0'; p.style.fontFamily = 'monospace'; p.style.fontSize = '12px'; p.style.textAlign = 'left';
-            p.style.color = logs[currentLog].includes('SUCCESS') || logs[currentLog].includes('OK') ? '#27c93f' : logs[currentLog].includes('Sending') ? '#ffbd2e' : '#00f2fe';
-            p.innerText = logs[currentLog]; logsContainer.appendChild(p);
-            logsContainer.scrollTop = logsContainer.scrollHeight; currentLog++;
+    function createSplash(x, y) {
+        const splashCount = Math.floor(Math.random() * 2) + 1; // Giảm số lượng hạt vỡ trên mobile xuống để mượt hơn
+        for (let i = 0; i < splashCount; i++) {
+            splashes.push({
+                x: x, y: y,
+                vx: (Math.random() - 0.5) * 3,
+                vy: -Math.random() * 3 - 1,
+                radius: Math.random() * 1 + 0.5,
+                alpha: 0.6, gravity: 0.2
+            });
         }
-    }, 400);
-    
-    const progressInterval = setInterval(() => {
-        if (progress < 100) {
-            progress += 2; progressBar.style.width = progress + '%';
-            statusText.innerText = `Attacking: ${progress}% - Sent: ${Math.floor(progress * 1.5)} SMS`;
-        } else {
-            clearInterval(progressInterval); clearInterval(logInterval);
-            statusText.style.color = '#ff5f56'; statusText.innerText = `✔️ ATTACK COMPLETED! TARGET CRASHED!`;
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // VẼ VIỀN LÁ CHẮN (CHỈ VẼ TRÊN PC, ĐIỆN THOẠI BỎ HOÀN TOÀN ĐỂ GIẢM LAG)
+        if (mouse.x !== -1000 && !isTouching) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+            ctx.shadowBlur = 25;
+            ctx.shadowColor = "#00f2fe";
+            ctx.strokeStyle = "rgba(0, 242, 254, 0.25)";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.restore();
         }
-    }, 150);
-}
-    </script>
+
+        // 1. XỬ LÝ DI CHUYỂN CỦA GIỌT MƯA
+        for (let i = 0; i < raindrops.length; i++) {
+            let drop = raindrops[i];
+            let dx = drop.x - mouse.x;
+            let dy = drop.y - mouse.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            // HIỆU ỨNG HÚT MƯA: CHỈ HOẠT ĐỘNG KHI ĐANG CÓ TAY CHẠM TRÊN ĐIỆN THOẠI
+            if (isTouching && mouse.x !== -1000 && distance < mouse.radius * 2) { 
+                let force = (mouse.radius * 2 - distance) / (mouse.radius * 2);
+                let pullSpeed = 6 * force;
+                drop.x += (mouse.x - drop.x) * 0.1 * pullSpeed;
+                drop.y += (mouse.y - drop.y) * 0.1 * pullSpeed;
+
+                if (distance <= 12) {
+                    createSplash(drop.x, drop.y);
+                    drop.y = -20; drop.x = Math.random() * canvas.width;
+                    drop.speed = drop.baseSpeed; continue;
+                }
+            } else {
+                // RƠI TỰ NHIÊN HOẶC NÉ TRÊN PC
+                drop.y += drop.speed;
+
+                if (!isTouching && distance <= mouse.radius && dy < 0) {
+                    let angle = Math.atan2(dy, dx);
+                    createSplash(mouse.x + Math.cos(angle) * mouse.radius, mouse.y + Math.sin(angle) * mouse.radius);
+                    drop.y = -20; drop.x = Math.random() * canvas.width; continue;
+                }
+            }
+
+            // Vẽ nét giọt mưa
+            ctx.beginPath();
+            ctx.strokeStyle = isTouching ? `rgba(188, 52, 250, ${drop.opacity + 0.3})` : `rgba(0, 242, 254, ${drop.opacity})`;
+            ctx.lineWidth = 1.5;
+            ctx.moveTo(drop.x, drop.y);
+            ctx.lineTo(drop.x, drop.y + drop.length);
+            ctx.stroke();
+
+            if (drop.y > canvas.height || drop.x < 0 || drop.x > canvas.width) {
+                drop.y = -20; drop.x = Math.random() * canvas.width; drop.speed = drop.baseSpeed;
+            }
+        }
+
+        // 2. XỬ LÝ CÁC TIA NƯỚC VĂN (SPLASHES)
+        for (let i = splashes.length - 1; i >= 0; i--) {
+            let s = splashes[i];
+            if (isTouching) {
+                s.x += (mouse.x - s.x) * 0.04;
+                s.y += (mouse.y - s.y) * 0.04;
+            } else {
+                s.x += s.vx; s.y += s.vy; s.vy += s.gravity;
+            }
+            s.alpha -= 0.02; // Hạt nước tan nhanh hơn để giải phóng bộ nhớ nhanh
+
+            if (s.alpha <= 0) { splashes.splice(i, 1); continue; }
+
+            ctx.beginPath();
+            ctx.fillStyle = isTouching ? `rgba(188, 52, 250, ${s.alpha})` : `rgba(0, 242, 254, ${s.alpha})`;
+            
+            // CHỈ ĐỔ BÓNG TRÊN PC, MOBILE BỎ QUA ĐỂ KHÔNG BỊ TRỄ NHỊP (LAG)
+            if (!isTouching) {
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = "#00f2fe";
+            }
+            
+            ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+
+    // ==========================================
+    // 4. LOGIC TOOL SPAM SMS (GIẢ LẬP CONSOLE)
+    // ==========================================
+    function openSpamModal() { document.getElementById('spam-modal').style.display = 'flex'; }
+    function closeSpamModal() {
+        document.getElementById('spam-modal').style.display = 'none';
+        document.getElementById('spam-input-group').style.display = 'block';
+        document.getElementById('spam-console').style.display = 'none';
+        document.getElementById('console-logs').innerHTML = '';
+    }
+
+    function startFakeSpam() {
+        const phone = document.getElementById('target-phone').value;
+        if (!phone) { alert('Vui lòng nhập số điện thoại mục tiêu!'); return; }
+        
+        document.getElementById('spam-input-group').style.display = 'none';
+        document.getElementById('spam-console').style.display = 'block';
+        
+        const logsContainer = document.getElementById('console-logs');
+        const progressBar = document.getElementById('progress-bar');
+        const statusText = document.getElementById('spam-status');
+        
+        const logs = [
+            `Connecting to bypass gateway server...`, `[OK] Connected to API_Gateway_v4.2`,
+            `Fetching target info for: ${phone}...`, `[SUCCESS] Vulnerability found in API_Tiki_OTP`,
+            `[SUCCESS] Vulnerability found in API_Shopee_Login`, `Starting multi-thread bypass...`,
+            `[THREAD 1] Sending SMS OTP (Tiki) -> Success!`, `[THREAD 2] Sending SMS OTP (Shopee) -> Success!`,
+            `[THREAD 3] Sending SMS OTP (Grab) -> Success!`, `Looping exploit requests... Queue full!`
+        ];
+        
+        let currentLog = 0; let progress = 0;
+        
+        const logInterval = setInterval(() => {
+            if (currentLog < logs.length) {
+                const p = document.createElement('p');
+                p.style.margin = '4px 0'; p.style.fontFamily = 'monospace'; p.style.fontSize = '12px'; p.style.textAlign = 'left';
+                p.style.color = logs[currentLog].includes('SUCCESS') || logs[currentLog].includes('OK') ? '#27c93f' : logs[currentLog].includes('Sending') ? '#ffbd2e' : '#00f2fe';
+                p.innerText = logs[currentLog]; logsContainer.appendChild(p);
+                logsContainer.scrollTop = logsContainer.scrollHeight; currentLog++;
+            }
+        }, 400);
+        
+        const progressInterval = setInterval(() => {
+            if (progress < 100) {
+                progress += 2; progressBar.style.width = progress + '%';
+                statusText.innerText = `Attacking: ${progress}% - Sent: ${Math.floor(progress * 1.5)} SMS`;
+            } else {
+                clearInterval(progressInterval); clearInterval(logInterval);
+                statusText.style.color = '#ff5f56'; statusText.innerText = `✔️ ATTACK COMPLETED! TARGET CRASHED!`;
+            }
+        }, 150);
+    }
+</script>
 </body>
 </html>
