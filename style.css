@@ -20,31 +20,32 @@ body {
     position: relative;
 }
 
-/* CANVAS 1: Mưa rơi ở dưới Profile */
+/* CANVAS 1: Chuyên vẽ mưa (Nằm dưới cùng) */
 #rain-canvas {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 1; /* Nằm dưới cùng */
+    position: fixed; /* Đổi sang fixed để không ăn theo khung bọc */
+    top: 0; left: 0; 
+    width: 100vw; height: 100vh;
+    z-index: 1; 
     pointer-events: none;
 }
 
-/* Khung Profile ở giữa */
+/* Khung Profile ở giữa (Giữ nguyên cấu trúc chuẩn) */
 .profile-container-wrapper {
     display: flex;
     align-items: center;
     gap: 20px;
-    z-index: 5; /* Cao hơn canvas mưa (1) nhưng thấp hơn canvas tia sáng (99) */
+    z-index: 5; 
     position: relative;
 }
 
-/* CANVAS 2: Tia sáng Neon đè lên TRÊN Profile */
+/* CANVAS 2: Chuyên vẽ dải sáng Neon (Nằm trên cùng) */
 #trail-canvas {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 99; /* Cao nhất hệ thống, đè lên mọi thứ */
-    pointer-events: none; /* Giúp bấm xuyên qua để click nút trên card bình thường */
+    position: fixed; /* Đổi sang fixed để đè chuẩn toàn màn hình */
+    top: 0; left: 0; 
+    width: 100vw; height: 100vh;
+    z-index: 99; 
+    pointer-events: none; 
 }
-
 /* ==================== MÀN HÌNH CHÀO INTRO ==================== */
 #intro-screen {
     position: fixed;
