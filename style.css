@@ -138,15 +138,86 @@ body {
 .progress-bar-container { width: 100%; height: 6px; background: #1a1d24; border-radius: 10px; overflow: hidden; }
 #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #00f2fe, #bc34fa); }
 
-/* ==================== ĐÁP ỨNG DI ĐỘNG (MOBILE) ==================== */
+/* ==================== ĐÁP ỨNG DI ĐỘNG (MOBILE NÂNG CẤP) ==================== */
 @media (max-width: 480px) {
+    
+    /* 1. Thu nhỏ khung bọc và đảo thanh âm lượng xuống dưới */
     .profile-container-wrapper {
-        flex-direction: column-reverse; /* Đưa thanh Volume nằm NGANG bên dưới card trên màn hình rất nhỏ */
-        gap: 15px;
+        flex-direction: column-reverse; 
+        gap: 12px;
+        width: 100%;
+        padding: 0 15px; /* Tạo khoảng cách 2 bên rìa màn hình điện thoại */
     }
+
+    /* 2. Sửa lỗi Profile Card chiếm hết màn hình */
+    .profile-card {
+        width: 100%; /* Tự co giãn theo màn hình điện thoại */
+        max-width: 350px; /* Giới hạn độ rộng tối đa để không bị quá bè */
+        padding: 25px 20px; /* Giảm padding từ (40px 30px) xuống để card gọn hơn */
+        border-radius: 20px;
+    }
+
+    /* 3. Thu nhỏ Avatar một chút cho cân đối */
+    .avatar-box {
+        width: 95px;
+        height: 95px;
+        margin-bottom: 15px;
+    }
+    .avatar {
+        width: 87px;
+        height: 87px;
+    }
+
+    /* 4. Thu nhỏ cỡ chữ để không bị tràn dòng */
+    .name {
+        font-size: 20px;
+    }
+    .subtitle {
+        font-size: 11px;
+        margin-bottom: 18px;
+    }
+
+    /* 5. Thu nhỏ khoảng cách trong hộp thông tin */
+    .info-box {
+        padding: 12px 14px;
+        margin-bottom: 15px;
+        gap: 8px;
+    }
+    .info-item {
+        font-size: 13px;
+    }
+
+    /* 6. Thu nhỏ các nút bấm để bấm không bị thô */
+    .spam-btn {
+        padding: 10px;
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+    .social-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    /* 7. Thanh âm lượng nằm ngang bên dưới gọn gàng */
     .volume-vertical-container {
-        flex-direction: row; height: 50px; width: 100%; max-width: 380px; padding: 10px 20px; border-radius: 16px;
+        flex-direction: row; 
+        height: 46px; 
+        width: 100%; 
+        max-width: 350px; 
+        padding: 0 15px; 
+        border-radius: 14px;
     }
-    .slider-wrapper { height: auto; width: 60%; }
-    #volume-slider { transform: rotate(0deg); width: 100%; }
+    .slider-wrapper { 
+        height: auto; 
+        width: 65%; 
+    }
+    #volume-slider { 
+        transform: rotate(0deg); 
+        width: 100%; 
+        height: 8px;
+    }
+    #volume-slider::-webkit-slider-thumb {
+        width: 18px;
+        height: 18px;
+    }
 }
