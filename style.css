@@ -1,5 +1,5 @@
 /* ==========================================
-   RESET & PHONG CÁCH CHUNG
+   RESET TRÌNH DUYỆT & PHONG CÁCH CHUNG
    ========================================== */
 * {
     margin: 0;
@@ -10,7 +10,7 @@
 }
 
 body {
-    background: #0b0914; /* Màu nền tối huyền bí */
+    background: #0b0914;
     overflow: hidden;
     width: 100vw;
     height: 100vh;
@@ -18,13 +18,13 @@ body {
 }
 
 /* ==========================================
-   HỆ THỐNG PHÂN TẦNG CANVAS (FIX LỖI HIỂN THỊ)
+   HỆ THỐNG HAI CANVAS PHÂN TẦNG TUYỆT ĐỐI
    ========================================== */
 #rain-canvas {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    z-index: 1; /* NẰM DƯỚI CÙNG */
+    z-index: 1; /* NẰM DƯỚI CÙNG: Mưa rơi sau Profile Card */
     pointer-events: none;
 }
 
@@ -32,11 +32,11 @@ body {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    z-index: 99; /* NẰM TRÊN CÙNG ĐÈ LÊN CARD */
+    z-index: 0; /* KHỞI TẠO BẰNG 0: Nằm dưới intro screen để không che nút bấm chào */
     pointer-events: none;
 }
 
-/* KHUNG BAO CHÍNH ÉP TOÀN BỘ GIAO DIỆN VÀO GIỮA MÀN HÌNH KHÔNG BỊ LỆCH */
+/* KHUNG BAO CHÍNH ÉP TOÀN BỘ GIAO DIỆN CHÍNH VÀO TÂM MÀN HÌNH CHỐNG LỆCH PHẢI */
 .main-wrapper {
     position: fixed;
     top: 0; left: 0;
@@ -44,8 +44,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10; /* Nằm giữa 2 canvas */
+    z-index: 10; /* NẰM GIỮA: Cao hơn mưa (1) nhưng thấp hơn dải lụa neon (99) */
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .profile-container-wrapper {
@@ -54,11 +55,11 @@ body {
     justify-content: center;
     gap: 30px;
     width: 100%;
-    max-width: 600px; /* Định hình vùng hiển thị cân đối */
+    max-width: 600px;
 }
 
 /* ==========================================
-   THÀNH PHẦN 1: PROFILE CARD
+   THÀNH PHẦN 1: PROFILE CARD CHÍNH KHÔNG GIAN 3D TILT
    ========================================== */
 .profile-card {
     background: rgba(22, 19, 38, 0.65);
@@ -73,7 +74,7 @@ body {
     transition: transform 0.1s ease;
 }
 
-/* Avatar và viền phát sáng tròn */
+/* Avatar khối tròn viền gradient chuyển động */
 .avatar-box {
     position: relative;
     width: 110px;
@@ -100,7 +101,7 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Chữ danh tính */
+/* Danh tính text nghệ thuật */
 .name {
     color: #fff;
     font-size: 24px;
@@ -124,7 +125,7 @@ body {
     letter-spacing: 1px;
 }
 
-/* Khối Kỹ năng (Tags) */
+/* Khối Kỹ năng (Tags) dạng hộp mềm */
 .skills-grid {
     display: flex;
     flex-wrap: wrap;
@@ -145,7 +146,7 @@ body {
     gap: 6px;
 }
 
-/* Hộp Thông tin học vấn */
+/* Hộp thông tin học vấn, năm sinh */
 .info-box {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 16px;
@@ -170,11 +171,11 @@ body {
     text-align: center;
 }
 
-/* Hệ thống các nút bấm */
+/* Các nút điều hướng tương tác mạng xã hội */
 .spam-btn {
     width: 100%;
     background: linear-gradient(90deg, #ff007f, #bc34fa);
-    color: #white;
+    color: #fff;
     border: none;
     padding: 12px;
     border-radius: 14px;
@@ -215,7 +216,7 @@ body {
 
 
 /* ==========================================
-   THÀNH PHẦN 2: THANH ÂM LƯỢNG DỌC (PC)
+   THÀNH PHẦN 2: THANH ÂM LƯỢNG DỌC CỦA MÁY TÍNH (PC)
    ========================================== */
 .volume-vertical-container {
     display: flex;
@@ -252,7 +253,7 @@ body {
 #volume-slider {
     -webkit-appearance: none;
     appearance: none;
-    transform: rotate(-90deg); /* Xoay dọc thanh slider trên PC */
+    transform: rotate(-90deg); /* Xoay thanh trượt thẳng đứng trên PC */
     width: 150px;
     height: 6px;
     background: rgba(255, 255, 255, 0.1);
@@ -272,13 +273,13 @@ body {
 
 
 /* ==========================================
-   THÀNH PHẦN 3: MÀN HÌNH CHÀO (INTRO SCREEN)
+   THÀNH PHẦN 3: MÀN HÌNH CHÀO INTRO (Z-INDEX: 1000)
    ========================================== */
 #intro-screen {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     background: #050409;
-    z-index: 1000;
+    z-index: 1000; /* Luôn cao nhất khi tải trang */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -295,10 +296,10 @@ body {
     width: 100%;
     max-width: 500px;
 }
-.terminal-line { color: #fff; font-family: monospace; font-size: 14px; margin-bottom: 8px; }
+.terminal-line { color: #fff; font-family: monospace; font-size: 14px; margin-bottom: 8px; text-align: left;}
 .cmd-cyan { color: #00f2fe; }
 .cmd-green { color: #27c93f; }
-.terminal-output { color: #aaa; font-family: monospace; font-size: 13px; margin-bottom: 6px; padding-left: 15px; }
+.terminal-output { color: #aaa; font-family: monospace; font-size: 13px; margin-bottom: 6px; padding-left: 15px; text-align: left;}
 .enter-btn {
     width: 100%; background: transparent; border: 1px solid #00f2fe; color: #00f2fe;
     padding: 12px; margin-top: 15px; border-radius: 8px; font-family: monospace;
@@ -308,7 +309,7 @@ body {
 
 
 /* ==========================================
-   THÀNH PHẦN 4: POPUP MODAL DIỄN HỌA SPAM
+   THÀNH PHẦN 4: POPUP CÔNG CỤ SMS PANEL (MODAL)
    ========================================== */
 .modal-overlay {
     position: fixed;
@@ -335,37 +336,37 @@ body {
 .progress-container { width: 100%; background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; margin-bottom: 10px; overflow: hidden; }
 #progress-bar { width: 0%; height: 100%; background: #27c93f; transition: width 0.1s linear; }
 #spam-status { color: #fff; font-size: 13px; font-weight: 500; margin-bottom: 15px; }
-#console-logs { background: #050409; border-radius: 10px; height: 150px; padding: 10px; overflow-y: auto; }
+#console-logs { background: #050409; border-radius: 10px; height: 150px; padding: 10px; overflow-y: auto; text-align: left; }
 
 
 /* ==========================================
-   ĐÁP ỨNG DI ĐỘNG (XỬ LÝ TRIỆT ĐỂ LỖI LỆCH PHẢI)
+   MÀN HÌNH ĐIỆN THOẠI (XỬ LÝ TRIỆT ĐỂ LỖI LỆCH PHẢI & XOAY NGANG LOA)
    ========================================== */
 @media (max-width: 480px) {
     .main-wrapper {
         padding: 15px;
     }
 
-    /* Ép khung bọc đổi hướng thành hàng dọc và ôm sát tâm */
+    /* Ép bộ bọc đổi hướng thành hàng dọc và ôm khít chính giữa tâm */
     .profile-container-wrapper {
-        flex-direction: column-reverse; /* Đẩy thanh volume xuống đáy */
+        flex-direction: column-reverse; /* Đẩy thanh âm lượng xuống phía dưới card */
         gap: 15px;
         width: 100%;
     }
 
-    /* Ép Profile card co giãn tỷ lệ vàng theo màn hình điện thoại */
+    /* Ép Profile Card co giãn linh hoạt, căn giữa hoàn hảo */
     .profile-card {
         width: 100%;
         max-width: 350px;
         padding: 30px 20px;
         border-radius: 20px;
+        margin: 0 auto;
     }
 
-    /* Thu nhỏ nhẹ kích cỡ chữ đề phòng tràn dòng */
     .name { font-size: 21px; }
     .subtitle { font-size: 11px; margin-bottom: 20px; }
 
-    /* Định hình lại thanh âm lượng nằm ngang, rộng bằng với Profile Card */
+    /* Xoay ngang thanh âm lượng, bo tròn đều cân đối ngay dưới card */
     .volume-vertical-container {
         flex-direction: row;
         width: 100%;
@@ -373,9 +374,10 @@ body {
         height: 48px;
         padding: 0 15px;
         border-radius: 14px;
+        margin: 0 auto;
     }
 
-    /* Hủy bỏ góc xoay dọc của thanh kéo để duỗi thẳng nằm ngang */
+    /* Hủy bỏ góc xoay dọc - duỗi thẳng thanh kéo slider nằm ngang */
     .slider-wrapper {
         height: auto;
         width: 65%;
