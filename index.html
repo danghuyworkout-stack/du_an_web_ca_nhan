@@ -43,6 +43,11 @@
     <canvas id="rain-canvas"></canvas>
 
     <div class="profile-container-wrapper">
+         </div>
+
+    <canvas id="trail-canvas"></canvas>
+
+    <div class="profile-container-wrapper">
 
         <div class="profile-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
             <div class="avatar-box">
@@ -175,145 +180,139 @@
 
 
     // ==========================================
-    // 3. HIỆU ỨNG MƯA + TIA SÁNG ĐUỔI THEO NGÓN TAY
+    // 3. HỆ THỐNG HAI CANVAS: MƯA DƯỚI - SÁNG TRÊN
     // ==========================================
-    const canvas = document.getElementById('rain-canvas');
-    const ctx = canvas.getContext('2d');
-    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    const rainCanvas = document.getElementById('rain-canvas');
+    const rainCtx = rainCanvas.getContext('2d');
+    const trailCanvas = document.getElementById('trail-canvas');
+    const trailCtx = trailCanvas.getContext('2d');
 
-    // Biến quản lý chuột/tay chạm
+    function resizeCanvases() {
+        rainCanvas.width = window.innerWidth; rainCanvas.height = window.innerHeight;
+        trailCanvas.width = window.innerWidth; trailCanvas.height = window.innerHeight;
+    }
+    resizeCanvases();
+    window.addEventListener('resize', resizeCanvases);
+
     let mouse = { x: -1000, y: -1000, radius: 90 };
-    let isTouching = false;
-    let trailPoints = []; // Mảng chứa các điểm tạo nên tia sáng dải lụa
+    let trailPoints = [];
+    let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    // --- Cảm ứng Máy tính (PC): Giữ nguyên hiệu ứng né mưa nguyên bản ---
-    window.addEventListener('mousemove', (e) => {
-        if (!isTouching) {
+    // CHỐNG XUNG ĐỘT: PC dùng chuột, Mobile dùng chạm tay độc lập
+    if (!isMobile) {
+        // --- CHỈ CHẠY TRÊN MÁY TÍNH (PC) ---
+        window.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
-        }
-    });
-    window.addEventListener('mouseleave', () => {
-        if (!isTouching) { mouse.x = -1000; mouse.y = -1000; }
-    });
-
-    // --- Cảm ứng Điện thoại (Mobile): Vẽ tia sáng đuổi theo ngón tay ---
-    window.addEventListener('touchstart', (e) => {
-        isTouching = true;
-        mouse.x = -1000; mouse.y = -1000; // Tắt hoàn toàn khiên đẩy mưa trên mobile
-        
-        // Thêm điểm đầu tiên của tia sáng
-        trailPoints.push({
-            x: e.touches[0].clientX,
-            y: e.touches[0].clientY,
-            alpha: 1.0, // Độ sáng ban đầu
-            width: 10   // Độ dày ban đầu của nét vẽ
         });
-    }, { passive: true });
-
-    window.addEventListener('touchmove', (e) => {
-        if (isTouching) {
-            // Khi di chuyển, liên tục bơm thêm các điểm tọa độ mới vào mảng
+        window.addEventListener('mouseleave', () => {
+            mouse.x = -1000; mouse.y = -1000;
+        });
+    } else {
+        // --- CHỈ CHẠY TRÊN ĐIỆN THOẠI (MOBILE) ---
+        window.addEventListener('touchstart', (e) => {
             trailPoints.push({
                 x: e.touches[0].clientX,
                 y: e.touches[0].clientY,
-                alpha: 1.0,
-                width: 10
+                alpha: 1.0, width: 10
             });
-        }
-    }, { passive: true });
+        }, { passive: true });
 
-    window.addEventListener('touchend', () => {
-        isTouching = false;
-    });
+        window.addEventListener('touchmove', (e) => {
+            trailPoints.push({
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+                alpha: 1.0, width: 10
+            });
+        }, { passive: true });
+    }
 
-    // Khởi tạo mưa rơi tự nhiên không ảnh hưởng
+    // Khởi tạo mưa rơi tự nhiên
     const raindrops = [];
-    const maxRaindrops = 250; // Giảm xuống 250 hạt trên mobile để siêu mượt
+    const maxRaindrops = isMobile ? 220 : 400; // Tối ưu số lượng hạt mưa chống lag cho điện thoại
 
     for (let i = 0; i < maxRaindrops; i++) {
         raindrops.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
+            x: Math.random() * rainCanvas.width,
+            y: Math.random() * rainCanvas.height,
             length: Math.random() * 15 + 10,
             speed: Math.random() * 8 + 10,
             opacity: Math.random() * 0.3 + 0.1
         });
     }
 
+    // Vòng lặp Render chính
     function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // 1. XÓA NỀN CŨ ĐỂ VẼ KHUNG HÌNH MỚI
+        rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+        trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
 
-        // A. VẼ MƯA RƠI TỰ NHIÊN
+        // 2. VẼ MƯA (TRÊN CANVAS DƯỚI)
         for (let i = 0; i < raindrops.length; i++) {
             let drop = raindrops[i];
             drop.y += drop.speed;
 
-            // Trên PC (Không chạm tay) thì mưa vẫn né chuột
-            if (!isTouching && mouse.x !== -1000) {
+            // Hiệu ứng né mưa vòng tròn (Chỉ chạy trên PC)
+            if (!isMobile && mouse.x !== -1000) {
                 let dx = drop.x - mouse.x;
                 let dy = drop.y - mouse.y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
                 if (distance <= mouse.radius && dy < 0) {
-                    drop.y = -20; drop.x = Math.random() * canvas.width; continue;
+                    drop.y = -20; drop.x = Math.random() * rainCanvas.width; continue;
                 }
             }
 
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`;
-            ctx.lineWidth = 1.2;
-            ctx.moveTo(drop.x, drop.y);
-            ctx.lineTo(drop.x, drop.y + drop.length);
-            ctx.stroke();
+            rainCtx.beginPath();
+            rainCtx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`;
+            rainCtx.lineWidth = 1.2;
+            rainCtx.moveTo(drop.x, drop.y);
+            rainCtx.lineTo(drop.x, drop.y + drop.length);
+            rainCtx.stroke();
 
-            if (drop.y > canvas.height) {
-                drop.y = -20; drop.x = Math.random() * canvas.width;
+            if (drop.y > rainCanvas.height) {
+                drop.y = -20; drop.x = Math.random() * rainCanvas.width;
             }
         }
 
-        // B. VẼ CHIẾC DÙ QUANH CHUỘT (CHỈ HIỂN THỊ TRÊN PC KHÔNG CHẠM)
-        if (mouse.x !== -1000 && !isTouching) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = "#00f2fe";
-            ctx.strokeStyle = "rgba(0, 242, 254, 0.2)";
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            ctx.restore();
+        // 3. VẼ VÒNG TRÒN PHÁT SÁNG QUANH CHUỘT (CHỈ HIỂN THỊ TRÊN PC)
+        if (!isMobile && mouse.x !== -1000) {
+            rainCtx.save();
+            rainCtx.beginPath();
+            rainCtx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+            rainCtx.shadowBlur = 20;
+            rainCtx.shadowColor = "#00f2fe";
+            rainCtx.strokeStyle = "rgba(0, 242, 254, 0.2)";
+            rainCtx.lineWidth = 1.5;
+            rainCtx.stroke();
+            rainCtx.restore();
         }
 
-        // C. VẼ TIA SÁNG ĐUỔI THEO NGÓN TAY (LIGHT TRAIL) TRÊN MOBILE
-        if (trailPoints.length > 1) {
-            ctx.save();
-            // Thêm hiệu ứng phát sáng Neon rực rỡ cho tia sáng
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = "#bc34fa"; // Màu tím Neon ma mị quý phái
+        // 4. VẼ TIA SÁNG ĐUỔI THEO TAY (TRÊN CANVAS TRÊN - ĐÈ LÊN PROFILE)
+        if (isMobile && trailPoints.length > 1) {
+            trailCtx.save();
+            trailCtx.shadowBlur = 18;
+            trailCtx.shadowColor = "#bc34fa"; // Ánh sáng neon tím cực đẹp
 
             for (let i = 1; i < trailPoints.length; i++) {
                 let p1 = trailPoints[i - 1];
                 let p2 = trailPoints[i];
 
-                ctx.beginPath();
-                // Tạo dải màu gradient mờ dần mượt mà giữa các điểm
-                ctx.strokeStyle = `rgba(188, 52, 250, ${p2.alpha})`;
-                ctx.lineWidth = p2.width;
-                ctx.lineCap = "round"; // Làm bo tròn 2 đầu nét vẽ để tia sáng mềm mại
-                ctx.lineJoin = "round";
-                ctx.moveTo(p1.x, p1.y);
-                ctx.lineTo(p2.x, p2.y);
-                ctx.stroke();
+                trailCtx.beginPath();
+                trailCtx.strokeStyle = `rgba(188, 52, 250, ${p2.alpha})`;
+                trailCtx.lineWidth = p2.width;
+                trailCtx.lineCap = "round";
+                trailCtx.lineJoin = "round";
+                trailCtx.moveTo(p1.x, p1.y);
+                trailCtx.lineTo(p2.x, p2.y);
+                trailCtx.stroke();
 
-                // Làm cho tia sáng vuốt đuôi nhỏ dần và mờ dần theo thời gian thực
-                p2.alpha -= 0.03; // Tốc độ biến mất mờ dần
-                p2.width -= 0.2;  // Tia sáng nhỏ dần đều
+                // Hiệu ứng vuốt đuôi biến mất dần mượt mà
+                p2.alpha -= 0.025;
+                p2.width -= 0.18;
             }
-            ctx.restore();
+            trailCtx.restore();
 
-            // Xóa bỏ các điểm đã mờ hẳn (alpha <= 0) khỏi bộ nhớ để chống tràn RAM/lag máy
+            // Dọn dẹp bộ nhớ RAM liên tục
             trailPoints = trailPoints.filter(p => p.alpha > 0);
         }
 
