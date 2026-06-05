@@ -12,7 +12,7 @@
 </head>
 <body>
 
-    <audio id="bg-music" src="Link_Nhạc_Của_Bạn_Ở_Đây.mp3" loop></audio>
+    <audio id="bg-music" src="CHÈN_LINK_NHẠC_CỦA_BẠN_TẠI_ĐÂY.mp3" loop></audio>
 
     <canvas id="rain-canvas"></canvas>
 
@@ -44,7 +44,7 @@
             <div class="profile-card" data-tilt data-tilt-max="10" data-tilt-speed="400">
                 <div class="avatar-box">
                     <div class="avatar-border"></div>
-                    <img src="emri.jpg" alt="Avatar" class="avatar">
+                    <img src="CHÈN_LINK_AVATAR_CỦA_BẠN_TẠI_ĐÂY.jpg" alt="Avatar" class="avatar">
                 </div>
 
                 <h1 class="name">Nguyễn Đăng Huy <i class="fa-solid fa-circle-check verify-badge"></i></h1>
@@ -73,8 +73,8 @@
                 </button>
 
                 <div class="social-links">
-                    <a href="https://www.facebook.com/danghuydangsuy" target="_blank" class="social-btn fb-btn"><i class="fa-brands fa-facebook"></i> Facebook</a>
-                    <a href="https://github.com/danghuyworkout-stack" target="_blank" class="social-btn gh-btn"><i class="fa-brands fa-github"></i> GitHub</a>
+                    <a href="#" target="_blank" class="social-btn fb-btn"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="#" target="_blank" class="social-btn gh-btn"><i class="fa-brands fa-github"></i> GitHub</a>
                 </div>
             </div>
 
@@ -89,9 +89,9 @@
             </div>
             
             <div id="spam-input-group">
-                <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Nhập số điện thoại nạn nhân để tiến hành khai thác API OTP giả lập.</p>
+                <p style="font-size: 13px; color: #aaa; margin-bottom: 15px; text-align: center;">Nhập số điện thoại mục tiêu để giả lập khai thác lỗ hổng gửi tin nhắn OTP liên tục.</p>
                 <input type="tel" id="target-phone" placeholder="Ví dụ: 0987654321" autocomplete="off">
-                <button class="execute-btn" onclick="startFakeSpam()">LAUNCH EXPLOIT ATTACT</button>
+                <button class="execute-btn" onclick="startFakeSpam()">LAUNCH EXPLOIT ATTACK</button>
             </div>
 
             <div id="spam-console" style="display: none;">
@@ -108,7 +108,262 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script>
-        // ... (Bao gồm toàn bộ mã JavaScript 4 phần đã tối ưu hóa ở lượt phản hồi trước của bạn vào đây) ...
+        // ==========================================
+        // 1. TỰ ĐỘNG LẤY THÔNG TIN HỆ THỐNG (INTRO)
+        // ==========================================
+        fetch('https://api.ipify.org?format=json')
+            .then(res => res.json())
+            .then(data => document.getElementById('user-ip').innerText = data.ip)
+            .catch(() => document.getElementById('user-ip').innerText = "116.110.160.98");
+
+        const os = navigator.userAgent.includes("Windows") ? "Windows" : navigator.userAgent.includes("Mac") ? "MacOS" : "Linux/Android";
+        document.getElementById('user-os').innerText = os;
+
+        function startProfile() {
+            // FIX LỖI BLOCK CLICK: Đưa canvas dải sáng lên trên cùng đè profile CHỈ khi đã bấm vào trang chính
+            document.getElementById('trail-canvas').style.zIndex = "99"; 
+
+            document.getElementById('intro-screen').classList.add('fade-out');
+            setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 500);
+            document.getElementById('bg-music').play().catch(err => console.log(err));
+        }
+        window.addEventListener('keydown', (e) => { if (e.key === 'Enter') startProfile(); });
+
+
+        // ==========================================
+        // 2. LOGIC ĐIỀU KHIỂN ÂM LƯỢNG (DỌC + MUTE)
+        // ==========================================
+        let lastVolume = 100;
+
+        function changeVolume(volumeValue) {
+            const music = document.getElementById('bg-music');
+            const volumeIcon = document.getElementById('volume-icon');
+            const volumeText = document.getElementById('volume-text');
+            const volumeSlider = document.getElementById('volume-slider');
+            if (!music) return;
+
+            music.volume = volumeValue / 100;
+            volumeText.innerText = volumeValue + '%';
+            volumeSlider.value = volumeValue;
+            
+            if (volumeValue == 0) {
+                volumeIcon.className = "fa-solid fa-volume-xmark";
+                volumeIcon.style.color = "#ff5f56";
+            } else if (volumeValue < 50) {
+                volumeIcon.className = "fa-solid fa-volume-low";
+                volumeIcon.style.color = "#00f2fe";
+            } else {
+                volumeIcon.className = "fa-solid fa-volume-high";
+                volumeIcon.style.color = "#00f2fe";
+            }
+        }
+
+        function toggleMute() {
+            const volumeSlider = document.getElementById('volume-slider');
+            if (volumeSlider.value > 0) {
+                lastVolume = volumeSlider.value;
+                changeVolume(0);
+            } else {
+                changeVolume(lastVolume);
+            }
+        }
+
+
+        // ==========================================
+        // 3. HỆ THỐNG HAI CANVAS: MƯA DƯỚI - SÁNG TRÊN (CÔ LẬP PC & MOBILE)
+        // ==========================================
+        const rainCanvas = document.getElementById('rain-canvas');
+        const rainCtx = rainCanvas.getContext('2d');
+        const trailCanvas = document.getElementById('trail-canvas');
+        const trailCtx = trailCanvas.getContext('2d');
+
+        function resizeCanvases() {
+            rainCanvas.width = window.innerWidth; rainCanvas.height = window.innerHeight;
+            trailCanvas.width = window.innerWidth; trailCanvas.height = window.innerHeight;
+        }
+        resizeCanvases();
+        window.addEventListener('resize', resizeCanvases);
+
+        let mouse = { x: -1000, y: -1000, radius: 90 };
+        let trailPoints = [];
+
+        // --- LẮNG NGHE CHUỘT TRÊN PC (KHÔI PHỤC KHIÊN PHÁT SÁNG NÉ MƯA ĐỘC LẬP) ---
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseleave', () => {
+            mouse.x = -1000; mouse.y = -1000;
+        });
+
+        // --- LẮNG NGHE TAY CHẠM TRÊN MOBILE (VẼ TIA SÁNG ĐUỔI THEO) ---
+        window.addEventListener('touchstart', (e) => {
+            // Khóa hoàn toàn tọa độ khiên PC khi dùng cảm ứng để tránh xung đột cấu trúc mưa
+            mouse.x = -1000; mouse.y = -1000;
+            
+            trailPoints.push({
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+                alpha: 1.0, width: 10
+            });
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            mouse.x = -1000; mouse.y = -1000;
+            
+            trailPoints.push({
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+                alpha: 1.0, width: 10
+            });
+        }, { passive: true });
+
+
+        // Tạo mảng hạt mưa rơi tự nhiên rơi phía dưới Profile Card
+        const raindrops = [];
+        const maxRaindrops = (window.innerWidth < 480) ? 220 : 420; 
+
+        for (let i = 0; i < maxRaindrops; i++) {
+            raindrops.push({
+                x: Math.random() * rainCanvas.width,
+                y: Math.random() * rainCanvas.height,
+                length: Math.random() * 15 + 10,
+                speed: Math.random() * 8 + 10,
+                opacity: Math.random() * 0.3 + 0.1
+            });
+        }
+
+        // Vòng lặp vẽ đồ họa liên tục (Animation Loop)
+        function animate() {
+            rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+            trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+
+            // A. XỬ LÝ VẼ MƯA (CANVAS DƯỚI)
+            for (let i = 0; i < raindrops.length; i++) {
+                let drop = raindrops[i];
+                drop.y += drop.speed;
+
+                // Hiệu ứng né mưa vòng tròn trên PC (Khi mouse.x có tọa độ thực)
+                if (mouse.x !== -1000) {
+                    let dx = drop.x - mouse.x;
+                    let dy = drop.y - mouse.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance <= mouse.radius && dy < 0) {
+                        drop.y = -20; drop.x = Math.random() * rainCanvas.width; continue;
+                    }
+                }
+
+                rainCtx.beginPath();
+                rainCtx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`;
+                rainCtx.lineWidth = 1.2;
+                rainCtx.moveTo(drop.x, drop.y);
+                rainCtx.lineTo(drop.x, drop.y + drop.length);
+                rainCtx.stroke();
+
+                if (drop.y > rainCanvas.height) {
+                    drop.y = -20; drop.x = Math.random() * rainCanvas.width;
+                }
+            }
+
+            // B. VẼ TẤM KHIÊN NÉ MƯA PHÁT SÁNG TRÒN (CHỈ HIỂN THỊ TRÊN PC KHÔNG CHẠM)
+            if (mouse.x !== -1000) {
+                rainCtx.save();
+                rainCtx.beginPath();
+                rainCtx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+                rainCtx.shadowBlur = 20;
+                rainCtx.shadowColor = "#00f2fe";
+                rainCtx.strokeStyle = "rgba(0, 242, 254, 0.2)";
+                rainCtx.lineWidth = 1.5;
+                rainCtx.stroke();
+                rainCtx.restore();
+            }
+
+            // C. VẼ TIA SÁNG ĐUỔI THEO NGÓN TAY VẼ (CANVAS TRÊN - PHÍA TRƯỚC ĐÈ PROFILE)
+            if (trailPoints.length > 1) {
+                trailCtx.save();
+                trailCtx.shadowBlur = 18;
+                trailCtx.shadowColor = "#bc34fa"; // Ánh sáng neon tím
+
+                for (let i = 1; i < trailPoints.length; i++) {
+                    let p1 = trailPoints[i - 1];
+                    let p2 = trailPoints[i];
+
+                    trailCtx.beginPath();
+                    trailCtx.strokeStyle = `rgba(188, 52, 250, ${p2.alpha})`;
+                    trailCtx.lineWidth = p2.width;
+                    trailCtx.lineCap = "round";
+                    trailCtx.lineJoin = "round";
+                    trailCtx.moveTo(p1.x, p1.y);
+                    trailCtx.lineTo(p2.x, p2.y);
+                    trailCtx.stroke();
+
+                    // Hiệu ứng vuốt lụa mờ dần và nhỏ dần theo thời gian thực
+                    p2.alpha -= 0.025;
+                    p2.width -= 0.18;
+                }
+                trailCtx.restore();
+
+                // Dọn dẹp mảng điểm cũ chống tràn dung lượng bộ nhớ RAM của điện thoại
+                trailPoints = trailPoints.filter(p => p.alpha > 0);
+            }
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // ==========================================
+        // 4. LOGIC TOOL SPAM SMS (GIẢ LẬP CONSOLE)
+        // ==========================================
+        function openSpamModal() { document.getElementById('spam-modal').style.display = 'flex'; }
+        function closeSpamModal() {
+            document.getElementById('spam-modal').style.display = 'none';
+            document.getElementById('spam-input-group').style.display = 'block';
+            document.getElementById('spam-console').style.display = 'none';
+            document.getElementById('console-logs').innerHTML = '';
+        }
+
+        function startFakeSpam() {
+            const phone = document.getElementById('target-phone').value;
+            if (!phone) { alert('Vui lòng nhập số điện thoại mục tiêu!'); return; }
+            
+            document.getElementById('spam-input-group').style.display = 'none';
+            document.getElementById('spam-console').style.display = 'block';
+            
+            const logsContainer = document.getElementById('console-logs');
+            const progressBar = document.getElementById('progress-bar');
+            const statusText = document.getElementById('spam-status');
+            
+            const logs = [
+                `Connecting to bypass gateway server...`, `[OK] Connected to API_Gateway_v4.2`,
+                `Fetching target info for: ${phone}...`, `[SUCCESS] Vulnerability found in API_Tiki_OTP`,
+                `[SUCCESS] Vulnerability found in API_Shopee_Login`, `Starting multi-thread bypass...`,
+                `[THREAD 1] Sending SMS OTP (Tiki) -> Success!`, `[THREAD 2] Sending SMS OTP (Shopee) -> Success!`,
+                `[THREAD 3] Sending SMS OTP (Grab) -> Success!`, `Looping exploit requests... Queue full!`
+            ];
+            
+            let currentLog = 0; let progress = 0;
+            
+            const logInterval = setInterval(() => {
+                if (currentLog < logs.length) {
+                    const p = document.createElement('p');
+                    p.style.margin = '4px 0'; p.style.fontFamily = 'monospace'; p.style.fontSize = '12px'; p.style.textAlign = 'left';
+                    p.style.color = logs[currentLog].includes('SUCCESS') || logs[currentLog].includes('OK') ? '#27c93f' : logs[currentLog].includes('Sending') ? '#ffbd2e' : '#00f2fe';
+                    p.innerText = logs[currentLog]; logsContainer.appendChild(p);
+                    logsContainer.scrollTop = logsContainer.scrollHeight; currentLog++;
+                }
+            }, 400);
+            
+            const progressInterval = setInterval(() => {
+                if (progress < 100) {
+                    progress += 2; progressBar.style.width = progress + '%';
+                    statusText.innerText = `Attacking: ${progress}% - Sent: ${Math.floor(progress * 1.5)} SMS`;
+                } else {
+                    clearInterval(progressInterval); clearInterval(logInterval);
+                    statusText.style.color = '#ff5f56'; statusText.innerText = `✔️ ATTACK COMPLETED! TARGET CRASHED!`;
+                }
+            }, 150);
+        }
     </script>
 </body>
 </html>
