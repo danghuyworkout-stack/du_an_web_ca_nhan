@@ -161,7 +161,36 @@ function createSplash(x, y) {
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+// HÀM ĐIỀU KHIỂN ÂM LƯỢNG THỰC TẾ
+function changeVolume(volumeValue) {
+    const music = document.getElementById('bg-music');
+    const volumeIcon = document.getElementById('volume-icon');
+    const volumeText = document.getElementById('volume-text');
+    
+    if (!music) return; // Nếu không tìm thấy thẻ nhạc thì dừng lại để tránh lỗi
 
+    // Chuyển đổi giá trị từ 0-100 của thanh trượt sang 0.0 - 1.0 của thẻ audio
+    const volumeDecimal = volumeValue / 100;
+    music.volume = volumeDecimal;
+    
+    // Hiển thị phần trăm chữ số
+    volumeText.innerText = volumeValue + '%';
+    
+    // Tự động thay đổi icon loa theo mức to nhỏ
+    if (volumeValue == 0) {
+        volumeIcon.className = "fa-solid fa-volume-xmark"; // Tắt tiếng
+        volumeIcon.style.color = "#ff5f56";
+    } else if (volumeValue < 40) {
+        volumeIcon.className = "fa-solid fa-volume-off"; // Nhỏ
+        volumeIcon.style.color = "#94a3b8";
+    } else if (volumeValue < 80) {
+        volumeIcon.className = "fa-solid fa-volume-low"; // Vừa
+        volumeIcon.style.color = "#00f2fe";
+    } else {
+        volumeIcon.className = "fa-solid fa-volume-high"; // To
+        volumeIcon.style.color = "#00f2fe";
+    }
+}
     // 1. XỬ LÝ VÀ VẼ MƯA RƠI
     for (let i = 0; i < raindrops.length; i++) {
         let drop = raindrops[i];
