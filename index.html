@@ -114,7 +114,7 @@
         </div>
     </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 <script>
     // ==========================================
     // 1. TỰ ĐỘNG LẤY THÔNG TIN HỆ THỐNG (INTRO)
@@ -127,7 +127,6 @@
     const os = navigator.userAgent.includes("Windows") ? "Windows" : navigator.userAgent.includes("Mac") ? "MacOS" : "Linux/Android";
     document.getElementById('user-os').innerText = os;
 
-    // Logic bấm để vào trang chính
     function startProfile() {
         document.getElementById('intro-screen').classList.add('fade-out');
         setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 500);
@@ -139,7 +138,7 @@
     // ==========================================
     // 2. LOGIC ĐIỀU KHIỂN ÂM LƯỢNG (DỌC + MUTE)
     // ==========================================
-    let lastVolume = 100; // Lưu lại mức âm lượng trước khi tắt tiếng
+    let lastVolume = 100;
 
     function changeVolume(volumeValue) {
         const music = document.getElementById('bg-music');
@@ -148,15 +147,13 @@
         const volumeSlider = document.getElementById('volume-slider');
         if (!music) return;
 
-        // Thay đổi âm lượng thực tế của thẻ audio
         music.volume = volumeValue / 100;
         volumeText.innerText = volumeValue + '%';
         volumeSlider.value = volumeValue;
         
-        // Thay đổi Icon và màu sắc tương ứng
         if (volumeValue == 0) {
             volumeIcon.className = "fa-solid fa-volume-xmark";
-            volumeIcon.style.color = "#ff5f56"; // Đỏ khi tắt tiếng
+            volumeIcon.style.color = "#ff5f56";
         } else if (volumeValue < 50) {
             volumeIcon.className = "fa-solid fa-volume-low";
             volumeIcon.style.color = "#00f2fe";
@@ -166,20 +163,19 @@
         }
     }
 
-    // Hàm click vào Icon Loa để Bật/Tắt tiếng nhanh
     function toggleMute() {
         const volumeSlider = document.getElementById('volume-slider');
         if (volumeSlider.value > 0) {
             lastVolume = volumeSlider.value;
-            changeVolume(0); // Tắt tiếng
+            changeVolume(0);
         } else {
-            changeVolume(lastVolume); // Khôi phục lại tiếng cũ
+            changeVolume(lastVolume);
         }
     }
 
 
     // ==========================================
-    // 3. HIỆU ỨNG MƯA ĐA NỀN TẢNG TỐI ƯU CẤU HÌNH (CANVAS)
+    // 3. HIỆU ỨNG MƯA + TIA SÁNG ĐUỔI THEO NGÓN TAY
     // ==========================================
     const canvas = document.getElementById('rain-canvas');
     const ctx = canvas.getContext('2d');
@@ -187,14 +183,14 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Cấu hình ban đầu
-    let mouse = { x: -1000, y: -1000, radius: 90 }; // Mặc định PC là 90
-    let isTouching = false; 
+    // Biến quản lý chuột/tay chạm
+    let mouse = { x: -1000, y: -1000, radius: 90 };
+    let isTouching = false;
+    let trailPoints = []; // Mảng chứa các điểm tạo nên tia sáng dải lụa
 
-    // --- Sự kiện di chuột trên Máy tính (PC) ---
+    // --- Cảm ứng Máy tính (PC): Giữ nguyên hiệu ứng né mưa nguyên bản ---
     window.addEventListener('mousemove', (e) => {
         if (!isTouching) {
-            mouse.radius = 90; // Giữ nguyên bán kính to trên PC
             mouse.x = e.clientX;
             mouse.y = e.clientY;
         }
@@ -203,142 +199,124 @@
         if (!isTouching) { mouse.x = -1000; mouse.y = -1000; }
     });
 
-    // --- Sự kiện chạm tay trên Điện thoại (Mobile) ---
+    // --- Cảm ứng Điện thoại (Mobile): Vẽ tia sáng đuổi theo ngón tay ---
     window.addEventListener('touchstart', (e) => {
         isTouching = true;
-        mouse.radius = 50; // THU NHỎ PHẠM VI KHIÊN TRÊN MOBILE CÒN 50PX ĐỂ ĐỠ LAG
-        mouse.x = e.touches[0].clientX;
-        mouse.y = e.touches[0].clientY;
+        mouse.x = -1000; mouse.y = -1000; // Tắt hoàn toàn khiên đẩy mưa trên mobile
+        
+        // Thêm điểm đầu tiên của tia sáng
+        trailPoints.push({
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY,
+            alpha: 1.0, // Độ sáng ban đầu
+            width: 10   // Độ dày ban đầu của nét vẽ
+        });
     }, { passive: true });
 
     window.addEventListener('touchmove', (e) => {
         if (isTouching) {
-            mouse.x = e.touches[0].clientX;
-            mouse.y = e.touches[0].clientY;
+            // Khi di chuyển, liên tục bơm thêm các điểm tọa độ mới vào mảng
+            trailPoints.push({
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+                alpha: 1.0,
+                width: 10
+            });
         }
     }, { passive: true });
 
     window.addEventListener('touchend', () => {
         isTouching = false;
-        mouse.x = -1000;
-        mouse.y = -1000; 
     });
 
-    // Khởi tạo danh sách mưa
+    // Khởi tạo mưa rơi tự nhiên không ảnh hưởng
     const raindrops = [];
-    const splashes = [];
-    const maxRaindrops = 450; 
+    const maxRaindrops = 250; // Giảm xuống 250 hạt trên mobile để siêu mượt
 
     for (let i = 0; i < maxRaindrops; i++) {
         raindrops.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
             length: Math.random() * 15 + 10,
-            speed: Math.random() * 10 + 12,
-            baseSpeed: 0,
-            opacity: Math.random() * 0.4 + 0.1
+            speed: Math.random() * 8 + 10,
+            opacity: Math.random() * 0.3 + 0.1
         });
-        raindrops[i].baseSpeed = raindrops[i].speed;
-    }
-
-    function createSplash(x, y) {
-        const splashCount = Math.floor(Math.random() * 2) + 1; // Giảm số lượng hạt vỡ trên mobile xuống để mượt hơn
-        for (let i = 0; i < splashCount; i++) {
-            splashes.push({
-                x: x, y: y,
-                vx: (Math.random() - 0.5) * 3,
-                vy: -Math.random() * 3 - 1,
-                radius: Math.random() * 1 + 0.5,
-                alpha: 0.6, gravity: 0.2
-            });
-        }
     }
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // VẼ VIỀN LÁ CHẮN (CHỈ VẼ TRÊN PC, ĐIỆN THOẠI BỎ HOÀN TOÀN ĐỂ GIẢM LAG)
-        if (mouse.x !== -1000 && !isTouching) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
-            ctx.shadowBlur = 25;
-            ctx.shadowColor = "#00f2fe";
-            ctx.strokeStyle = "rgba(0, 242, 254, 0.25)";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            ctx.restore();
-        }
-
-        // 1. XỬ LÝ DI CHUYỂN CỦA GIỌT MƯA
+        // A. VẼ MƯA RƠI TỰ NHIÊN
         for (let i = 0; i < raindrops.length; i++) {
             let drop = raindrops[i];
-            let dx = drop.x - mouse.x;
-            let dy = drop.y - mouse.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
+            drop.y += drop.speed;
 
-            // HIỆU ỨNG HÚT MƯA: CHỈ HOẠT ĐỘNG KHI ĐANG CÓ TAY CHẠM TRÊN ĐIỆN THOẠI
-            if (isTouching && mouse.x !== -1000 && distance < mouse.radius * 2) { 
-                let force = (mouse.radius * 2 - distance) / (mouse.radius * 2);
-                let pullSpeed = 6 * force;
-                drop.x += (mouse.x - drop.x) * 0.1 * pullSpeed;
-                drop.y += (mouse.y - drop.y) * 0.1 * pullSpeed;
-
-                if (distance <= 12) {
-                    createSplash(drop.x, drop.y);
-                    drop.y = -20; drop.x = Math.random() * canvas.width;
-                    drop.speed = drop.baseSpeed; continue;
-                }
-            } else {
-                // RƠI TỰ NHIÊN HOẶC NÉ TRÊN PC
-                drop.y += drop.speed;
-
-                if (!isTouching && distance <= mouse.radius && dy < 0) {
-                    let angle = Math.atan2(dy, dx);
-                    createSplash(mouse.x + Math.cos(angle) * mouse.radius, mouse.y + Math.sin(angle) * mouse.radius);
+            // Trên PC (Không chạm tay) thì mưa vẫn né chuột
+            if (!isTouching && mouse.x !== -1000) {
+                let dx = drop.x - mouse.x;
+                let dy = drop.y - mouse.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance <= mouse.radius && dy < 0) {
                     drop.y = -20; drop.x = Math.random() * canvas.width; continue;
                 }
             }
 
-            // Vẽ nét giọt mưa
             ctx.beginPath();
-            ctx.strokeStyle = isTouching ? `rgba(188, 52, 250, ${drop.opacity + 0.3})` : `rgba(0, 242, 254, ${drop.opacity})`;
-            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`;
+            ctx.lineWidth = 1.2;
             ctx.moveTo(drop.x, drop.y);
             ctx.lineTo(drop.x, drop.y + drop.length);
             ctx.stroke();
 
-            if (drop.y > canvas.height || drop.x < 0 || drop.x > canvas.width) {
-                drop.y = -20; drop.x = Math.random() * canvas.width; drop.speed = drop.baseSpeed;
+            if (drop.y > canvas.height) {
+                drop.y = -20; drop.x = Math.random() * canvas.width;
             }
         }
 
-        // 2. XỬ LÝ CÁC TIA NƯỚC VĂN (SPLASHES)
-        for (let i = splashes.length - 1; i >= 0; i--) {
-            let s = splashes[i];
-            if (isTouching) {
-                s.x += (mouse.x - s.x) * 0.04;
-                s.y += (mouse.y - s.y) * 0.04;
-            } else {
-                s.x += s.vx; s.y += s.vy; s.vy += s.gravity;
-            }
-            s.alpha -= 0.02; // Hạt nước tan nhanh hơn để giải phóng bộ nhớ nhanh
-
-            if (s.alpha <= 0) { splashes.splice(i, 1); continue; }
-
+        // B. VẼ CHIẾC DÙ QUANH CHUỘT (CHỈ HIỂN THỊ TRÊN PC KHÔNG CHẠM)
+        if (mouse.x !== -1000 && !isTouching) {
+            ctx.save();
             ctx.beginPath();
-            ctx.fillStyle = isTouching ? `rgba(188, 52, 250, ${s.alpha})` : `rgba(0, 242, 254, ${s.alpha})`;
-            
-            // CHỈ ĐỔ BÓNG TRÊN PC, MOBILE BỎ QUA ĐỂ KHÔNG BỊ TRỄ NHỊP (LAG)
-            if (!isTouching) {
-                ctx.shadowBlur = 5;
-                ctx.shadowColor = "#00f2fe";
-            }
-            
-            ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0;
+            ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = "#00f2fe";
+            ctx.strokeStyle = "rgba(0, 242, 254, 0.2)";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
         }
+
+        // C. VẼ TIA SÁNG ĐUỔI THEO NGÓN TAY (LIGHT TRAIL) TRÊN MOBILE
+        if (trailPoints.length > 1) {
+            ctx.save();
+            // Thêm hiệu ứng phát sáng Neon rực rỡ cho tia sáng
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#bc34fa"; // Màu tím Neon ma mị quý phái
+
+            for (let i = 1; i < trailPoints.length; i++) {
+                let p1 = trailPoints[i - 1];
+                let p2 = trailPoints[i];
+
+                ctx.beginPath();
+                // Tạo dải màu gradient mờ dần mượt mà giữa các điểm
+                ctx.strokeStyle = `rgba(188, 52, 250, ${p2.alpha})`;
+                ctx.lineWidth = p2.width;
+                ctx.lineCap = "round"; // Làm bo tròn 2 đầu nét vẽ để tia sáng mềm mại
+                ctx.lineJoin = "round";
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+
+                // Làm cho tia sáng vuốt đuôi nhỏ dần và mờ dần theo thời gian thực
+                p2.alpha -= 0.03; // Tốc độ biến mất mờ dần
+                p2.width -= 0.2;  // Tia sáng nhỏ dần đều
+            }
+            ctx.restore();
+
+            // Xóa bỏ các điểm đã mờ hẳn (alpha <= 0) khỏi bộ nhớ để chống tràn RAM/lag máy
+            trailPoints = trailPoints.filter(p => p.alpha > 0);
+        }
+
         requestAnimationFrame(animate);
     }
     animate();
