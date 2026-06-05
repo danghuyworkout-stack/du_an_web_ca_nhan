@@ -174,7 +174,7 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        let mouse = { x: -1000, y: -1000, radius: 90 };
+        let mouse = { x: -1000, y: -1000, radius: 50 };
         window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
         window.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; });
 
@@ -228,10 +228,10 @@
                 let distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance <= mouse.radius && dy < 0) {
-                    let angle = Math.atan2(dy, dx);
-                    createSplash(mouse.x + Math.cos(angle) * mouse.radius, mouse.y + Math.sin(angle) * mouse.radius);
-                    drop.y = -20; drop.x = Math.random() * canvas.width; continue;
-                }
+    let angle = Math.atan2(dy, dx);
+    createSplash(mouse.x + Math.cos(angle) * mouse.radius, mouse.y + Math.sin(angle) * mouse.radius);
+    drop.y = -20; drop.x = Math.random() * canvas.width; continue;
+}
 
                 ctx.beginPath();
                 ctx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`;
