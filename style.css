@@ -29,15 +29,17 @@ body {
     pointer-events: none;
 }
 
-/* Khung Profile ở giữa (Giữ nguyên cấu trúc chuẩn) */
 .profile-container-wrapper {
     display: flex;
     align-items: center;
+    justify-content: center; /* Căn giữa theo chiều ngang */
     gap: 20px;
-    z-index: 5; 
+    z-index: 5;
     position: relative;
+    width: 100%;
+    max-width: 1200px; /* Hoặc kích thước tối đa bạn đang để */
+    margin: 0 auto; /* Tự động căn giữa toàn khối */
 }
-
 /* CANVAS 2: Chuyên vẽ dải sáng Neon (Nằm trên cùng) */
 #trail-canvas {
     position: fixed; /* Đổi sang fixed để đè chuẩn toàn màn hình */
@@ -156,86 +158,63 @@ body {
 .progress-bar-container { width: 100%; height: 6px; background: #1a1d24; border-radius: 10px; overflow: hidden; }
 #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #00f2fe, #bc34fa); }
 
-/* ==================== ĐÁP ỨNG DI ĐỘNG (MOBILE NÂNG CẤP) ==================== */
+/* ==================== ĐÁP ỨNG DI ĐỘNG (FIX LỖI LỆCH PHẢI) ==================== */
 @media (max-width: 480px) {
     
-    /* 1. Thu nhỏ khung bọc và đảo thanh âm lượng xuống dưới */
+    /* Ép khung bọc chính phải xếp theo chiều dọc và căn chính giữa màn hình */
     .profile-container-wrapper {
-        flex-direction: column-reverse; 
-        gap: 12px;
-        width: 100%;
-        padding: 0 15px; /* Tạo khoảng cách 2 bên rìa màn hình điện thoại */
+        flex-direction: column-reverse; /* Đẩy thanh âm lượng xuống dưới card */
+        justify-content: center;        /* Căn giữa dọc */
+        align-items: center;            /* Căn giữa ngang */
+        gap: 15px;
+        width: 100vw;                   /* Lấy hết độ rộng màn hình */
+        padding: 0;                     /* Reset padding để không bị đẩy lệch */
+        box-sizing: border-box;
     }
 
-    /* 2. Sửa lỗi Profile Card chiếm hết màn hình */
+    /* Định hình lại Profile Card nằm ngay ngắn ở giữa */
     .profile-card {
-        width: 100%; /* Tự co giãn theo màn hình điện thoại */
-        max-width: 350px; /* Giới hạn độ rộng tối đa để không bị quá bè */
-        padding: 25px 20px; /* Giảm padding từ (40px 30px) xuống để card gọn hơn */
+        width: 90%;          /* Chiếm 90% chiều rộng màn hình để chừa 2 bên rìa */
+        max-width: 350px;    /* Giới hạn độ rộng tối đa */
+        margin: 0 auto;      /* Căn giữa tuyệt đối */
+        padding: 30px 20px;  /* Siết gọn khoảng cách bên trong */
         border-radius: 20px;
+        box-sizing: border-box;
     }
 
-    /* 3. Thu nhỏ Avatar một chút cho cân đối */
+    /* Thu nhỏ nhẹ Avatar cho cân đối */
     .avatar-box {
-        width: 95px;
-        height: 95px;
-        margin-bottom: 15px;
-    }
-    .avatar {
-        width: 87px;
-        height: 87px;
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 15px auto; /* Căn giữa avatar */
     }
 
-    /* 4. Thu nhỏ cỡ chữ để không bị tràn dòng */
-    .name {
-        font-size: 20px;
-    }
-    .subtitle {
-        font-size: 11px;
-        margin-bottom: 18px;
-    }
-
-    /* 5. Thu nhỏ khoảng cách trong hộp thông tin */
-    .info-box {
-        padding: 12px 14px;
-        margin-bottom: 15px;
-        gap: 8px;
-    }
-    .info-item {
-        font-size: 13px;
-    }
-
-    /* 6. Thu nhỏ các nút bấm để bấm không bị thô */
-    .spam-btn {
-        padding: 10px;
-        font-size: 13px;
-        margin-bottom: 15px;
-    }
-    .social-btn {
-        padding: 10px;
-        font-size: 13px;
-    }
-
-    /* 7. Thanh âm lượng nằm ngang bên dưới gọn gàng */
+    /* Định dạng lại thanh âm lượng nằm ngang, cân bằng ở dưới Card */
     .volume-vertical-container {
-        flex-direction: row; 
-        height: 46px; 
-        width: 100%; 
-        max-width: 350px; 
-        padding: 0 15px; 
-        border-radius: 14px;
+        flex-direction: row !important; /* Ép nằm ngang */
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+        width: 90% !important;   /* Rộng bằng với Profile Card */
+        max-width: 350px;
+        margin: 0 auto;          /* Căn giữa tuyệt đối */
+        padding: 0 15px;
+        border-radius: 15px;
+        box-sizing: border-box;
     }
-    .slider-wrapper { 
-        height: auto; 
-        width: 65%; 
+
+    /* Sửa lại thanh kéo slider chạy mượt theo chiều ngang */
+    .slider-wrapper {
+        height: auto !important;
+        width: 65% !important;
+        display: flex;
+        align-items: center;
     }
-    #volume-slider { 
-        transform: rotate(0deg); 
-        width: 100%; 
+
+    #volume-slider {
+        transform: rotate(0deg) !important; /* Hủy bỏ xoay dọc của PC */
+        width: 100% !important;
         height: 8px;
-    }
-    #volume-slider::-webkit-slider-thumb {
-        width: 18px;
-        height: 18px;
+        margin: 0;
     }
 }
