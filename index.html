@@ -180,7 +180,7 @@
 
 
     // ==========================================
-    // 3. HỆ THỐNG HAI CANVAS: MƯA DƯỚI - SÁNG TRÊN
+    // 3. HỆ THỐNG HAI CANVAS: MƯA DƯỚI - SÁNG TRÊN (SỬA LỖI PC + MOBILE)
     // ==========================================
     const rainCanvas = document.getElementById('rain-canvas');
     const rainCtx = rainCanvas.getContext('2d');
@@ -196,40 +196,43 @@
 
     let mouse = { x: -1000, y: -1000, radius: 90 };
     let trailPoints = [];
-    let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    // CHỐNG XUNG ĐỘT: PC dùng chuột, Mobile dùng chạm tay độc lập
-    if (!isMobile) {
-        // --- CHỈ CHẠY TRÊN MÁY TÍNH (PC) ---
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-        window.addEventListener('mouseleave', () => {
-            mouse.x = -1000; mouse.y = -1000;
-        });
-    } else {
-        // --- CHỈ CHẠY TRÊN ĐIỆN THOẠI (MOBILE) ---
-        window.addEventListener('touchstart', (e) => {
-            trailPoints.push({
-                x: e.touches[0].clientX,
-                y: e.touches[0].clientY,
-                alpha: 1.0, width: 10
-            });
-        }, { passive: true });
+    // --- XỬ LÝ SỰ KIỆN TRÊN MÁY TÍNH (PC MOUSE) ---
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => {
+        mouse.x = -1000; mouse.y = -1000;
+    });
 
-        window.addEventListener('touchmove', (e) => {
-            trailPoints.push({
-                x: e.touches[0].clientX,
-                y: e.touches[0].clientY,
-                alpha: 1.0, width: 10
-            });
-        }, { passive: true });
-    }
+    // --- XỬ LÝ SỰ KIỆN TRÊN ĐIỆN THOẠI (MOBILE TOUCH) ---
+    window.addEventListener('touchstart', (e) => {
+        // Khi có tay chạm vào, lập tức ẩn khiên chuột PC đi để tránh xung đột hiệu ứng
+        mouse.x = -1000; mouse.y = -1000;
+        
+        trailPoints.push({
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY,
+            alpha: 1.0, width: 10
+        });
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+        mouse.x = -1000; mouse.y = -1000; // Khóa tọa độ khiên trên điện thoại khi vuốt
+        
+        trailPoints.push({
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY,
+            alpha: 1.0, width: 10
+        });
+    }, { passive: true });
+
 
     // Khởi tạo mưa rơi tự nhiên
     const raindrops = [];
-    const maxRaindrops = isMobile ? 220 : 400; // Tối ưu số lượng hạt mưa chống lag cho điện thoại
+    // Kiểm tra nhanh cấu hình màn hình nhỏ để tự động giảm hạt mưa trên điện thoại chống lag
+    const maxRaindrops = (window.innerWidth < 480) ? 220 : 420; 
 
     for (let i = 0; i < maxRaindrops; i++) {
         raindrops.push({
@@ -241,19 +244,18 @@
         });
     }
 
-    // Vòng lặp Render chính
+    // Vòng lặp Render chính liên tục
     function animate() {
-        // 1. XÓA NỀN CŨ ĐỂ VẼ KHUNG HÌNH MỚI
         rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
         trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
 
-        // 2. VẼ MƯA (TRÊN CANVAS DƯỚI)
+        // 1. VẼ MƯA (CANVAS DƯỚI)
         for (let i = 0; i < raindrops.length; i++) {
             let drop = raindrops[i];
             drop.y += drop.speed;
 
-            // Hiệu ứng né mưa vòng tròn (Chỉ chạy trên PC)
-            if (!isMobile && mouse.x !== -1000) {
+            // Hiệu ứng né mưa vòng tròn (Nếu tọa độ mouse.x hoạt động - tức là trên PC)
+            if (mouse.x !== -1000) {
                 let dx = drop.x - mouse.x;
                 let dy = drop.y - mouse.y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
@@ -274,8 +276,8 @@
             }
         }
 
-        // 3. VẼ VÒNG TRÒN PHÁT SÁNG QUANH CHUỘT (CHỈ HIỂN THỊ TRÊN PC)
-        if (!isMobile && mouse.x !== -1000) {
+        // 2. VẼ TẤM KHIÊN NÉ MƯA PHÁT SÁNG (CHỈ CHẠY TRÊN PC KHI CÓ CHUỘT)
+        if (mouse.x !== -1000) {
             rainCtx.save();
             rainCtx.beginPath();
             rainCtx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
@@ -287,11 +289,11 @@
             rainCtx.restore();
         }
 
-        // 4. VẼ TIA SÁNG ĐUỔI THEO TAY (TRÊN CANVAS TRÊN - ĐÈ LÊN PROFILE)
-        if (isMobile && trailPoints.length > 1) {
+        // 3. VẼ TIA SÁNG ĐUỔI THEO TAY (CANVAS TRÊN - ĐÈ LÊN PROFILE)
+        if (trailPoints.length > 1) {
             trailCtx.save();
             trailCtx.shadowBlur = 18;
-            trailCtx.shadowColor = "#bc34fa"; // Ánh sáng neon tím cực đẹp
+            trailCtx.shadowColor = "#bc34fa"; // Ánh sáng neon tím ma mị
 
             for (let i = 1; i < trailPoints.length; i++) {
                 let p1 = trailPoints[i - 1];
@@ -306,20 +308,19 @@
                 trailCtx.lineTo(p2.x, p2.y);
                 trailCtx.stroke();
 
-                // Hiệu ứng vuốt đuôi biến mất dần mượt mà
+                // Hiệu ứng dải lụa vuốt đuôi mờ nhỏ dần
                 p2.alpha -= 0.025;
                 p2.width -= 0.18;
             }
             trailCtx.restore();
 
-            // Dọn dẹp bộ nhớ RAM liên tục
+            // Lọc dọn dẹp điểm cũ
             trailPoints = trailPoints.filter(p => p.alpha > 0);
         }
 
         requestAnimationFrame(animate);
     }
     animate();
-
 
     // ==========================================
     // 4. LOGIC TOOL SPAM SMS (GIẢ LẬP CONSOLE)
