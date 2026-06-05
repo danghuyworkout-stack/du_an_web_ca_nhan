@@ -179,7 +179,8 @@ function toggleMute() {
 
 
 // ==========================================
-// 3. HIỆU ỨNG MƯA ĐA NỀN TẢNG (CANVAS)
+// ==========================================
+// 3. HIỆU ỨNG MƯA ĐA NỀN TẢNG TỐI ƯU CẤU HÌNH (CANVAS)
 // ==========================================
 const canvas = document.getElementById('rain-canvas');
 const ctx = canvas.getContext('2d');
@@ -187,13 +188,14 @@ function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = wind
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-// Cấu hình vùng không khí quanh chuột (Bán kính 90px)
-let mouse = { x: -1000, y: -1000, radius: 90 };
-let isTouching = false; // Trạng thái kiểm tra xem có đang chạm điện thoại không
+// Cấu hình ban đầu
+let mouse = { x: -1000, y: -1000, radius: 90 }; // Mặc định PC là 90
+let isTouching = false; 
 
 // --- Sự kiện di chuột trên Máy tính (PC) ---
 window.addEventListener('mousemove', (e) => {
     if (!isTouching) {
+        mouse.radius = 90; // Giữ nguyên bán kính to trên PC
         mouse.x = e.clientX;
         mouse.y = e.clientY;
     }
@@ -205,6 +207,7 @@ window.addEventListener('mouseleave', () => {
 // --- Sự kiện chạm tay trên Điện thoại (Mobile) ---
 window.addEventListener('touchstart', (e) => {
     isTouching = true;
+    mouse.radius = 50; // THU NHỎ PHẠM VI KHIÊN TRÊN MOBILE CÒN 50PX ĐỂ ĐỠ LAG
     mouse.x = e.touches[0].clientX;
     mouse.y = e.touches[0].clientY;
 }, { passive: true });
@@ -219,10 +222,10 @@ window.addEventListener('touchmove', (e) => {
 window.addEventListener('touchend', () => {
     isTouching = false;
     mouse.x = -1000;
-    mouse.y = -1000; // Nhấc tay ra thì tắt lực hút
+    mouse.y = -1000; 
 });
 
-// Khởi tạo danh sách mưa bão dồn dập
+// Khởi tạo danh sách mưa
 const raindrops = [];
 const splashes = [];
 const maxRaindrops = 450; 
@@ -239,61 +242,58 @@ for (let i = 0; i < maxRaindrops; i++) {
     raindrops[i].baseSpeed = raindrops[i].speed;
 }
 
-// Hàm tạo các tia nước vỡ ra khi va chạm
 function createSplash(x, y) {
-    const splashCount = Math.floor(Math.random() * 3) + 2;
+    const splashCount = Math.floor(Math.random() * 2) + 1; // Giảm số lượng hạt vỡ trên mobile xuống để mượt hơn
     for (let i = 0; i < splashCount; i++) {
         splashes.push({
             x: x, y: y,
-            vx: (Math.random() - 0.5) * 4,
-            vy: -Math.random() * 4 - 2,
+            vx: (Math.random() - 0.5) * 3,
+            vy: -Math.random() * 3 - 1,
             radius: Math.random() * 1 + 0.5,
             alpha: 0.6, gravity: 0.2
         });
     }
 }
 
-// Vòng lặp vẽ hoạt ảnh liên tục
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Vẽ vòng tròn lá chắn phát sáng (PC: Xanh đẩy | Mobile: Tím hút)
-    if (mouse.x !== -1000) {
+    // VẼ VIỀN LÁ CHẮN (CHỈ VẼ TRÊN PC, ĐIỆN THOẠI BỎ HOÀN TOÀN ĐỂ GIẢM LAG)
+    if (mouse.x !== -1000 && !isTouching) {
         ctx.save();
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
         ctx.shadowBlur = 25;
-        ctx.shadowColor = isTouching ? "#bc34fa" : "#00f2fe";
-        ctx.strokeStyle = isTouching ? "rgba(188, 52, 250, 0.35)" : "rgba(0, 242, 254, 0.25)";
-        ctx.lineWidth = isTouching ? 3 : 2;
+        ctx.shadowColor = "#00f2fe";
+        ctx.strokeStyle = "rgba(0, 242, 254, 0.25)";
+        ctx.lineWidth = 2;
         ctx.stroke();
         ctx.restore();
     }
 
-    // Xử lý chuyển động từng giọt mưa
+    // 1. XỬ LÝ DI CHUYỂN CỦA GIỌT MƯA
     for (let i = 0; i < raindrops.length; i++) {
         let drop = raindrops[i];
         let dx = drop.x - mouse.x;
         let dy = drop.y - mouse.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (isTouching && distance < mouse.radius * 2.5) {
-            // TRÊN MOBILE: Tính toán lực nam châm hút mưa vào tâm
-            let force = (mouse.radius * 2.5 - distance) / (mouse.radius * 2.5);
-            let pullSpeed = 8 * force;
-            drop.x += (mouse.x - drop.x) * 0.08 * pullSpeed;
-            drop.y += (mouse.y - drop.y) * 0.08 * pullSpeed;
+        // HIỆU ỨNG HÚT MƯA: CHỈ HOẠT ĐỘNG KHI ĐANG CÓ TAY CHẠM TRÊN ĐIỆN THOẠI
+        if (isTouching && mouse.x !== -1000 && distance < mouse.radius * 2) { 
+            let force = (mouse.radius * 2 - distance) / (mouse.radius * 2);
+            let pullSpeed = 6 * force;
+            drop.x += (mouse.x - drop.x) * 0.1 * pullSpeed;
+            drop.y += (mouse.y - drop.y) * 0.1 * pullSpeed;
 
-            if (distance <= 15) {
+            if (distance <= 12) {
                 createSplash(drop.x, drop.y);
                 drop.y = -20; drop.x = Math.random() * canvas.width;
                 drop.speed = drop.baseSpeed; continue;
             }
         } else {
-            // TRÊN PC HOẶC RƠI TỰ NHIÊN
+            // RƠI TỰ NHIÊN HOẶC NÉ TRÊN PC
             drop.y += drop.speed;
 
-            // Chạm rìa ô vô hình trên PC thì nổ tia nước
             if (!isTouching && distance <= mouse.radius && dy < 0) {
                 let angle = Math.atan2(dy, dx);
                 createSplash(mouse.x + Math.cos(angle) * mouse.radius, mouse.y + Math.sin(angle) * mouse.radius);
@@ -301,9 +301,9 @@ function animate() {
             }
         }
 
-        // Vẽ nét giọt mưa
+        // Vẽ nét giọt mưa (Bỏ shadow đổ bóng cho giọt mưa trên điện thoại)
         ctx.beginPath();
-        ctx.strokeStyle = isTouching ? `rgba(188, 52, 250, ${drop.opacity + 0.2})` : `rgba(0, 242, 254, ${drop.opacity})`;
+        ctx.strokeStyle = isTouching ? `rgba(188, 52, 250, ${drop.opacity + 0.3})` : `rgba(0, 242, 254, ${drop.opacity})`;
         ctx.lineWidth = 1.5;
         ctx.moveTo(drop.x, drop.y);
         ctx.lineTo(drop.x, drop.y + drop.length);
@@ -314,30 +314,34 @@ function animate() {
         }
     }
 
-    // Xử lý hạt nước văng tung tóe (Splashes)
+    // 2. XỬ LÝ CÁC TIA NƯỚC VĂNG (SPLASHES)
     for (let i = splashes.length - 1; i >= 0; i--) {
         let s = splashes[i];
         if (isTouching) {
-            s.x += (mouse.x - s.x) * 0.03;
-            s.y += (mouse.y - s.y) * 0.03;
+            s.x += (mouse.x - s.x) * 0.04;
+            s.y += (mouse.y - s.y) * 0.04;
         } else {
             s.x += s.vx; s.y += s.vy; s.vy += s.gravity;
         }
-        s.alpha -= 0.015;
+        s.alpha -= 0.02; // Hạt nước tan nhanh hơn để giải phóng bộ nhớ nhanh
 
         if (s.alpha <= 0) { splashes.splice(i, 1); continue; }
 
         ctx.beginPath();
         ctx.fillStyle = isTouching ? `rgba(188, 52, 250, ${s.alpha})` : `rgba(0, 242, 254, ${s.alpha})`;
-        ctx.shadowBlur = isTouching ? 8 : 5;
-        ctx.shadowColor = isTouching ? "#bc34fa" : "#00f2fe";
+        
+        // CHỈ ĐỔ BÓNG TRÊN PC, MOBILE BỎ QUA ĐỂ KHÔNG BỊ TRỄ NHỊP (LAG)
+        if (!isTouching) {
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = "#00f2fe";
+        }
+        
         ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
     }
     requestAnimationFrame(animate);
 }
-animate();
 
 
 // ==========================================
