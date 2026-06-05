@@ -47,7 +47,18 @@
             <div class="avatar-gradient"></div>
             <img src="emri.jpg" alt="Avatar" class="avatar">
         </div>
+<div class="profile-container-wrapper">
+    <div class="profile-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+        </div>
 
+    <div class="volume-vertical-container">
+        <i class="fa-solid fa-volume-high" id="volume-icon" onclick="toggleMute()" title="Bật/Tắt tiếng"></i>
+        <div class="slider-wrapper">
+            <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
+        </div>
+        <span id="volume-text">100%</span>
+    </div>
+</div>
         <h1 class="name">Đăng Huy <i class="fa-solid fa-circle-check verified-badge"></i></h1>
         <p class="subtitle">Fullstack Developer / Student</p>
 
@@ -67,11 +78,6 @@
                 <i class="fa-solid fa-school"></i>
                 <span>Trường: <strong>THPT Tố Hữu</strong></span>
             </div>
-            <div class="volume-container">
-    <i class="fa-solid fa-volume-high" id="volume-icon"></i>
-    <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
-    <span id="volume-text">100%</span>
-</div>
         </div>
         <div class="social-links">
             <a href="https://www.facebook.com/danghuydangsuy/" class="social-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
@@ -161,34 +167,48 @@ function createSplash(x, y) {
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-// HÀM ĐIỀU KHIỂN ÂM LƯỢNG THỰC TẾ
+// Biến toàn cục để lưu lại mức âm lượng trước khi bấm Mute
+let lastVolume = 100; 
+
 function changeVolume(volumeValue) {
     const music = document.getElementById('bg-music');
     const volumeIcon = document.getElementById('volume-icon');
     const volumeText = document.getElementById('volume-text');
+    const volumeSlider = document.getElementById('volume-slider');
     
-    if (!music) return; // Nếu không tìm thấy thẻ nhạc thì dừng lại để tránh lỗi
+    if (!music) return;
 
-    // Chuyển đổi giá trị từ 0-100 của thanh trượt sang 0.0 - 1.0 của thẻ audio
     const volumeDecimal = volumeValue / 100;
     music.volume = volumeDecimal;
     
-    // Hiển thị phần trăm chữ số
+    // Cập nhật text và giá trị thanh gạt đề phòng trường hợp đồng bộ
     volumeText.innerText = volumeValue + '%';
+    volumeSlider.value = volumeValue;
     
-    // Tự động thay đổi icon loa theo mức to nhỏ
+    // Thay đổi icon dựa trên mức âm lượng
     if (volumeValue == 0) {
-        volumeIcon.className = "fa-solid fa-volume-xmark"; // Tắt tiếng
-        volumeIcon.style.color = "#ff5f56";
-    } else if (volumeValue < 40) {
-        volumeIcon.className = "fa-solid fa-volume-off"; // Nhỏ
-        volumeIcon.style.color = "#94a3b8";
-    } else if (volumeValue < 80) {
-        volumeIcon.className = "fa-solid fa-volume-low"; // Vừa
+        volumeIcon.className = "fa-solid fa-volume-xmark";
+        volumeIcon.style.color = "#ff5f56"; // Đỏ khi tắt tiếng
+    } else if (volumeValue < 50) {
+        volumeIcon.className = "fa-solid fa-volume-low";
         volumeIcon.style.color = "#00f2fe";
     } else {
-        volumeIcon.className = "fa-solid fa-volume-high"; // To
+        volumeIcon.className = "fa-solid fa-volume-high";
         volumeIcon.style.color = "#00f2fe";
+    }
+}
+
+// HÀM CLICK VÀO ICON LOA ĐỂ BẬT/TẮT TIẾNG KHẨN CẤP
+function toggleMute() {
+    const volumeSlider = document.getElementById('volume-slider');
+    
+    if (volumeSlider.value > 0) {
+        // Nếu đang có tiếng -> Lưu lại mức âm lượng hiện tại và đưa về 0 (Mute)
+        lastVolume = volumeSlider.value;
+        changeVolume(0);
+    } else {
+        // Nếu đang tắt tiếng -> Khôi phục lại mức âm lượng trước đó
+        changeVolume(lastVolume);
     }
 }
     // 1. XỬ LÝ VÀ VẼ MƯA RƠI
