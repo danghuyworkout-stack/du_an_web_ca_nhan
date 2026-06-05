@@ -230,17 +230,110 @@ body {
     font-weight: 600;
 }
 
-/* Khung bọc khu vực âm lượng (Tăng khoảng cách đệm cho dễ bấm) */
-.volume-container {
+/* Khung bọc bao gồm cả Profile Card và Thanh âm lượng bên cạnh */
+.profile-container-wrapper {
     display: flex;
     align-items: center;
+    gap: 15px; /* Khoảng cách giữa card và thanh âm lượng */
+    z-index: 2;
+    position: relative;
+}
+
+/* THANH ÂM LƯỢNG NẰM DỌC PHÁT SÁNG */
+.volume-vertical-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: space-between;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 14px 18px; /* Tăng padding từ 10px lên 14px để khung to hơn */
-    margin-bottom: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.02);
-    transform: translateZ(30px);
+    background: rgba(15, 17, 23, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 20px 10px;
+    border-radius: 30px;
+    height: 280px; /* Chiều cao thanh dọc tương đối cân đối với card */
+    width: 45px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
+}
+
+.volume-vertical-container:hover {
+    border-color: rgba(0, 242, 254, 0.3);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.15);
+}
+
+/* Icon loa có hiệu ứng đổi màu khi hover và con trỏ hình bàn tay */
+#volume-icon {
+    font-size: 18px;
+    color: #00f2fe;
+    cursor: pointer;
+    transition: transform 0.2s, filter 0.2s;
+}
+#volume-icon:hover {
+    transform: scale(1.15);
+    filter: brightness(1.2);
+}
+
+/* Chữ hiển thị phần trăm ở dưới cùng */
+#volume-text {
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: bold;
+}
+
+/* BỘ XOAY THANH GẠT THÀNH NẰM DỌC */
+.slider-wrapper {
+    height: 160px; /* Chiều dài vùng trượt */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 150px; /* Đây sẽ thành CHIỀU CAO khi xoay dọc */
+    height: 8px;
+    border-radius: 10px;
+    background: #1a1d24;
+    outline: none;
+    cursor: pointer;
+    /* Gốc cốt lõi: Xoay ngược chiều kim đồng hồ 90 độ để biến ngang thành dọc */
+    transform: rotate(-90deg); 
+    overflow: hidden;
+}
+
+/* Nút tròn kéo (Đã tối ưu kích thước touch bự để điện thoại dễ vuốt) */
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #00f2fe;
+    /* Đổ bóng Neon kéo dài (khi xoay dọc nó sẽ tô màu dải âm lượng phía dưới nút) */
+    box-shadow: -407px 0 0 400px #00f2fe, 0 0 10px #00f2fe;
+    transition: all 0.1s ease;
+}
+#volume-slider::-webkit-slider-thumb:active {
+    background: #ffffff;
+    box-shadow: -407px 0 0 400px #00f2fe, 0 0 20px #ffffff;
+}
+
+/* Hỗ trợ hiển thị mượt trên Firefox */
+#volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    background: #00f2fe;
+    box-shadow: 0 0 10px #00f2fe;
+}
+#volume-slider::-moz-range-progress {
+    background-color: #00f2fe;
+    height: 8px;
+    border-radius: 10px;
 }
 
 /* TÙY BIẾN THANH TRƯỢT TRÊN ĐIỆN THOẠI */
