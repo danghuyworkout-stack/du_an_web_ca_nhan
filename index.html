@@ -180,7 +180,7 @@
 
 
     // ==========================================
-    // 3. HỆ THỐNG HAI CANVAS: MƯA DƯỚI - SÁNG TRÊN (SỬA LỖI PC + MOBILE)
+    // 3. HỆ THỐNG HAI CANVAS: MƯA DƯỚI - SÁNG TRÊN (TỐI ƯU PC & ĐIỆN THOẠI)
     // ==========================================
     const rainCanvas = document.getElementById('rain-canvas');
     const rainCtx = rainCanvas.getContext('2d');
@@ -197,7 +197,7 @@
     let mouse = { x: -1000, y: -1000, radius: 90 };
     let trailPoints = [];
 
-    // --- XỬ LÝ SỰ KIỆN TRÊN MÁY TÍNH (PC MOUSE) ---
+    // --- SỰ KIỆN TRÊN MÁY TÍNH (PC MOUSE) ---
     window.addEventListener('mousemove', (e) => {
         mouse.x = e.clientX;
         mouse.y = e.clientY;
@@ -206,9 +206,9 @@
         mouse.x = -1000; mouse.y = -1000;
     });
 
-    // --- XỬ LÝ SỰ KIỆN TRÊN ĐIỆN THOẠI (MOBILE TOUCH) ---
+    // --- SỰ KIỆN TRÊN ĐIỆN THOẠI (MOBILE TOUCH) ---
     window.addEventListener('touchstart', (e) => {
-        // Khi có tay chạm vào, lập tức ẩn khiên chuột PC đi để tránh xung đột hiệu ứng
+        // Tắt khiên đẩy mưa trên PC ngay khi chạm tay để tránh xung đột
         mouse.x = -1000; mouse.y = -1000;
         
         trailPoints.push({
@@ -219,7 +219,7 @@
     }, { passive: true });
 
     window.addEventListener('touchmove', (e) => {
-        mouse.x = -1000; mouse.y = -1000; // Khóa tọa độ khiên trên điện thoại khi vuốt
+        mouse.x = -1000; mouse.y = -1000; // Khóa tọa độ chuột khi đang vuốt tay
         
         trailPoints.push({
             x: e.touches[0].clientX,
@@ -229,9 +229,9 @@
     }, { passive: true });
 
 
-    // Khởi tạo mưa rơi tự nhiên
+    // Khởi tạo hệ thống hạt mưa rơi tự nhiên
     const raindrops = [];
-    // Kiểm tra nhanh cấu hình màn hình nhỏ để tự động giảm hạt mưa trên điện thoại chống lag
+    // Tự động nhận diện màn hình điện thoại để giảm số hạt mưa xuống 220, giúp mượt 60 FPS
     const maxRaindrops = (window.innerWidth < 480) ? 220 : 420; 
 
     for (let i = 0; i < maxRaindrops; i++) {
@@ -244,17 +244,18 @@
         });
     }
 
-    // Vòng lặp Render chính liên tục
+    // Vòng lặp vẽ đồ họa liên tục (Animation Loop)
     function animate() {
+        // Xóa sạch khung hình cũ trước khi vẽ khung hình mới
         rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
         trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
 
-        // 1. VẼ MƯA (CANVAS DƯỚI)
+        // A. XỬ LÝ VẼ MƯA (CANVAS DƯỚI - PHÍA SAU PROFILE)
         for (let i = 0; i < raindrops.length; i++) {
             let drop = raindrops[i];
             drop.y += drop.speed;
 
-            // Hiệu ứng né mưa vòng tròn (Nếu tọa độ mouse.x hoạt động - tức là trên PC)
+            // Hiệu ứng né mưa vòng tròn (Chỉ chạy trên PC khi mouse.x có tọa độ thực)
             if (mouse.x !== -1000) {
                 let dx = drop.x - mouse.x;
                 let dy = drop.y - mouse.y;
@@ -276,7 +277,7 @@
             }
         }
 
-        // 2. VẼ TẤM KHIÊN NÉ MƯA PHÁT SÁNG (CHỈ CHẠY TRÊN PC KHI CÓ CHUỘT)
+        // B. VẼ TẤM KHIÊN NÉ MƯA PHÁT SÁNG (CHỈ XUẤT HIỆN TRÊN PC)
         if (mouse.x !== -1000) {
             rainCtx.save();
             rainCtx.beginPath();
@@ -289,11 +290,11 @@
             rainCtx.restore();
         }
 
-        // 3. VẼ TIA SÁNG ĐUỔI THEO TAY (CANVAS TRÊN - ĐÈ LÊN PROFILE)
+        // C. VẼ TIA SÁNG ĐUỔI THEO TAY VẼ NÈON (CANVAS TRÊN - PHÍA TRƯỚC ĐÈ PROFILE)
         if (trailPoints.length > 1) {
             trailCtx.save();
             trailCtx.shadowBlur = 18;
-            trailCtx.shadowColor = "#bc34fa"; // Ánh sáng neon tím ma mị
+            trailCtx.shadowColor = "#bc34fa"; // Màu tím Neon ma mị rực rỡ
 
             for (let i = 1; i < trailPoints.length; i++) {
                 let p1 = trailPoints[i - 1];
@@ -308,19 +309,20 @@
                 trailCtx.lineTo(p2.x, p2.y);
                 trailCtx.stroke();
 
-                // Hiệu ứng dải lụa vuốt đuôi mờ nhỏ dần
+                // Hiệu ứng vuốt đuôi dải lụa mờ dần và nhỏ dần
                 p2.alpha -= 0.025;
                 p2.width -= 0.18;
             }
             trailCtx.restore();
 
-            // Lọc dọn dẹp điểm cũ
+            // Tự động lọc bỏ các điểm đã biến mất hoàn toàn để giải phóng RAM
             trailPoints = trailPoints.filter(p => p.alpha > 0);
         }
 
         requestAnimationFrame(animate);
     }
     animate();
+
 
     // ==========================================
     // 4. LOGIC TOOL SPAM SMS (GIẢ LẬP CONSOLE)
