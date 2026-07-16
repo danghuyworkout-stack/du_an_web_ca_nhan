@@ -364,6 +364,33 @@
                 }
             }, 150);
         }
+        // ==========================================
+// 5. HIỆU ỨNG BÓNG ĐỔ THEO CHUỘT CHO PROFILE CARD
+// ==========================================
+const profileCard = document.querySelector('.profile-card');
+
+profileCard.addEventListener('mousemove', (e) => {
+  const rect = profileCard.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  const percentX = (x - centerX) / centerX; // -1 -> 1
+  const percentY = (y - centerY) / centerY; // -1 -> 1
+
+  const shadowStrength = 35;
+  const shadowX = (-percentX * shadowStrength).toFixed(1);
+  const shadowY = (-percentY * shadowStrength).toFixed(1);
+
+  profileCard.style.boxShadow =
+    `${shadowX}px ${shadowY}px 40px rgba(0, 242, 254, 0.35)`; // khớp màu neon xanh cyan của theme
+});
+
+profileCard.addEventListener('mouseleave', () => {
+  profileCard.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.3)';
+});
     </script>
 </body>
 </html>
