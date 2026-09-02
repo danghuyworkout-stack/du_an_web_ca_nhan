@@ -30,6 +30,18 @@ body {
   color: var(--text);
   line-height: 1.7;
   overflow-x: hidden;
+  position: relative;
+}
+
+#rain-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
 }
 
 a { text-decoration: none; color: inherit; }
@@ -115,8 +127,13 @@ ul { list-style: none; }
    ============================================ */
 .section {
   padding: 100px 0;
+  position: relative;
+  z-index: 1;
 }
-.section-alt { background: var(--bg-alt); }
+.section-alt {
+  background: rgba(17, 17, 17, 0.7);
+  backdrop-filter: blur(8px);
+}
 .container {
   max-width: 1100px;
   margin: 0 auto;

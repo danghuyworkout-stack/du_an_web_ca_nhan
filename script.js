@@ -153,5 +153,71 @@ function typeLoop() {
 
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(typeLoop, 500);
+  initRain();
 });
+
+// ============================================
+// RAIN EFFECT (Canvas Animation)
+// ============================================
+function initRain() {
+  const canvas = document.getElementById('rain-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const maxDrops = window.innerWidth < 768 ? 70 : 140;
+  const drops = [];
+
+  for (let i = 0; i < maxDrops; i++) {
+    drops.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      length: Math.random() * 18 + 10,
+      speed: Math.random() * 4 + 6,
+      opacity: Math.random() * 0.35 + 0.15,
+      width: Math.random() * 0.8 + 0.8
+    });
+  }
+
+  function drawRain() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < drops.length; i++) {
+      const drop = drops[i];
+
+      ctx.beginPath();
+      // Màu gradient hạt mưa tím xanh neon tinh tế hòa hợp với theme
+      const grad = ctx.createLinearGradient(drop.x, drop.y, drop.x - 1, drop.y + drop.length);
+      grad.addColorStop(0, `rgba(108, 99, 255, ${drop.opacity * 0.3})`);
+      grad.addColorStop(1, `rgba(0, 242, 254, ${drop.opacity})`);
+
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = drop.width;
+      ctx.lineCap = 'round';
+
+      ctx.moveTo(drop.x, drop.y);
+      ctx.lineTo(drop.x - 1, drop.y + drop.length);
+      ctx.stroke();
+
+      drop.y += drop.speed;
+      drop.x -= 0.5;
+
+      if (drop.y > height) {
+        drop.y = -20;
+        drop.x = Math.random() * (width + 50);
+      }
+    }
+
+    requestAnimationFrame(drawRain);
+  }
+
+  drawRain();
+}
 
