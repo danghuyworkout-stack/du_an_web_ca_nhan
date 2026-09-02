@@ -104,7 +104,7 @@ fadeTargets.forEach(el => {
 });
 
 // ============================================
-// TYPING EFFECT (Hero Title)
+// TYPING EFFECT (Page Title & Hero Title)
 // ============================================
 const typedElement = document.getElementById('typed-text');
 const phrases = [
@@ -122,24 +122,25 @@ const deletingSpeed = 50;
 const pauseDelay = 1800;
 
 function typeLoop() {
-  if (!typedElement) return;
-
   const currentPhrase = phrases[phraseIndex];
+  const currentText = currentPhrase.substring(0, isDeleting ? charIndex - 1 : charIndex + 1);
+
+  if (typedElement) {
+    typedElement.textContent = currentText;
+  }
+  document.title = currentText ? `${currentText} |` : 'Nguyễn Đăng Huy';
 
   if (!isDeleting) {
-    typedElement.textContent = currentPhrase.substring(0, charIndex + 1);
     charIndex++;
-
     if (charIndex === currentPhrase.length) {
+      document.title = currentPhrase;
       isDeleting = true;
       setTimeout(typeLoop, pauseDelay);
       return;
     }
     setTimeout(typeLoop, typingSpeed);
   } else {
-    typedElement.textContent = currentPhrase.substring(0, charIndex - 1);
     charIndex--;
-
     if (charIndex === 0) {
       isDeleting = false;
       phraseIndex = (phraseIndex + 1) % phrases.length;
