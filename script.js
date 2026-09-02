@@ -172,17 +172,18 @@ function initRain() {
     height = canvas.height = window.innerHeight;
   });
 
-  const maxDrops = window.innerWidth < 768 ? 70 : 140;
+  // Tăng số lượng hạt mưa cho rõ và dày hơn
+  const maxDrops = window.innerWidth < 768 ? 160 : 320;
   const drops = [];
 
   for (let i = 0; i < maxDrops; i++) {
     drops.push({
-      x: Math.random() * width,
+      x: Math.random() * (width + 100),
       y: Math.random() * height,
-      length: Math.random() * 18 + 10,
-      speed: Math.random() * 4 + 6,
-      opacity: Math.random() * 0.35 + 0.15,
-      width: Math.random() * 0.8 + 0.8
+      length: Math.random() * 24 + 16,
+      speed: Math.random() * 8 + 10,
+      opacity: Math.random() * 0.5 + 0.4,
+      width: Math.random() * 0.8 + 1.2
     });
   }
 
@@ -193,9 +194,9 @@ function initRain() {
       const drop = drops[i];
 
       ctx.beginPath();
-      // Màu gradient hạt mưa tím xanh neon tinh tế hòa hợp với theme
-      const grad = ctx.createLinearGradient(drop.x, drop.y, drop.x - 1, drop.y + drop.length);
-      grad.addColorStop(0, `rgba(108, 99, 255, ${drop.opacity * 0.3})`);
+      // Màu xanh cyan sáng & tím neon phát sáng rõ rệt
+      const grad = ctx.createLinearGradient(drop.x, drop.y, drop.x - 2, drop.y + drop.length);
+      grad.addColorStop(0, `rgba(108, 99, 255, ${drop.opacity * 0.4})`);
       grad.addColorStop(1, `rgba(0, 242, 254, ${drop.opacity})`);
 
       ctx.strokeStyle = grad;
@@ -203,15 +204,15 @@ function initRain() {
       ctx.lineCap = 'round';
 
       ctx.moveTo(drop.x, drop.y);
-      ctx.lineTo(drop.x - 1, drop.y + drop.length);
+      ctx.lineTo(drop.x - 2, drop.y + drop.length);
       ctx.stroke();
 
       drop.y += drop.speed;
-      drop.x -= 0.5;
+      drop.x -= 1;
 
       if (drop.y > height) {
-        drop.y = -20;
-        drop.x = Math.random() * (width + 50);
+        drop.y = -30;
+        drop.x = Math.random() * (width + 100);
       }
     }
 
