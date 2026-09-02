@@ -1,4 +1,4 @@
-﻿/* ============================================
+/* ============================================
    CSS VARIABLES & RESET
    ============================================ */
 :root {
@@ -263,6 +263,21 @@ ul { list-style: none; }
   color: var(--text-strong);
   letter-spacing: -1px;
   margin-top: -4px;
+  min-height: 1.25em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.typed-cursor {
+  display: inline-block;
+  color: var(--accent);
+  margin-left: 4px;
+  font-weight: 300;
+  animation: blinkCursor 0.8s infinite;
+}
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 .hero-role {
   font-size: 1rem;

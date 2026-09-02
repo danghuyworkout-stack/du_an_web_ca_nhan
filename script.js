@@ -1,4 +1,4 @@
-﻿// ============================================
+// ============================================
 // NAVBAR: Scroll effect + Active link spy
 // ============================================
 const navbar = document.getElementById('navbar');
@@ -102,3 +102,55 @@ fadeTargets.forEach(el => {
   el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
   fadeObserver.observe(el);
 });
+
+// ============================================
+// TYPING EFFECT (Hero Title)
+// ============================================
+const typedElement = document.getElementById('typed-text');
+const phrases = [
+  'Nguyễn Đăng Huy',
+  'Fullstack Developer',
+  'Python Enthusiast',
+  'Creative Web Builder'
+];
+
+let phraseIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+const typingSpeed = 100;
+const deletingSpeed = 50;
+const pauseDelay = 1800;
+
+function typeLoop() {
+  if (!typedElement) return;
+
+  const currentPhrase = phrases[phraseIndex];
+
+  if (!isDeleting) {
+    typedElement.textContent = currentPhrase.substring(0, charIndex + 1);
+    charIndex++;
+
+    if (charIndex === currentPhrase.length) {
+      isDeleting = true;
+      setTimeout(typeLoop, pauseDelay);
+      return;
+    }
+    setTimeout(typeLoop, typingSpeed);
+  } else {
+    typedElement.textContent = currentPhrase.substring(0, charIndex - 1);
+    charIndex--;
+
+    if (charIndex === 0) {
+      isDeleting = false;
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+      setTimeout(typeLoop, 400);
+      return;
+    }
+    setTimeout(typeLoop, deletingSpeed);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(typeLoop, 500);
+});
+
