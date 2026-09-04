@@ -325,7 +325,7 @@ async function initWelcomeTerminal() {
       // Cập nhật luôn badge trên trang chính
       const greetingEl = document.getElementById('visitor-badge');
       if (greetingEl) {
-        greetingEl.innerHTML = ${data.flag || '📍'} Chào bạn từ <strong></strong> &middot; ;
+        greetingEl.innerHTML = (data.flag || "Ὂi") + " Cháo bạn tằb <strong>" + locationText + "</strong> &raquo; " + ispText;
         greetingEl.style.display = 'inline-flex';
         greetingEl.style.alignItems = 'center';
       }
