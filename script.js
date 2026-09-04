@@ -303,6 +303,13 @@ async function initWelcomeTerminal() {
   if (closeBtn) closeBtn.addEventListener('click', closeTerminal);
   document.addEventListener('keydown', onKeyPress);
 
+  // Click ra ngoài cửa sổ Terminal để vào trang chính Portfolio
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      closeTerminal();
+    }
+  });
+
   const os = detectOS();
   termText.textContent = '[+] Dang ket noi may chu...\n[+] Kiem tra he thong...\n';
 
@@ -335,13 +342,13 @@ async function initWelcomeTerminal() {
     '==============================================',
     '       NDH SYSTEM SECURITY TERMINAL v2.5      ',
     '==============================================',
-    ' > Xin chào người bạn ché thăm toitenhuy.vercel.app!',
+    ' > Xin chào người bạn ghé thăm toitenhuy.vercel.app!',
     '----------------------------------------------',
-    ' [‗] Địa chỉ IP      : ' + ipText,
-    ' [‗] Quốc gia        : ' + flag + ' ' + locationText,
-    ' [‗] Nhà mạng (ISP)  : ' + ispText,
-    ' [‗] Hệ diều hành    : ' + os,
-    ' [₂] Trạng thái      : KẺt nối an toàn (200 OK)',
+    ' [•] Địa chỉ IP       : ' + ipText,
+    ' [•] Quốc gia         : ' + flag + ' ' + locationText,
+    ' [•] Đang sài nhà mạng: ' + ispText,
+    ' [•] Hệ điều hành     : ' + os,
+    ' [•] Trạng thái       : Kết nối an toàn (200 OK)',
     '----------------------------------------------',
     ' >> Chúc bạn có trải nghiệm tuyệt vời tại website!'
   ];
@@ -365,11 +372,8 @@ async function initWelcomeTerminal() {
       }
     } else {
       if (termFooter) {
-        termFooter.innerHTML = '<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px;"><button id="btn-scan-gps" class="btn-enter" style="background: linear-gradient(135deg, #10b981, #06b6d4); font-size: 0.88rem; padding: 10px 18px; cursor: pointer;"><i class="fa-solid fa-crosshairs"></i> Click vào đây để quét vị trí chính xác (GPS)</button><button id="btn-enter-portfolio" class="btn-enter" style="font-size: 0.88rem; padding: 10px 18px; cursor: pointer;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Vào Portfolio</button></div><div id="gps-scan-status" style="font-size: 0.85rem; color: #38bdf8; margin-top: 10px; min-height: 20px;"></div>';
+        termFooter.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 14px;"><button id="btn-scan-gps" class="btn-enter" style="background: linear-gradient(135deg, #10b981, #06b6d4); font-size: 0.88rem; padding: 10px 20px; cursor: pointer;"><i class="fa-solid fa-crosshairs"></i> Click vào đây để quét vị trí chính xác (GPS)</button><p style="font-size: 0.82rem; color: rgba(255,255,255,0.45); margin-top: 4px; cursor: pointer;" onclick="document.getElementById(\'welcome-terminal-overlay\').classList.add(\'hidden\')"><i class="fa-regular fa-hand-pointer"></i> Hoặc click ra ngoài / nhấn Enter để tiếp tục</p></div><div id="gps-scan-status" style="font-size: 0.85rem; color: #38bdf8; margin-top: 8px; min-height: 18px;"></div>';
         termFooter.style.display = 'block';
-
-        const enterP = document.getElementById('btn-enter-portfolio');
-        if (enterP) enterP.addEventListener('click', closeTerminal);
 
         const scanBtn = document.getElementById('btn-scan-gps');
         const statusDiv = document.getElementById('gps-scan-status');
