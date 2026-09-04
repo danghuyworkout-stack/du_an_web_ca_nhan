@@ -244,7 +244,7 @@ async function getVisitorLocation() {
       }
     }
   } catch (err) {
-    console.log("Không thể lấy vị trí khách:", err);
+    console.log("Không thể lấy vị trí :", err);
   }
 }
 
