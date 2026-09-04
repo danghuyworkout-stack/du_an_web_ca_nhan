@@ -304,28 +304,25 @@ async function initWelcomeTerminal() {
   document.addEventListener('keydown', onKeyPress);
 
   const os = detectOS();
-  termText.textContent = 'Đang quét thông tin kết nối...\n';
+  termText.textContent = '[+] Dang ket noi may chu...\n[+] Kiem tra he thong...\n';
 
   let locationText = 'Việt Nam';
-  let ispText = 'Nhà mạng bí mật';
-  let ipText = 'Đang tải...';
+  let ispText = 'Nhà mạng Việt Nam';
+  let ipText = 'Downloading...';
+  let flag = '🇩🇰';
 
   try {
     const res = await fetch('/api/ip');
     const data = await res.json();
     if (data) {
-      ipText = data.ip || 'Hidden';
-      const parts = [];
-      if (data.city) parts.push(data.city);
-      if (data.region && data.region !== data.city) parts.push(data.region);
-      if (data.country) parts.push(data.country);
-      if (parts.length > 0) locationText = parts.join(', ');
-      if (data.isp) ispText = data.isp;
+      ipText = data.ip || 'hidden';
+      locationText = data.country || 'Việt Nam';
+      ispText = data.isp || 'Nhà mạng Việt Nam';
+      flag = data.flag || '🇩🇰';
 
-      // Cập nhật luôn badge trên trang chính
       const greetingEl = document.getElementById('visitor-badge');
       if (greetingEl) {
-        greetingEl.innerHTML = (data.flag || "Ὂi") + " Cháo bạn tằb <strong>" + locationText + "</strong> &raquo; " + ispText;
+        greetingEl.innerHTML = flag + ' Chào bạn từ <strong>' + locationText + '</strong> &middot; <span style="opacity: 0.85;">' + ispText + '</span>';
         greetingEl.style.display = 'inline-flex';
         greetingEl.style.alignItems = 'center';
       }
@@ -334,18 +331,17 @@ async function initWelcomeTerminal() {
     console.log('API error', err);
   }
 
-  // Nội dung hiển thị dạng Terminal
-  const lines = [
+  const linesSystem = [
     '==============================================',
     '       NDH SYSTEM SECURITY TERMINAL v2.5      ',
     '==============================================',
-    ' > Xin chào người bạn ghé thăm toitenhuy.vercel.app!',
+    ' > Xin chào người bạn ché thăm toitenhuy.vercel.app!',
     '----------------------------------------------',
-    ' [•] Địa chỉ IP      : ' + ipText,
-    ' [•] Vị trí đến từ   : ' + locationText,
-    ' [•] Nhà mạng (ISP)  : ' + ispText,
-    ' [•] Hệ điều hành    : ' + os,
-    ' [•] Trạng thái      : Kết nối an toàn (200 OK)',
+    ' [‗] Địa chỉ IP      : ' + ipText,
+    ' [‗] Quốc gia        : ' + flag + ' ' + locationText,
+    ' [‗] Nhà mạng (ISP)  : ' + ispText,
+    ' [‗] Hệ diều hành    : ' + os,
+    ' [₂] Trạng thái      : KẺt nối an toàn (200 OK)',
     '----------------------------------------------',
     ' >> Chúc bạn có trải nghiệm tuyệt vời tại website!'
   ];
@@ -355,8 +351,8 @@ async function initWelcomeTerminal() {
   termText.textContent = '';
 
   function typeTerminal() {
-    if (lineIdx < lines.length) {
-      const curLine = lines[lineIdx];
+    if (lineIdx < linesSystem.length) {
+      const curLine = linesSystem[lineIdx];
       if (charIdx < curLine.length) {
         termText.textContent += curLine.charAt(charIdx);
         charIdx++;
@@ -368,12 +364,72 @@ async function initWelcomeTerminal() {
         setTimeout(typeTerminal, 60);
       }
     } else {
-      if (termFooter) termFooter.style.display = 'block';
+      if (termFooter) {
+        termFooter.innerHTML = '<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px;"><button id="btn-scan-gps" class="btn-enter" style="background: linear-gradient(135deg, #10b981, #06b6d4); font-size: 0.88rem; padding: 10px 18px; cursor: pointer;"><i class="fa-solid fa-crosshairs"></i> Click vào đây để quét vị trí chính xác (GPS)</button><button id="btn-enter-portfolio" class="btn-enter" style="font-size: 0.88rem; padding: 10px 18px; cursor: pointer;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Vào Portfolio</button></div><div id="gps-scan-status" style="font-size: 0.85rem; color: #38bdf8; margin-top: 10px; min-height: 20px;"></div>';
+        termFooter.style.display = 'block';
+
+        const enterP = document.getElementById('btn-enter-portfolio');
+        if (enterP) enterP.addEventListener('click', closeTerminal);
+
+        const scanBtn = document.getElementById('btn-scan-gps');
+        const statusDiv = document.getElementById('gps-scan-status');
+
+        if (scanBtn) {
+          scanBtn.addEventListener('click', () => {
+            if (!navigator.geolocation) {
+              statusDiv.innerText = 'Trình duyệt của bạn không hỗ trợ GPS.';
+              return;
+            }
+
+            statusDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xin quyền và lấy tọa độ GPS...';
+
+            navigator.geolocation.getCurrentPosition(
+              async (pos) => {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                statusDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang giải mã tọa độ bản đồ...';
+
+                try {
+                  const geoRes = await fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lon + '&zoom=14&addressdetails=1');
+                  const geoData = await geoRes.json();
+                  
+                  if (geoData && geoData.address) {
+                    const a = geoData.address;
+                    const ward = a.suburb || a.quarter || a.neighbourhood || a.ward || '';
+                    const district = a.city_district || a.district || a.county || '';
+                    const city = a.city || a.state || 'Đà Nẵng';
+                    const accuratePlace = [ward, district, city].filter(Boolean).join(', ');
+
+                    statusDiv.innerHTML = '🎯 <strong>Vị trí chính xác:</strong> ' + accuratePlace;
+                    termText.textContent += '\n [✓] GPS Hiện tại     : ' + accuratePlace;
+
+                    const greetingEl = document.getElementById('visitor-badge');
+                    if (greetingEl) {
+                      greetingEl.innerHTML = '📍 Chào bạn từ <strong>' + accuratePlace + '</strong> &middot; ' + ispText;
+                    }
+                  } else {
+                    statusDiv.innerText = 'Tọa độ GPS: ' + lat.toFixed(4) + ', ' + lon.toFixed(4);
+                  }
+                } catch (err) {
+                  statusDiv.innerText = 'Lỗi bản đồ, vui lòng thử lại.';
+                }
+              },
+              (err) => {
+                if (err.code === 1) {
+                  statusDiv.innerHTML = '⚠️ Bạn đã từ chối cấp quyền GPS.';
+                } else {
+                  statusDiv.innerHTML = '⚠️ Không thể lấy tín hiệu GPS: ' + err.message;
+                }
+              },
+              { enableHighAccuracy: true, timeout: 10000 }
+            );
+          });
+        }
+      }
     }
   }
 
   typeTerminal();
 }
 
-// Chạy terminal khi vừa tải trang
 document.addEventListener('DOMContentLoaded', initWelcomeTerminal);
