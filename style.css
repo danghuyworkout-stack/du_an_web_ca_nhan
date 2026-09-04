@@ -823,50 +823,64 @@ body.light-theme .contact-form textarea {
 /* ============================================
 
 /* ============================================
-   PILL CAPSULE BADGES (Kieu dang hinh anh mau)
+
+/* ============================================
+   PILL CAPSULE BADGES (Goc tren ben phai, duoi Navbar, kich thuoc to ro rang)
    ============================================ */
-.nav-controls {
+.floating-controls {
+  position: fixed;
+  top: calc(var(--nav-h) + 16px);
+  right: 28px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-left: 12px;
+  gap: 14px;
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .floating-controls {
+    top: calc(var(--nav-h) + 12px);
+    right: 16px;
+    gap: 10px;
+  }
 }
 
 .pill-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
+  gap: 10px;
+  padding: 10px 22px; /* Tang padding to ro */
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(26, 26, 32, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #f1f5f9;
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  background: rgba(22, 22, 29, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 0.84rem;
-  font-weight: 500;
+  font-size: 0.98rem; /* Font to hon, ro rang */
+  font-weight: 600;
   cursor: pointer;
   outline: none;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 .pill-badge:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  transform: translateY(-3px) scale(1.04);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
 }
 
 .pill-badge:active {
-  transform: scale(0.96);
+  transform: scale(0.95);
 }
 
 /* Icon trong badge */
 .pill-icon {
-  font-size: 1.05rem;
+  font-size: 1.35rem; /* Icon to hon */
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -875,63 +889,63 @@ body.light-theme .contact-form textarea {
 }
 
 .pill-text {
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
   white-space: nowrap;
 }
 
-/* Nút mưa active (Đang mưa) */
+/* Trang thai Mua active */
 #rain-toggle.active {
-  background: rgba(14, 165, 233, 0.18);
-  border-color: rgba(56, 189, 248, 0.45);
-  color: #bae6fd;
-  box-shadow: 0 0 16px rgba(14, 165, 233, 0.25);
+  background: rgba(14, 165, 233, 0.22);
+  border-color: rgba(56, 189, 248, 0.6);
+  color: #e0f2fe;
+  box-shadow: 0 8px 25px rgba(14, 165, 233, 0.35);
 }
 
 #rain-toggle.active .pill-icon {
-  animation: rainCloudFloat 3s infinite ease-in-out;
+  animation: rainCloudFloat 2.5s infinite ease-in-out;
 }
 
-/* Nút mưa inactive (Tắt mưa - Trời nắng) */
+/* Trang thai Tat mua (Troi nang) */
 #rain-toggle:not(.active) {
-  background: rgba(245, 158, 11, 0.16);
-  border-color: rgba(245, 158, 11, 0.4);
-  color: #fde68a;
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+  background: rgba(245, 158, 11, 0.22);
+  border-color: rgba(251, 191, 36, 0.6);
+  color: #fef3c7;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
 }
 
 #rain-toggle:not(.active) .pill-icon {
-  animation: sunRotate 8s linear infinite;
+  animation: sunRotate 9s linear infinite;
 }
 
 /* Theme Light Mode */
 body.light-theme .pill-badge {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: rgba(0, 0, 0, 0.08);
-  color: #1e293b;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #0f172a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 body.light-theme #rain-toggle.active {
-  background: rgba(14, 165, 233, 0.12);
-  border-color: rgba(14, 165, 233, 0.3);
-  color: #0284c7;
+  background: rgba(14, 165, 233, 0.16);
+  border-color: rgba(14, 165, 233, 0.4);
+  color: #0369a1;
 }
 
 body.light-theme #rain-toggle:not(.active) {
-  background: rgba(245, 158, 11, 0.14);
-  border-color: rgba(245, 158, 11, 0.35);
-  color: #d97706;
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #b45309;
 }
 
 body.light-theme #theme-toggle {
-  background: rgba(254, 240, 138, 0.35);
-  border-color: rgba(245, 158, 11, 0.4);
-  color: #b45309;
+  background: rgba(254, 240, 138, 0.4);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #92400e;
 }
 
 @keyframes rainCloudFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
+  50% { transform: translateY(-3px); }
 }
 
 @keyframes sunRotate {

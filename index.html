@@ -51,24 +51,27 @@
                 <li><a class="nav-link" href="#achievements">Achievements</a></li>
                 <li><a class="nav-link" href="#contact">Contact</a></li>
             </ul>
-            <div class="nav-controls">
-                <!-- NÚT PILL 1: THỜI TIẾT / MƯA (THEO HÌNH ẢNH MẪU CỦA BẠN) -->
-                <button class="pill-badge active" id="rain-toggle" aria-label="Bật tắt mưa" title="Click để Bật/Tắt mưa">
-                    <span class="pill-icon" id="weather-icon">🌧️</span>
-                    <span class="pill-text" id="weather-text">Mưa &bull; Đà Nẵng</span>
-                </button>
-
-                <!-- NÚT PILL 2: SÁNG / TỐI -->
-                <button class="pill-badge" id="theme-toggle" aria-label="Đổi giao diện sáng tối" title="Click để đổi Sáng/Tối">
-                    <span class="pill-icon" id="theme-icon">🌙</span>
-                    <span class="pill-text" id="theme-text">Tối</span>
-                </button>
-            </div>
             <button class="hamburger" id="hamburger" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
+
+    <!-- 2 NÚT NỔI Ở GÓC TRÊN BÊN PHẢI NGAY DƯỚI THANH ĐIỀU HƯỚNG -->
+    <div class="floating-controls">
+        <!-- NÚT PILL 1: THỜI TIẾT / MƯA (LÀM TO VÀ RÕ NÉT) -->
+        <button class="pill-badge active" id="rain-toggle" aria-label="Bật tắt mưa" title="Click để Bật/Tắt mưa">
+            <span class="pill-icon" id="weather-icon">🌧️</span>
+            <span class="pill-text" id="weather-text">Mưa &bull; Đà Nẵng</span>
+        </button>
+
+        <!-- NÚT PILL 2: SÁNG / TỐI -->
+        <button class="pill-badge" id="theme-toggle" aria-label="Đổi giao diện sáng tối" title="Click để đổi Sáng/Tối">
+            <span class="pill-icon" id="theme-icon">🌙</span>
+            <span class="pill-text" id="theme-text">Tối</span>
+        </button>
+    </div>
+
     <section id="hero" class="section hero-section">
         <div class="hero-content">
             <div class="avatar-wrapper">
