@@ -363,71 +363,17 @@ async function initWelcomeTerminal() {
       if (charIdx < curLine.length) {
         termText.textContent += curLine.charAt(charIdx);
         charIdx++;
-        setTimeout(typeTerminal, 14);
+        setTimeout(typeTerminal, 3);
       } else {
         termText.textContent += '\n';
         lineIdx++;
         charIdx = 0;
-        setTimeout(typeTerminal, 60);
+        setTimeout(typeTerminal, 18);
       }
     } else {
       if (termFooter) {
-        termFooter.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 14px;"><button id="btn-scan-gps" class="btn-enter" style="background: linear-gradient(135deg, #10b981, #06b6d4); font-size: 0.88rem; padding: 10px 20px; cursor: pointer;"><i class="fa-solid fa-crosshairs"></i> Click vào đây để quét vị trí chính xác (GPS)</button><p style="font-size: 0.82rem; color: rgba(255,255,255,0.45); margin-top: 4px; cursor: pointer;" onclick="document.getElementById(\'welcome-terminal-overlay\').classList.add(\'hidden\')"><i class="fa-regular fa-hand-pointer"></i> Hoặc click ra ngoài / nhấn Enter để tiếp tục</p></div><div id="gps-scan-status" style="font-size: 0.85rem; color: #38bdf8; margin-top: 8px; min-height: 18px;"></div>';
+        termFooter.innerHTML = '<p style="font-size: 0.88rem; color: rgba(255,255,255,0.55); margin-top: 14px; text-align: center; cursor: pointer;" onclick="document.getElementById(\'welcome-terminal-overlay\').classList.add(\'hidden\')"><i class="fa-regular fa-hand-pointer"></i> Click ra ngoài cửa sổ hoặc nhấn Enter để tiếp tục</p>';
         termFooter.style.display = 'block';
-
-        const scanBtn = document.getElementById('btn-scan-gps');
-        const statusDiv = document.getElementById('gps-scan-status');
-
-        if (scanBtn) {
-          scanBtn.addEventListener('click', () => {
-            if (!navigator.geolocation) {
-              statusDiv.innerText = 'Trình duyệt của bạn không hỗ trợ GPS.';
-              return;
-            }
-
-            statusDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xin quyền và lấy tọa độ GPS...';
-
-            navigator.geolocation.getCurrentPosition(
-              async (pos) => {
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-                statusDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang giải mã tọa độ bản đồ...';
-
-                try {
-                  const geoRes = await fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' + lat + '&longitude=' + lon + '&localityLanguage=vi');
-                  const geoData = await geoRes.json();
-                  
-                  if (geoData) {
-                    const ward = geoData.locality || '';
-                    const city = geoData.city || geoData.principalSubdivision || 'Đà Nẵng';
-                    const country = geoData.countryName || 'Việt Nam';
-                    const accuratePlace = [ward, city, country].filter(Boolean).join(', ');
-
-                    statusDiv.innerHTML = '🎯 <strong>Vị trí chính xác:</strong> ' + accuratePlace;
-                    termText.textContent += '\n [✓] GPS Hiện tại     : ' + accuratePlace;
-
-                    const greetingEl = document.getElementById('visitor-badge');
-                    if (greetingEl) {
-                      greetingEl.innerHTML = '📍 Chào bạn từ <strong>' + accuratePlace + '</strong> &middot; ' + ispText;
-                    }
-                  } else {
-                    statusDiv.innerText = 'Tọa độ GPS: ' + lat.toFixed(4) + ', ' + lon.toFixed(4);
-                  }
-                } catch (err) {
-                  statusDiv.innerText = 'Lỗi kết nối bản đồ: ' + err.message;
-                }
-              },
-              (err) => {
-                if (err.code === 1) {
-                  statusDiv.innerHTML = '⚠️ Bạn đã từ chối cấp quyền GPS.';
-                } else {
-                  statusDiv.innerHTML = '⚠️ Không thể lấy tín hiệu GPS: ' + err.message;
-                }
-              },
-              { enableHighAccuracy: true, timeout: 10000 }
-            );
-          });
-        }
       }
     }
   }
