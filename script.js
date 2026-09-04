@@ -277,7 +277,7 @@ function detectOS() {
 }
 
 // ============================================
-// TERMINAL INTRO POPUP (Kochehe style)
+// TERMINAL INTRO POPUP 
 // ============================================
 async function initWelcomeTerminal() {
   const overlay = document.getElementById('welcome-terminal-overlay');
@@ -341,7 +341,7 @@ async function initWelcomeTerminal() {
     ' [‗] Quốc gia        : ' + flag + ' ' + locationText,
     ' [‗] Nhà mạng (ISP)  : ' + ispText,
     ' [‗] Hệ diều hành    : ' + os,
-    ' [₂] Trạng thái      : KẺt nối an toàn (200 OK)',
+    ' [₂] Trạng thái      : Kết nối an toàn (200 OK)',
     '----------------------------------------------',
     ' >> Chúc bạn có trải nghiệm tuyệt vời tại website!'
   ];
