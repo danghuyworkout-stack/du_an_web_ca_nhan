@@ -221,21 +221,22 @@ function initRain() {
 
   drawRain();
 }
-// Tự động chào đón người xem theo vị trí
+// Tự động hiển thị lời chào kèm cờ quốc gia và thành phố
 async function getVisitorLocation() {
   try {
     const res = await fetch('/api/ip');
     const data = await res.json();
 
-    // Lấy tên thành phố và quốc gia từ APILayer trả về
-    const city = data.city || data.region_name;
-    const country = data.country_name;
+    if (data && data.country_name) {
+      const city = data.city || data.region_name;
+      const country = data.country_name;
+      const flag = (data.location && data.location.country_flag_emoji) ? data.location.country_flag_emoji : '📍';
 
-    if (city && country) {
       const greetingEl = document.getElementById('visitor-badge');
       if (greetingEl) {
-        greetingEl.innerHTML = `📍 Chào bạn từ <strong>${city}, ${country}</strong>!`;
-        greetingEl.style.display = 'inline-block';
+        greetingEl.innerHTML = `${flag} Chào bạn từ <strong>${city ? city + ', ' : ''}${country}</strong>!`;
+        greetingEl.style.display = 'inline-flex';
+        greetingEl.style.alignItems = 'center';
       }
     }
   } catch (err) {
@@ -243,5 +244,5 @@ async function getVisitorLocation() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', getVisitorLocation);
-
+// Chạy ngay khi nạp script
+getVisitorLocation();
