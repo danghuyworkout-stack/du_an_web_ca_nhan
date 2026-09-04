@@ -277,7 +277,7 @@ function detectOS() {
 }
 
 // ============================================
-// TERMINAL INTRO POPUP (Kochehe style)
+// TERMINAL INTRO POPUP 
 // ============================================
 async function initWelcomeTerminal() {
   const overlay = document.getElementById('welcome-terminal-overlay');
@@ -335,13 +335,13 @@ async function initWelcomeTerminal() {
     '==============================================',
     '       NDH SYSTEM SECURITY TERMINAL v2.5      ',
     '==============================================',
-    ' > Xin chào người bạn ché thăm toitenhuy.vercel.app!',
+    ' > Xin chào người bạn ghé thăm toitenhuy.vercel.app!',
     '----------------------------------------------',
     ' [‗] Địa chỉ IP      : ' + ipText,
     ' [‗] Quốc gia        : ' + flag + ' ' + locationText,
     ' [‗] Nhà mạng (ISP)  : ' + ispText,
     ' [‗] Hệ diều hành    : ' + os,
-    ' [₂] Trạng thái      : KẺt nối an toàn (200 OK)',
+    ' [₂] Trạng thái      : Kết nối an toàn ',
     '----------------------------------------------',
     ' >> Chúc bạn có trải nghiệm tuyệt vời tại website!'
   ];
