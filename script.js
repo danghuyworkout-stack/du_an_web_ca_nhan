@@ -365,7 +365,7 @@ async function initWelcomeTerminal() {
       }
     } else {
       if (termFooter) {
-        termFooter.innerHTML = '<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top                       lid fa-crosshairs"></i> Tìm vị trí chủ website (GPS)</button><button id="btn-enter-portfolio" class="btn-enter" style="font-size: 0.88rem; padding: 10px 18px; cursor: pointer;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Vào Portfolio</button></div><div id="gps-scan-status" style="font-size: 0.85rem; color: #38bdf8; margin-top: 10px; min-height: 20px;"></div>';
+        termFooter.innerHTML = '<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top;"></i> Tìm vị trí chủ website (GPS)</button><button id="btn-enter-portfolio" class="btn-enter" style="font-size: 0.88rem; padding: 10px 18px; cursor: pointer;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Vào Portfolio</button></div><div id="gps-scan-status" style="font-size: 0.85rem; color: #38bdf8; margin-top: 10px; min-height: 20px;"></div>';
         termFooter.style.display = 'block';
 
         const enterP = document.getElementById('btn-enter-portfolio');
