@@ -244,7 +244,7 @@ async function getVisitorLocation() {
       }
     }
   } catch (err) {
-    console.log("Không thể lấy vị trí :", err);
+    console.log("Không thể lấy vị trí khách:", err);
   }
 }
 
@@ -277,7 +277,7 @@ function detectOS() {
 }
 
 // ============================================
-// TERMINAL INTRO POPUP 
+// TERMINAL INTRO POPUP (Kochehe style)
 // ============================================
 async function initWelcomeTerminal() {
   const overlay = document.getElementById('welcome-terminal-overlay');
@@ -341,7 +341,7 @@ async function initWelcomeTerminal() {
     ' [‗] Quốc gia        : ' + flag + ' ' + locationText,
     ' [‗] Nhà mạng (ISP)  : ' + ispText,
     ' [‗] Hệ diều hành    : ' + os,
-    ' [₂] Trạng thái      : Kết nối an toàn (200 OK)',
+    ' [₂] Trạng thái      : KẺt nối an toàn (200 OK)',
     '----------------------------------------------',
     ' >> Chúc bạn có trải nghiệm tuyệt vời tại website!'
   ];
@@ -365,7 +365,7 @@ async function initWelcomeTerminal() {
       }
     } else {
       if (termFooter) {
-        termFooter.innerHTML = '<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top;"></i> Tìm vị trí chủ website (GPS)</button><button id="btn-enter-portfolio" class="btn-enter" style="font-size: 0.88rem; padding: 10px 18px; cursor: pointer;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Vào Portfolio</button></div><div id="gps-scan-status" style="font-size: 0.85rem; color: #38bdf8; margin-top: 10px; min-height: 20px;"></div>';
+        termFooter.innerHTML = '<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px;"><button id="btn-scan-gps" class="btn-enter" style="background: linear-gradient(135deg, #10b981, #06b6d4); font-size: 0.88rem; padding: 10px 18px; cursor: pointer;"><i class="fa-solid fa-crosshairs"></i> Click vào đây để quét vị trí chính xác (GPS)</button><button id="btn-enter-portfolio" class="btn-enter" style="font-size: 0.88rem; padding: 10px 18px; cursor: pointer;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Vào Portfolio</button></div><div id="gps-scan-status" style="font-size: 0.85rem; color: #38bdf8; margin-top: 10px; min-height: 20px;"></div>';
         termFooter.style.display = 'block';
 
         const enterP = document.getElementById('btn-enter-portfolio');
