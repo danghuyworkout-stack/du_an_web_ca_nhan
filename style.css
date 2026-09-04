@@ -821,154 +821,120 @@ body.light-theme .contact-form textarea {
 }
 
 /* ============================================
-   ANIMATED TOGGLE SWITCHES (RAIN & THEME)
+
+/* ============================================
+   PILL CAPSULE BADGES (Kieu dang hinh anh mau)
    ============================================ */
 .nav-controls {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-left: 16px;
+  gap: 10px;
+  margin-left: 12px;
 }
 
-.toggle-switch {
-  background: transparent;
-  border: none;
-  padding: 0;
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(26, 26, 32, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #f1f5f9;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 500;
   cursor: pointer;
   outline: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-.switch-track {
-  width: 58px;
-  height: 30px;
-  border-radius: 30px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 7px;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
-  overflow: hidden;
+.pill-badge:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 
-/* Rain Track Styling */
-.rain-track {
-  background: #1e293b;
-  border: 1px solid rgba(56, 189, 248, 0.3);
+.pill-badge:active {
+  transform: scale(0.96);
 }
 
-.toggle-switch.active .rain-track {
-  background: linear-gradient(135deg, #0f172a, #0369a1);
-  border-color: #38bdf8;
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
-}
-
-/* Theme Track Styling */
-.theme-track {
-  background: #1e1e2d;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-body.light-theme .theme-track {
-  background: linear-gradient(135deg, #38bdf8, #f59e0b);
-  border-color: #fbbf24;
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
-}
-
-/* Icons inside tracks */
-.icon-rain {
-  font-size: 0.8rem;
-  color: #38bdf8;
-  animation: rainIconGlow 2s infinite ease-in-out;
-}
-
-.icon-sun {
-  font-size: 0.85rem;
-  color: #f59e0b;
-}
-
-.icon-moon {
-  font-size: 0.8rem;
-  color: #a5b4fc;
-}
-
-.icon-sun-theme {
-  font-size: 0.85rem;
-  color: #fef08a;
-}
-
-/* Thumb (Nút tròn gạt có animation) */
-.switch-thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #ffffff;
-  display: flex;
+/* Icon trong badge */
+.pill-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.3s ease;
+  transition: transform 0.4s ease;
 }
 
-.thumb-icon {
-  font-size: 0.72rem;
-  transition: transform 0.4s ease, color 0.3s ease;
+.pill-text {
+  letter-spacing: 0.2px;
+  white-space: nowrap;
 }
 
-/* State: Rain Active (Mưa bật) */
-.toggle-switch.active#rain-toggle .switch-thumb {
-  transform: translateX(0);
-  background: #38bdf8;
+/* Nút mưa active (Đang mưa) */
+#rain-toggle.active {
+  background: rgba(14, 165, 233, 0.18);
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #bae6fd;
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.25);
 }
 
-.toggle-switch.active#rain-toggle .thumb-icon {
-  color: #ffffff;
-  animation: bounceDrop 1.5s infinite;
+#rain-toggle.active .pill-icon {
+  animation: rainCloudFloat 3s infinite ease-in-out;
 }
 
-/* State: Rain Inactive (Tắt mưa - Nắng rực rỡ) */
-.toggle-switch:not(.active)#rain-toggle .switch-thumb {
-  transform: translateX(28px);
-  background: #f59e0b;
+/* Nút mưa inactive (Tắt mưa - Trời nắng) */
+#rain-toggle:not(.active) {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fde68a;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
 }
 
-.toggle-switch:not(.active)#rain-toggle .thumb-icon {
-  color: #ffffff;
-  transform: rotate(180deg);
+#rain-toggle:not(.active) .pill-icon {
+  animation: sunRotate 8s linear infinite;
 }
 
-/* State: Theme Dark (Tối) */
-#theme-toggle .switch-thumb {
-  transform: translateX(0);
-  background: #4f46e5;
+/* Theme Light Mode */
+body.light-theme .pill-badge {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #1e293b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
-#theme-toggle .thumb-icon {
-  color: #ffffff;
+body.light-theme #rain-toggle.active {
+  background: rgba(14, 165, 233, 0.12);
+  border-color: rgba(14, 165, 233, 0.3);
+  color: #0284c7;
 }
 
-/* State: Theme Light (Sáng) */
-body.light-theme #theme-toggle .switch-thumb {
-  transform: translateX(28px);
-  background: #fef08a;
-}
-
-body.light-theme #theme-toggle .thumb-icon {
+body.light-theme #rain-toggle:not(.active) {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.35);
   color: #d97706;
-  transform: rotate(360deg);
 }
 
-@keyframes bounceDrop {
+body.light-theme #theme-toggle {
+  background: rgba(254, 240, 138, 0.35);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #b45309;
+}
+
+@keyframes rainCloudFloat {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-2px); }
 }
 
-@keyframes rainIconGlow {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; filter: drop-shadow(0 0 4px #38bdf8); }
+@keyframes sunRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

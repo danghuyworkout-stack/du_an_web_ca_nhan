@@ -235,48 +235,54 @@ function initRain() {
 
   drawRain();
 
-  // NÚT GẠT BẬT / TẮT MƯA
+  // NÚT CAPSULE BẬT / TẮT MƯA (THEO MẪU THỜI TIẾT)
   const rainToggle = document.getElementById('rain-toggle');
+  const weatherIcon = document.getElementById('weather-icon');
+  const weatherText = document.getElementById('weather-text');
+
   if (rainToggle) {
     rainToggle.addEventListener('click', () => {
       isRaining = !isRaining;
       if (isRaining) {
         rainToggle.classList.add('active');
-        const thumbIcon = rainToggle.querySelector('.thumb-icon');
-        if (thumbIcon) thumbIcon.className = 'fa-solid fa-droplet thumb-icon';
+        if (weatherIcon) weatherIcon.innerText = '🌧️';
+        if (weatherText) weatherText.innerHTML = 'Mưa &bull; Đà Nẵng';
         drawRain();
       } else {
         rainToggle.classList.remove('active');
-        const thumbIcon = rainToggle.querySelector('.thumb-icon');
-        if (thumbIcon) thumbIcon.className = 'fa-solid fa-sun thumb-icon';
+        if (weatherIcon) weatherIcon.innerText = '☀️';
+        if (weatherText) weatherText.innerHTML = '31°C &bull; Đà Nẵng';
         if (rainAnimationId) cancelAnimationFrame(rainAnimationId);
         ctx.clearRect(0, 0, width, height);
       }
     });
   }
 
-  // NÚT GẠT ĐỔI GIAO DIỆN SÁNG / TỐI
+  // NÚT CAPSULE ĐỔI GIAO DIỆN SÁNG / TỐI
   const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const themeText = document.getElementById('theme-text');
+
   if (themeToggle) {
-    // Khôi phục theme đã lưu nếu có
     const savedTheme = localStorage.getItem('ndh_theme');
     if (savedTheme === 'light') {
       document.body.classList.add('light-theme');
       themeToggle.classList.add('active');
-      const thumbIcon = themeToggle.querySelector('.thumb-icon');
-      if (thumbIcon) thumbIcon.className = 'fa-solid fa-sun thumb-icon';
+      if (themeIcon) themeIcon.innerText = '☀️';
+      if (themeText) themeText.innerText = 'Sáng';
     }
 
     themeToggle.addEventListener('click', () => {
       const isLight = document.body.classList.toggle('light-theme');
       themeToggle.classList.toggle('active', isLight);
-      const thumbIcon = themeToggle.querySelector('.thumb-icon');
 
       if (isLight) {
-        if (thumbIcon) thumbIcon.className = 'fa-solid fa-sun thumb-icon';
+        if (themeIcon) themeIcon.innerText = '☀️';
+        if (themeText) themeText.innerText = 'Sáng';
         localStorage.setItem('ndh_theme', 'light');
       } else {
-        if (thumbIcon) thumbIcon.className = 'fa-solid fa-moon thumb-icon';
+        if (themeIcon) themeIcon.innerText = '🌙';
+        if (themeText) themeText.innerText = 'Tối';
         localStorage.setItem('ndh_theme', 'dark');
       }
     });
