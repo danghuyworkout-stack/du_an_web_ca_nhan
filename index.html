@@ -51,6 +51,29 @@
                 <li><a class="nav-link" href="#achievements">Achievements</a></li>
                 <li><a class="nav-link" href="#contact">Contact</a></li>
             </ul>
+            <div class="nav-controls">
+                <!-- NÚT GẠT 1: BẬT / TẮT MƯA (ANIMATION MÂY MƯA / NẮNG) -->
+                <button class="toggle-switch active" id="rain-toggle" aria-label="Bật tắt mưa" title="Bật/Tắt hiệu ứng mưa">
+                    <div class="switch-track rain-track">
+                        <i class="fa-solid fa-cloud-showers-heavy icon-rain"></i>
+                        <i class="fa-solid fa-sun icon-sun"></i>
+                        <span class="switch-thumb">
+                            <i class="fa-solid fa-droplet thumb-icon"></i>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- NÚT GẠT 2: SÁNG / TỐI (ANIMATION MẶT TRỜI / MẶT TRĂNG) -->
+                <button class="toggle-switch" id="theme-toggle" aria-label="Đổi giao diện sáng tối" title="Chuyển đổi Sáng / Tối">
+                    <div class="switch-track theme-track">
+                        <i class="fa-solid fa-moon icon-moon"></i>
+                        <i class="fa-solid fa-sun icon-sun-theme"></i>
+                        <span class="switch-thumb">
+                            <i class="fa-solid fa-moon thumb-icon"></i>
+                        </span>
+                    </div>
+                </button>
+            </div>
             <button class="hamburger" id="hamburger" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
             </button>

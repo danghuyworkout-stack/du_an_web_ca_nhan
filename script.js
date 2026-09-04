@@ -187,17 +187,31 @@ function initRain() {
     });
   }
 
+  let isRaining = true;
+  let rainAnimationId = null;
+
   function drawRain() {
+    if (!isRaining) {
+      ctx.clearRect(0, 0, width, height);
+      return;
+    }
+
     ctx.clearRect(0, 0, width, height);
 
     for (let i = 0; i < drops.length; i++) {
       const drop = drops[i];
 
       ctx.beginPath();
-      // Màu xanh cyan sáng & tím neon phát sáng rõ rệt
+      // Màu sắc linh hoạt theo Theme
+      const isLight = document.body.classList.contains('light-theme');
       const grad = ctx.createLinearGradient(drop.x, drop.y, drop.x - 2, drop.y + drop.length);
-      grad.addColorStop(0, `rgba(108, 99, 255, ${drop.opacity * 0.4})`);
-      grad.addColorStop(1, `rgba(0, 242, 254, ${drop.opacity})`);
+      if (isLight) {
+        grad.addColorStop(0, `rgba(88, 80, 236, ${drop.opacity * 0.3})`);
+        grad.addColorStop(1, `rgba(14, 165, 233, ${drop.opacity * 0.8})`);
+      } else {
+        grad.addColorStop(0, `rgba(108, 99, 255, ${drop.opacity * 0.4})`);
+        grad.addColorStop(1, `rgba(0, 242, 254, ${drop.opacity})`);
+      }
 
       ctx.strokeStyle = grad;
       ctx.lineWidth = drop.width;
@@ -216,10 +230,57 @@ function initRain() {
       }
     }
 
-    requestAnimationFrame(drawRain);
+    rainAnimationId = requestAnimationFrame(drawRain);
   }
 
   drawRain();
+
+  // NÚT GẠT BẬT / TẮT MƯA
+  const rainToggle = document.getElementById('rain-toggle');
+  if (rainToggle) {
+    rainToggle.addEventListener('click', () => {
+      isRaining = !isRaining;
+      if (isRaining) {
+        rainToggle.classList.add('active');
+        const thumbIcon = rainToggle.querySelector('.thumb-icon');
+        if (thumbIcon) thumbIcon.className = 'fa-solid fa-droplet thumb-icon';
+        drawRain();
+      } else {
+        rainToggle.classList.remove('active');
+        const thumbIcon = rainToggle.querySelector('.thumb-icon');
+        if (thumbIcon) thumbIcon.className = 'fa-solid fa-sun thumb-icon';
+        if (rainAnimationId) cancelAnimationFrame(rainAnimationId);
+        ctx.clearRect(0, 0, width, height);
+      }
+    });
+  }
+
+  // NÚT GẠT ĐỔI GIAO DIỆN SÁNG / TỐI
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    // Khôi phục theme đã lưu nếu có
+    const savedTheme = localStorage.getItem('ndh_theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-theme');
+      themeToggle.classList.add('active');
+      const thumbIcon = themeToggle.querySelector('.thumb-icon');
+      if (thumbIcon) thumbIcon.className = 'fa-solid fa-sun thumb-icon';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-theme');
+      themeToggle.classList.toggle('active', isLight);
+      const thumbIcon = themeToggle.querySelector('.thumb-icon');
+
+      if (isLight) {
+        if (thumbIcon) thumbIcon.className = 'fa-solid fa-sun thumb-icon';
+        localStorage.setItem('ndh_theme', 'light');
+      } else {
+        if (thumbIcon) thumbIcon.className = 'fa-solid fa-moon thumb-icon';
+        localStorage.setItem('ndh_theme', 'dark');
+      }
+    });
+  }
 }
 
 // ============================================

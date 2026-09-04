@@ -766,3 +766,209 @@ ul { list-style: none; }
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
 }
+
+
+/* ============================================
+   LIGHT THEME VARIABLES
+   ============================================ */
+body.light-theme {
+  --bg: #f5f6fa;
+  --bg-alt: #ffffff;
+  --bg-card: rgba(0, 0, 0, 0.03);
+  --border: rgba(0, 0, 0, 0.08);
+  --accent: #5850ec;
+  --accent-hover: #4338ca;
+  --accent-glow: rgba(88, 80, 236, 0.2);
+  --text: #334155;
+  --text-muted: #64748b;
+  --text-strong: #0f172a;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-accent: 0 0 30px rgba(88, 80, 236, 0.2);
+}
+
+body.light-theme .navbar {
+  background: rgba(245, 246, 250, 0.85);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.light-theme .nav-link {
+  color: #475569;
+}
+
+body.light-theme .nav-link:hover,
+body.light-theme .nav-link.active {
+  color: var(--accent);
+}
+
+body.light-theme .nav-logo {
+  color: #0f172a;
+}
+
+body.light-theme .info-card,
+body.light-theme .skill-card,
+body.light-theme .timeline-card,
+body.light-theme .contact-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+body.light-theme .contact-form input,
+body.light-theme .contact-form textarea {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #0f172a;
+}
+
+/* ============================================
+   ANIMATED TOGGLE SWITCHES (RAIN & THEME)
+   ============================================ */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 16px;
+}
+
+.toggle-switch {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.switch-track {
+  width: 58px;
+  height: 30px;
+  border-radius: 30px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 7px;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+/* Rain Track Styling */
+.rain-track {
+  background: #1e293b;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.toggle-switch.active .rain-track {
+  background: linear-gradient(135deg, #0f172a, #0369a1);
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+}
+
+/* Theme Track Styling */
+.theme-track {
+  background: #1e1e2d;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body.light-theme .theme-track {
+  background: linear-gradient(135deg, #38bdf8, #f59e0b);
+  border-color: #fbbf24;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+}
+
+/* Icons inside tracks */
+.icon-rain {
+  font-size: 0.8rem;
+  color: #38bdf8;
+  animation: rainIconGlow 2s infinite ease-in-out;
+}
+
+.icon-sun {
+  font-size: 0.85rem;
+  color: #f59e0b;
+}
+
+.icon-moon {
+  font-size: 0.8rem;
+  color: #a5b4fc;
+}
+
+.icon-sun-theme {
+  font-size: 0.85rem;
+  color: #fef08a;
+}
+
+/* Thumb (Nút tròn gạt có animation) */
+.switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.3s ease;
+}
+
+.thumb-icon {
+  font-size: 0.72rem;
+  transition: transform 0.4s ease, color 0.3s ease;
+}
+
+/* State: Rain Active (Mưa bật) */
+.toggle-switch.active#rain-toggle .switch-thumb {
+  transform: translateX(0);
+  background: #38bdf8;
+}
+
+.toggle-switch.active#rain-toggle .thumb-icon {
+  color: #ffffff;
+  animation: bounceDrop 1.5s infinite;
+}
+
+/* State: Rain Inactive (Tắt mưa - Nắng rực rỡ) */
+.toggle-switch:not(.active)#rain-toggle .switch-thumb {
+  transform: translateX(28px);
+  background: #f59e0b;
+}
+
+.toggle-switch:not(.active)#rain-toggle .thumb-icon {
+  color: #ffffff;
+  transform: rotate(180deg);
+}
+
+/* State: Theme Dark (Tối) */
+#theme-toggle .switch-thumb {
+  transform: translateX(0);
+  background: #4f46e5;
+}
+
+#theme-toggle .thumb-icon {
+  color: #ffffff;
+}
+
+/* State: Theme Light (Sáng) */
+body.light-theme #theme-toggle .switch-thumb {
+  transform: translateX(28px);
+  background: #fef08a;
+}
+
+body.light-theme #theme-toggle .thumb-icon {
+  color: #d97706;
+  transform: rotate(360deg);
+}
+
+@keyframes bounceDrop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes rainIconGlow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; filter: drop-shadow(0 0 4px #38bdf8); }
+}
