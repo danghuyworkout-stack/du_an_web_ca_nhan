@@ -641,3 +641,128 @@ ul { list-style: none; }
   .about-info-cards { grid-template-columns: 1fr; }
   .section { padding: 70px 0; }
 }
+
+
+/* ============================================
+   WELCOME TERMINAL OVERLAY (Kochehe Style)
+   ============================================ */
+#welcome-terminal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 10, 15, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+}
+
+#welcome-terminal-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.96);
+  pointer-events: none;
+}
+
+#welcome-terminal {
+  width: 100%;
+  max-width: 620px;
+  background: #121218;
+  border-radius: 14px;
+  border: 1px solid rgba(108, 99, 255, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(108, 99, 255, 0.2);
+  overflow: hidden;
+  font-family: 'Consolas', 'Courier New', monospace;
+  animation: termPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes termPop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+#terminal-header {
+  background: #1a1a24;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#terminal-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 2;
+}
+
+.terminal-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.terminal-btn.close { background: #ff5f56; }
+.terminal-btn.minimize { background: #ffbd2e; }
+.terminal-btn.maximize { background: #27c93f; }
+
+#terminal-title {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #888;
+  pointer-events: none;
+}
+
+#terminal-body {
+  padding: 20px 24px;
+  color: #39ff14;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+#terminal-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  color: #a5f3fc;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+#terminal-prompt-footer {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.btn-enter {
+  background: linear-gradient(135deg, #6c63ff, #00f2fe);
+  border: none;
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-enter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
+}

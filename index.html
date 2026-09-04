@@ -22,6 +22,26 @@
 </head>
 <body>
     <canvas id="rain-canvas"></canvas>
+
+    <!-- TERMINAL WELCOME OVERLAY (Giống kochehe) -->
+    <div id="welcome-terminal-overlay">
+        <div id="welcome-terminal">
+            <div id="terminal-header">
+                <div id="terminal-buttons">
+                    <span class="terminal-btn close" id="term-close"></span>
+                    <span class="terminal-btn minimize"></span>
+                    <span class="terminal-btn maximize"></span>
+                </div>
+                <div id="terminal-title">bash &mdash; guest@toitenhuy:~</div>
+            </div>
+            <div id="terminal-body">
+                <pre id="terminal-text"></pre>
+                <div id="terminal-prompt-footer" style="display: none;">
+                    <button id="terminal-enter-btn" class="btn-enter"><i class="fa-solid fa-arrow-right-to-bracket"></i> Bấm phím bất kỳ hoặc click vào đây để vào Portfolio</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <a class="nav-logo" href="#hero">NDH<span class="dot">.</span></a>

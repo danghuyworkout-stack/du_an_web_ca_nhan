@@ -251,3 +251,129 @@ async function getVisitorLocation() {
 // Chạy hàm lấy vị trí
 getVisitorLocation();
 
+
+
+// ============================================
+// HỆ ĐIỀU HÀNH & THÔNG TIN THIẾT BỊ
+// ============================================
+function detectOS() {
+  const ua = navigator.userAgent;
+  if (/Windows NT 10.0/i.test(ua)) return 'Windows 10/11';
+  if (/Windows NT 6.3/i.test(ua)) return 'Windows 8.1';
+  if (/Windows NT 6.2/i.test(ua)) return 'Windows 8';
+  if (/Windows NT 6.1/i.test(ua)) return 'Windows 7';
+  if (/Windows/i.test(ua)) return 'Windows';
+  if (/Android/i.test(ua)) {
+    const match = ua.match(/Android\s([0-9\.]*)/);
+    return match ? 'Android ' + match[1] : 'Android';
+  }
+  if (/iPhone|iPad|iPod/i.test(ua)) {
+    const match = ua.match(/OS\s([0-9_]*)/);
+    return match ? 'iOS ' + match[1].replace(/_/g, '.') : 'iOS';
+  }
+  if (/Macintosh|Mac OS X/i.test(ua)) return 'macOS';
+  if (/Linux/i.test(ua)) return 'Linux';
+  return 'Unknown OS';
+}
+
+// ============================================
+// TERMINAL INTRO POPUP (Kochehe style)
+// ============================================
+async function initWelcomeTerminal() {
+  const overlay = document.getElementById('welcome-terminal-overlay');
+  const termText = document.getElementById('terminal-text');
+  const termFooter = document.getElementById('terminal-prompt-footer');
+  const enterBtn = document.getElementById('terminal-enter-btn');
+  const closeBtn = document.getElementById('term-close');
+
+  if (!overlay || !termText) return;
+
+  function closeTerminal() {
+    overlay.classList.add('hidden');
+    document.removeEventListener('keydown', onKeyPress);
+  }
+
+  function onKeyPress(e) {
+    if (e.key === 'Enter' || e.key === 'Escape' || e.code === 'Space') {
+      closeTerminal();
+    }
+  }
+
+  if (enterBtn) enterBtn.addEventListener('click', closeTerminal);
+  if (closeBtn) closeBtn.addEventListener('click', closeTerminal);
+  document.addEventListener('keydown', onKeyPress);
+
+  const os = detectOS();
+  termText.textContent = 'Đang quét thông tin kết nối...\n';
+
+  let locationText = 'Việt Nam';
+  let ispText = 'Nhà mạng bí mật';
+  let ipText = 'Đang tải...';
+
+  try {
+    const res = await fetch('/api/ip');
+    const data = await res.json();
+    if (data) {
+      ipText = data.ip || 'Hidden';
+      const parts = [];
+      if (data.city) parts.push(data.city);
+      if (data.region && data.region !== data.city) parts.push(data.region);
+      if (data.country) parts.push(data.country);
+      if (parts.length > 0) locationText = parts.join(', ');
+      if (data.isp) ispText = data.isp;
+
+      // Cập nhật luôn badge trên trang chính
+      const greetingEl = document.getElementById('visitor-badge');
+      if (greetingEl) {
+        greetingEl.innerHTML = ${data.flag || '📍'} Chào bạn từ <strong></strong> &middot; ;
+        greetingEl.style.display = 'inline-flex';
+        greetingEl.style.alignItems = 'center';
+      }
+    }
+  } catch (err) {
+    console.log('API error', err);
+  }
+
+  // Nội dung hiển thị dạng Terminal
+  const lines = [
+    '==============================================',
+    '       NDH SYSTEM SECURITY TERMINAL v2.5      ',
+    '==============================================',
+    ' > Xin chào người bạn ghé thăm toitenhuy.vercel.app!',
+    '----------------------------------------------',
+    ' [•] Địa chỉ IP      : ' + ipText,
+    ' [•] Vị trí đến từ   : ' + locationText,
+    ' [•] Nhà mạng (ISP)  : ' + ispText,
+    ' [•] Hệ điều hành    : ' + os,
+    ' [•] Trạng thái      : Kết nối an toàn (200 OK)',
+    '----------------------------------------------',
+    ' >> Chúc bạn có trải nghiệm tuyệt vời tại website!'
+  ];
+
+  let lineIdx = 0;
+  let charIdx = 0;
+  termText.textContent = '';
+
+  function typeTerminal() {
+    if (lineIdx < lines.length) {
+      const curLine = lines[lineIdx];
+      if (charIdx < curLine.length) {
+        termText.textContent += curLine.charAt(charIdx);
+        charIdx++;
+        setTimeout(typeTerminal, 14);
+      } else {
+        termText.textContent += '\n';
+        lineIdx++;
+        charIdx = 0;
+        setTimeout(typeTerminal, 60);
+      }
+    } else {
+      if (termFooter) termFooter.style.display = 'block';
+    }
+  }
+
+  typeTerminal();
+}
+
+// Chạy terminal khi vừa tải trang
+document.addEventListener('DOMContentLoaded', initWelcomeTerminal);
