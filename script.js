@@ -221,4 +221,27 @@ function initRain() {
 
   drawRain();
 }
+// Tự động chào đón người xem theo vị trí
+async function getVisitorLocation() {
+  try {
+    const res = await fetch('/api/ip');
+    const data = await res.json();
+
+    // Lấy tên thành phố và quốc gia từ APILayer trả về
+    const city = data.city || data.region_name;
+    const country = data.country_name;
+
+    if (city && country) {
+      const greetingEl = document.getElementById('visitor-badge');
+      if (greetingEl) {
+        greetingEl.innerHTML = `📍 Chào bạn từ <strong>${city}, ${country}</strong>!`;
+        greetingEl.style.display = 'inline-block';
+      }
+    }
+  } catch (err) {
+    console.log("Không lấy được IP:", err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', getVisitorLocation);
 
