@@ -221,28 +221,33 @@ function initRain() {
 
   drawRain();
 }
-// Tự động hiển thị lời chào kèm cờ quốc gia và thành phố
+
+// ============================================
+// TỰ ĐỘNG ĐỊNH VỊ KHÁCH TRUY CẬP (KHÔNG CẦN POPUP)
+// ============================================
 async function getVisitorLocation() {
   try {
     const res = await fetch('/api/ip');
     const data = await res.json();
 
-    if (data && data.country_name) {
-      const city = data.city || data.region_name;
-      const country = data.country_name;
-      const flag = (data.location && data.location.country_flag_emoji) ? data.location.country_flag_emoji : '📍';
+    if (data && (data.country || data.country_name)) {
+      const country = data.country || data.country_name;
+      const city = data.city;
+      const flag = data.flag || (data.location && data.location.country_flag_emoji) || '📍';
+      const isp = data.isp ? ` &middot; <span style="opacity: 0.85;">${data.isp}</span>` : '';
 
       const greetingEl = document.getElementById('visitor-badge');
       if (greetingEl) {
-        greetingEl.innerHTML = `${flag} Chào bạn từ <strong>${city ? city + ', ' : ''}${country}</strong>!`;
+        greetingEl.innerHTML = `${flag} Chào bạn từ <strong>${city ? city + ', ' : ''}${country}</strong>${isp}`;
         greetingEl.style.display = 'inline-flex';
         greetingEl.style.alignItems = 'center';
       }
     }
   } catch (err) {
-    console.log("Không lấy được IP:", err);
+    console.log("Không thể lấy vị trí khách:", err);
   }
 }
 
-// Chạy ngay khi nạp script
+// Chạy hàm lấy vị trí
 getVisitorLocation();
+
