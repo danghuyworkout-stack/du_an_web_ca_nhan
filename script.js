@@ -277,7 +277,7 @@ function detectOS() {
 }
 
 // ============================================
-// TERMINAL INTRO POPUP 
+// TERMINAL INTRO POPUP (Kochehe style)
 // ============================================
 async function initWelcomeTerminal() {
   const overlay = document.getElementById('welcome-terminal-overlay');
@@ -335,13 +335,13 @@ async function initWelcomeTerminal() {
     '==============================================',
     '       NDH SYSTEM SECURITY TERMINAL v2.5      ',
     '==============================================',
-    ' > Xin chào người bạn ghé thăm toitenhuy.vercel.app!',
+    ' > Xin chào người bạn ché thăm toitenhuy.vercel.app!',
     '----------------------------------------------',
     ' [‗] Địa chỉ IP      : ' + ipText,
     ' [‗] Quốc gia        : ' + flag + ' ' + locationText,
     ' [‗] Nhà mạng (ISP)  : ' + ispText,
     ' [‗] Hệ diều hành    : ' + os,
-    ' [₂] Trạng thái      : Kết nối an toàn ',
+    ' [₂] Trạng thái      : KẺt nối an toàn (200 OK)',
     '----------------------------------------------',
     ' >> Chúc bạn có trải nghiệm tuyệt vời tại website!'
   ];
@@ -390,15 +390,14 @@ async function initWelcomeTerminal() {
                 statusDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang giải mã tọa độ bản đồ...';
 
                 try {
-                  const geoRes = await fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lon + '&zoom=14&addressdetails=1');
+                  const geoRes = await fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' + lat + '&longitude=' + lon + '&localityLanguage=vi');
                   const geoData = await geoRes.json();
                   
-                  if (geoData && geoData.address) {
-                    const a = geoData.address;
-                    const ward = a.suburb || a.quarter || a.neighbourhood || a.ward || '';
-                    const district = a.city_district || a.district || a.county || '';
-                    const city = a.city || a.state || 'Đà Nẵng';
-                    const accuratePlace = [ward, district, city].filter(Boolean).join(', ');
+                  if (geoData) {
+                    const ward = geoData.locality || '';
+                    const city = geoData.city || geoData.principalSubdivision || 'Đà Nẵng';
+                    const country = geoData.countryName || 'Việt Nam';
+                    const accuratePlace = [ward, city, country].filter(Boolean).join(', ');
 
                     statusDiv.innerHTML = '🎯 <strong>Vị trí chính xác:</strong> ' + accuratePlace;
                     termText.textContent += '\n [✓] GPS Hiện tại     : ' + accuratePlace;
@@ -411,7 +410,7 @@ async function initWelcomeTerminal() {
                     statusDiv.innerText = 'Tọa độ GPS: ' + lat.toFixed(4) + ', ' + lon.toFixed(4);
                   }
                 } catch (err) {
-                  statusDiv.innerText = 'Lỗi bản đồ, vui lòng thử lại.';
+                  statusDiv.innerText = 'Lỗi kết nối bản đồ: ' + err.message;
                 }
               },
               (err) => {
