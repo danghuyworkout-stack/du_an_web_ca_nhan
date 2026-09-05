@@ -1,451 +1,141 @@
-// ============================================
-// NAVBAR: Scroll effect + Active link spy
-// ============================================
-const navbar = document.getElementById('navbar');
-const navLinks = document.querySelectorAll('.nav-link');
-const sections = document.querySelectorAll('section[id]');
-const hamburger = document.getElementById('hamburger');
-const navMenu = document.getElementById('nav-menu');
-
-// Scroll: add .scrolled to navbar
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 20) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
-  updateActiveLink();
-});
-
-// Active nav link based on scroll position
-function updateActiveLink() {
-  let current = '';
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop - 100;
-    if (window.scrollY >= sectionTop) {
-      current = section.getAttribute('id');
-    }
-  });
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('href') === '#' + current) {
-      link.classList.add('active');
-    }
-  });
-}
-
-// Hamburger menu toggle
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  navMenu.classList.toggle('open');
-});
-
-// Close menu when nav link clicked (mobile)
-navLinks.forEach(link => {
-  link.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    navMenu.classList.remove('open');
-  });
-});
-
-// ============================================
-// SKILL BARS: Animate on scroll (IntersectionObserver)
-// ============================================
-const skillFills = document.querySelectorAll('.skill-fill');
-
-const skillObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const fill = entry.target;
-      const targetWidth = fill.getAttribute('data-width');
-      fill.style.width = targetWidth + '%';
-      skillObserver.unobserve(fill);
-    }
-  });
-}, { threshold: 0.3 });
-
-skillFills.forEach(fill => skillObserver.observe(fill));
-
-// ============================================
-// CONTACT FORM: mailto handler
-// ============================================
-function handleFormSubmit(e) {
-  e.preventDefault();
-  const name    = document.getElementById('name').value;
-  const email   = document.getElementById('email').value;
-  const message = document.getElementById('message').value;
-  const subject = encodeURIComponent('Lien he tu portfolio - ' + name);
-  const body    = encodeURIComponent('Tu: ' + name + '\nEmail: ' + email + '\n\n' + message);
-  window.location.href = 'mailto:danghuydangsuy@gmail.com?subject=' + subject + '&body=' + body;
-}
-
-// ============================================
-// FADE-IN: Sections animate when scrolled into view
-// ============================================
-const fadeTargets = document.querySelectorAll(
-  '.info-card, .skill-card, .timeline-card, .contact-card, .about-text'
-);
-
-const fadeObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-      fadeObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1 });
-
-fadeTargets.forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)';
-  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-  fadeObserver.observe(el);
-});
-
-// ============================================
-// TYPING EFFECT (Page Title & Hero Title)
-// ============================================
-const typedElement = document.getElementById('typed-text');
-const phrases = [
-  'Nguyễn Đăng Huy',
-  'Fullstack Developer',
-  'Python Enthusiast',
-  'Creative Web Builder'
-];
-
-let phraseIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-const typingSpeed = 100;
-const deletingSpeed = 50;
-const pauseDelay = 1800;
-
-function typeLoop() {
-  const currentPhrase = phrases[phraseIndex];
-  const currentText = currentPhrase.substring(0, isDeleting ? charIndex - 1 : charIndex + 1);
-
-  if (typedElement) {
-    typedElement.textContent = currentText;
-  }
-  document.title = currentText ? `${currentText} |` : 'Nguyễn Đăng Huy';
-
-  if (!isDeleting) {
-    charIndex++;
-    if (charIndex === currentPhrase.length) {
-      document.title = currentPhrase;
-      isDeleting = true;
-      setTimeout(typeLoop, pauseDelay);
-      return;
-    }
-    setTimeout(typeLoop, typingSpeed);
-  } else {
-    charIndex--;
-    if (charIndex === 0) {
-      isDeleting = false;
-      phraseIndex = (phraseIndex + 1) % phrases.length;
-      setTimeout(typeLoop, 400);
-      return;
-    }
-    setTimeout(typeLoop, deletingSpeed);
-  }
-}
+/**
+ * NGUYỄN ĐĂNG HUY - EDITORIAL ATELIER PORTFOLIO SCRIPT
+ * Lightweight, accessible, zero-dependency client logic.
+ * Fixed single warm European theme.
+ */
 
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(typeLoop, 500);
-  initRain();
+  initNavigationScroll();
+  initCopyEmail();
+  initMobileMenu();
 });
 
-// ============================================
-// RAIN EFFECT (Canvas Animation)
-// ============================================
-function initRain() {
-  const canvas = document.getElementById('rain-canvas');
-  if (!canvas) return;
+// ==========================================================================
+// 1. COPY EMAIL TO CLIPBOARD WITH TOAST NOTICE
+// ==========================================================================
+function initCopyEmail() {
+  const copyBtn = document.getElementById('copy-email-btn');
+  if (!copyBtn) return;
 
-  const ctx = canvas.getContext('2d');
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+  copyBtn.addEventListener('click', () => {
+    const email = copyBtn.getAttribute('data-email') || 'danghuyworkout@gmail.com';
 
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
-
-  // Tăng số lượng hạt mưa cho rõ và dày hơn
-  const maxDrops = window.innerWidth < 768 ? 160 : 320;
-  const drops = [];
-
-  for (let i = 0; i < maxDrops; i++) {
-    drops.push({
-      x: Math.random() * (width + 100),
-      y: Math.random() * height,
-      length: Math.random() * 24 + 16,
-      speed: Math.random() * 8 + 10,
-      opacity: Math.random() * 0.5 + 0.4,
-      width: Math.random() * 0.8 + 1.2
-    });
-  }
-
-  let isRaining = true;
-  let rainAnimationId = null;
-
-  function drawRain() {
-    if (!isRaining) {
-      ctx.clearRect(0, 0, width, height);
-      return;
-    }
-
-    ctx.clearRect(0, 0, width, height);
-
-    for (let i = 0; i < drops.length; i++) {
-      const drop = drops[i];
-
-      ctx.beginPath();
-      // Màu sắc linh hoạt theo Theme
-      const isLight = document.body.classList.contains('light-theme');
-      const grad = ctx.createLinearGradient(drop.x, drop.y, drop.x - 2, drop.y + drop.length);
-      if (isLight) {
-        grad.addColorStop(0, `rgba(88, 80, 236, ${drop.opacity * 0.3})`);
-        grad.addColorStop(1, `rgba(14, 165, 233, ${drop.opacity * 0.8})`);
-      } else {
-        grad.addColorStop(0, `rgba(108, 99, 255, ${drop.opacity * 0.4})`);
-        grad.addColorStop(1, `rgba(0, 242, 254, ${drop.opacity})`);
-      }
-
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = drop.width;
-      ctx.lineCap = 'round';
-
-      ctx.moveTo(drop.x, drop.y);
-      ctx.lineTo(drop.x - 2, drop.y + drop.length);
-      ctx.stroke();
-
-      drop.y += drop.speed;
-      drop.x -= 1;
-
-      if (drop.y > height) {
-        drop.y = -30;
-        drop.x = Math.random() * (width + 100);
-      }
-    }
-
-    rainAnimationId = requestAnimationFrame(drawRain);
-  }
-
-  drawRain();
-
-  // NÚT CAPSULE BẬT / TẮT MƯA (THEO MẪU THỜI TIẾT)
-  const rainToggle = document.getElementById('rain-toggle');
-  const weatherIcon = document.getElementById('weather-icon');
-  const weatherText = document.getElementById('weather-text');
-
-  if (rainToggle) {
-    rainToggle.addEventListener('click', () => {
-      isRaining = !isRaining;
-      if (isRaining) {
-        rainToggle.classList.add('active');
-        if (weatherIcon) weatherIcon.innerText = '🌧️';
-        if (weatherText) weatherText.innerHTML = 'Mưa &bull; Đà Nẵng';
-        drawRain();
-      } else {
-        rainToggle.classList.remove('active');
-        if (weatherIcon) weatherIcon.innerText = '☀️';
-        if (weatherText) weatherText.innerHTML = '31°C &bull; Đà Nẵng';
-        if (rainAnimationId) cancelAnimationFrame(rainAnimationId);
-        ctx.clearRect(0, 0, width, height);
-      }
-    });
-  }
-
-  // NÚT CAPSULE ĐỔI GIAO DIỆN SÁNG / TỐI
-  const themeToggle = document.getElementById('theme-toggle');
-  const themeIcon = document.getElementById('theme-icon');
-  const themeText = document.getElementById('theme-text');
-
-  if (themeToggle) {
-    const savedTheme = localStorage.getItem('ndh_theme');
-    if (savedTheme === 'light') {
-      document.body.classList.add('light-theme');
-      themeToggle.classList.add('active');
-      if (themeIcon) themeIcon.innerText = '☀️';
-      if (themeText) themeText.innerText = 'Sáng';
-    }
-
-    themeToggle.addEventListener('click', () => {
-      const isLight = document.body.classList.toggle('light-theme');
-      themeToggle.classList.toggle('active', isLight);
-
-      if (isLight) {
-        if (themeIcon) themeIcon.innerText = '☀️';
-        if (themeText) themeText.innerText = 'Sáng';
-        localStorage.setItem('ndh_theme', 'light');
-      } else {
-        if (themeIcon) themeIcon.innerText = '🌙';
-        if (themeText) themeText.innerText = 'Tối';
-        localStorage.setItem('ndh_theme', 'dark');
-      }
-    });
-  }
-}
-
-// ============================================
-// TỰ ĐỘNG ĐỊNH VỊ KHÁCH TRUY CẬP (KHÔNG CẦN POPUP)
-// ============================================
-async function getVisitorLocation() {
-  try {
-    const res = await fetch('/api/ip');
-    const data = await res.json();
-
-    if (data && (data.country || data.country_name)) {
-      const country = data.country || data.country_name;
-      const city = data.city;
-      const flag = data.flag || (data.location && data.location.country_flag_emoji) || '📍';
-      const isp = data.isp ? ` &middot; <span style="opacity: 0.85;">${data.isp}</span>` : '';
-
-      const greetingEl = document.getElementById('visitor-badge');
-      if (greetingEl) {
-        greetingEl.innerHTML = `${flag} Chào bạn từ <strong>${city ? city + ', ' : ''}${country}</strong>${isp}`;
-        greetingEl.style.display = 'inline-flex';
-        greetingEl.style.alignItems = 'center';
-      }
-    }
-  } catch (err) {
-    console.log("Không thể lấy vị trí khách:", err);
-  }
-}
-
-// Chạy hàm lấy vị trí
-getVisitorLocation();
-
-
-
-// ============================================
-// HỆ ĐIỀU HÀNH & THÔNG TIN THIẾT BỊ
-// ============================================
-function detectOS() {
-  const ua = navigator.userAgent;
-  if (/Windows NT 10.0/i.test(ua)) return 'Windows 10/11';
-  if (/Windows NT 6.3/i.test(ua)) return 'Windows 8.1';
-  if (/Windows NT 6.2/i.test(ua)) return 'Windows 8';
-  if (/Windows NT 6.1/i.test(ua)) return 'Windows 7';
-  if (/Windows/i.test(ua)) return 'Windows';
-  if (/Android/i.test(ua)) {
-    const match = ua.match(/Android\s([0-9\.]*)/);
-    return match ? 'Android ' + match[1] : 'Android';
-  }
-  if (/iPhone|iPad|iPod/i.test(ua)) {
-    const match = ua.match(/OS\s([0-9_]*)/);
-    return match ? 'iOS ' + match[1].replace(/_/g, '.') : 'iOS';
-  }
-  if (/Macintosh|Mac OS X/i.test(ua)) return 'macOS';
-  if (/Linux/i.test(ua)) return 'Linux';
-  return 'Unknown OS';
-}
-
-// ============================================
-// TERMINAL INTRO POPUP (Kochehe style)
-// ============================================
-async function initWelcomeTerminal() {
-  const overlay = document.getElementById('welcome-terminal-overlay');
-  const termText = document.getElementById('terminal-text');
-  const termFooter = document.getElementById('terminal-prompt-footer');
-  const enterBtn = document.getElementById('terminal-enter-btn');
-  const closeBtn = document.getElementById('term-close');
-
-  if (!overlay || !termText) return;
-
-  function closeTerminal() {
-    overlay.classList.add('hidden');
-    document.removeEventListener('keydown', onKeyPress);
-  }
-
-  function onKeyPress(e) {
-    if (e.key === 'Enter' || e.key === 'Escape' || e.code === 'Space') {
-      closeTerminal();
-    }
-  }
-
-  if (enterBtn) enterBtn.addEventListener('click', closeTerminal);
-  if (closeBtn) closeBtn.addEventListener('click', closeTerminal);
-  document.addEventListener('keydown', onKeyPress);
-
-  // Click ra ngoài cửa sổ Terminal để vào trang chính Portfolio
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      closeTerminal();
-    }
-  });
-
-  const os = detectOS();
-  termText.textContent = '[+] Dang ket noi may chu...\n[+] Kiem tra he thong...\n';
-
-  let locationText = 'Việt Nam';
-  let ispText = 'Nhà mạng Việt Nam';
-  let ipText = 'Downloading...';
-  let flag = '🇩🇰';
-
-  try {
-    const res = await fetch('/api/ip');
-    const data = await res.json();
-    if (data) {
-      ipText = data.ip || 'hidden';
-      locationText = data.country || 'Việt Nam';
-      ispText = data.isp || 'Nhà mạng Việt Nam';
-      flag = data.flag || '🇩🇰';
-
-      const greetingEl = document.getElementById('visitor-badge');
-      if (greetingEl) {
-        greetingEl.innerHTML = flag + ' Chào bạn từ <strong>' + locationText + '</strong> &middot; <span style="opacity: 0.85;">' + ispText + '</span>';
-        greetingEl.style.display = 'inline-flex';
-        greetingEl.style.alignItems = 'center';
-      }
-    }
-  } catch (err) {
-    console.log('API error', err);
-  }
-
-  const linesSystem = [
-    '==============================================',
-    '       NDH SYSTEM SECURITY TERMINAL v2.5      ',
-    '==============================================',
-    ' > Xin chào người bạn ghé thăm toitenhuy.vercel.app!',
-    '----------------------------------------------',
-    ' [•] Địa chỉ IP       : ' + ipText,
-    ' [•] Quốc gia         : ' + flag + ' ' + locationText,
-    ' [•] Đang sài nhà mạng: ' + ispText,
-    ' [•] Hệ điều hành     : ' + os,
-    ' [•] Trạng thái       : Kết nối an toàn (200 OK)',
-    '----------------------------------------------',
-    ' >> Chúc bạn có trải nghiệm tuyệt vời tại website!'
-  ];
-
-  let lineIdx = 0;
-  let charIdx = 0;
-  termText.textContent = '';
-
-  function typeTerminal() {
-    if (lineIdx < linesSystem.length) {
-      const curLine = linesSystem[lineIdx];
-      if (charIdx < curLine.length) {
-        termText.textContent += curLine.charAt(charIdx);
-        charIdx++;
-        setTimeout(typeTerminal, 3);
-      } else {
-        termText.textContent += '\n';
-        lineIdx++;
-        charIdx = 0;
-        setTimeout(typeTerminal, 18);
-      }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(() => {
+        showToastNotice(`Đã sao chép: ${email}`);
+      }).catch(() => {
+        fallbackCopyText(email);
+      });
     } else {
-      if (termFooter) {
-        termFooter.innerHTML = '<p style="font-size: 0.88rem; color: rgba(255,255,255,0.55); margin-top: 14px; text-align: center; cursor: pointer;" onclick="document.getElementById(\'welcome-terminal-overlay\').classList.add(\'hidden\')"><i class="fa-regular fa-hand-pointer"></i> Click ra ngoài cửa sổ hoặc nhấn Enter để tiếp tục</p>';
-        termFooter.style.display = 'block';
-      }
+      fallbackCopyText(email);
     }
-  }
-
-  typeTerminal();
+  });
 }
 
-document.addEventListener('DOMContentLoaded', initWelcomeTerminal);
+function fallbackCopyText(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    showToastNotice(`Đã sao chép: ${text}`);
+  } catch (err) {
+    showToastNotice(`Hộp thư: ${text}`);
+  }
+  document.body.removeChild(textarea);
+}
+
+// Toast notification helper
+let toastTimeout = null;
+function showToastNotice(message) {
+  const toast = document.getElementById('toast-notice');
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.classList.add('show');
+
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2600);
+}
+
+// ==========================================================================
+// 2. NAVIGATION ACTIVE SCROLL SPY
+// ==========================================================================
+function initNavigationScroll() {
+  const navLinks = document.querySelectorAll('.nav-item');
+  const sections = document.querySelectorAll('section[id]');
+  const header = document.getElementById('header');
+
+  window.addEventListener('scroll', () => {
+    // Header shadow on scroll
+    if (window.scrollY > 20) {
+      if (header) header.style.boxShadow = '0 4px 20px rgba(43, 34, 25, 0.06)';
+    } else {
+      if (header) header.style.boxShadow = 'none';
+    }
+
+    // Scroll spy
+    let currentId = '';
+    sections.forEach(sec => {
+      const top = sec.offsetTop - 120;
+      if (window.scrollY >= top) {
+        currentId = sec.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${currentId}`) {
+        link.classList.add('active');
+      }
+    });
+  });
+}
+
+// ==========================================================================
+// 3. MOBILE HAMBURGER MENU
+// ==========================================================================
+function initMobileMenu() {
+  const hamburger = document.getElementById('hamburger-btn');
+  const navMenu = document.getElementById('nav-menu');
+  const navLinks = document.querySelectorAll('.nav-item');
+
+  if (!hamburger || !navMenu) return;
+
+  hamburger.addEventListener('click', () => {
+    navMenu.classList.toggle('open');
+  });
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('open');
+    });
+  });
+}
+
+// ==========================================================================
+// 4. CONTACT FORM HANDLER (MAILTO DISPATCH)
+// ==========================================================================
+function handleFormSubmit(e) {
+  e.preventDefault();
+
+  const name = document.getElementById('form-name').value.trim();
+  const email = document.getElementById('form-email').value.trim();
+  const message = document.getElementById('form-message').value.trim();
+
+  const subject = encodeURIComponent(`[Liên hệ tuyển dụng/hợp tác] Lời nhắn từ ${name}`);
+  const body = encodeURIComponent(
+    `Kính gửi Nguyễn Đăng Huy,\n\n` +
+    `Tôi là: ${name}\n` +
+    `Email liên hệ: ${email}\n\n` +
+    `Nội dung trao đổi:\n${message}\n\n` +
+    `Trân trọng.`
+  );
+
+  window.location.href = `mailto:danghuyworkout@gmail.com?subject=${subject}&body=${body}`;
+}

@@ -7,219 +7,435 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-J2MMLP8ENY');
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nguyễn Đăng Huy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Nguyễn Đăng Huy — Tân sinh viên ngành Công nghệ Thông tin tại Trường Đại học Sư phạm - Đại học Đà Nẵng. Hồ sơ giới thiệu bản thân thanh lịch, chuyên nghiệp dành cho nhà tuyển dụng.">
+    <meta name="theme-color" content="#faf8f5">
+
+    <title>Nguyễn Đăng Huy &mdash; Hồ Sơ Cá Nhân &bull; Đại Học Sư Phạm Đà Nẵng</title>
+
+    <!-- Google Fonts: Cormorant Garamond & Playfair Display (European Fine-Dining Serif) + Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="rain-canvas"></canvas>
+    <!-- SUBTLE PAPER & LINEN TEXTURE OVERLAY -->
+    <div class="paper-texture-overlay" aria-hidden="true"></div>
 
-    <!-- TERMINAL WELCOME OVERLAY (Giống kochehe) -->
-    <div id="welcome-terminal-overlay">
-        <div id="welcome-terminal">
-            <div id="terminal-header">
-                <div id="terminal-buttons">
-                    <span class="terminal-btn close" id="term-close"></span>
-                    <span class="terminal-btn minimize"></span>
-                    <span class="terminal-btn maximize"></span>
-                </div>
-                <div id="terminal-title">bash &mdash; guest@toitenhuy:~</div>
-            </div>
-            <div id="terminal-body">
-                <pre id="terminal-text"></pre>
-                <div id="terminal-prompt-footer" style="display: none;">
-                    <button id="terminal-enter-btn" class="btn-enter"><i class="fa-solid fa-arrow-right-to-bracket"></i> Bấm phím bất kỳ hoặc click vào đây để tiếp tục</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a class="nav-logo" href="#hero">NDH<span class="dot">.</span></a>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a class="nav-link" href="#about">About</a></li>
-                <li><a class="nav-link" href="#skills">Skills</a></li>
-                <li><a class="nav-link" href="#achievements">Achievements</a></li>
-                <li><a class="nav-link" href="#contact">Contact</a></li>
-            </ul>
-            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </nav>
+    <!-- NOTIFICATION TOAST FOR ACTIONS -->
+    <div id="toast-notice" class="toast-notice" role="alert" aria-live="polite"></div>
 
-    <!-- 2 NÚT NỔI Ở GÓC TRÊN BÊN PHẢI NGAY DƯỚI THANH ĐIỀU HƯỚNG -->
-    <div class="floating-controls">
-        <!-- NÚT PILL 1: THỜI TIẾT / MƯA (LÀM TO VÀ RÕ NÉT) -->
-        <button class="pill-badge active" id="rain-toggle" aria-label="Bật tắt mưa" title="Click để Bật/Tắt mưa">
-            <span class="pill-icon" id="weather-icon">🌧️</span>
-            <span class="pill-text" id="weather-text">Mưa &bull; Đà Nẵng</span>
-        </button>
+    <!-- MAIN EDITORIAL HEADER -->
+    <header class="atelier-header" id="header">
+        <div class="container header-container">
+            <a href="#hero" class="brand-monogram">
+                <span class="monogram-letter">H</span>
+                <span class="monogram-dot">&bull;</span>
+                <span class="monogram-text">NDH Dossier</span>
+            </a>
 
-        <!-- NÚT PILL 2: SÁNG / TỐI -->
-        <button class="pill-badge" id="theme-toggle" aria-label="Đổi giao diện sáng tối" title="Click để đổi Sáng/Tối">
-            <span class="pill-icon" id="theme-icon">🌙</span>
-            <span class="pill-text" id="theme-text">Tối</span>
-        </button>
-    </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Menu chính">
+                <a href="#about" class="nav-item">Về Bản Thân</a>
+                <a href="#education" class="nav-item">Học Vấn & Thành Tích</a>
+                <a href="#skills" class="nav-item">Nền Tảng Kỹ Năng</a>
+                <a href="#vision" class="nav-item">Mục Tiêu & Phẩm Chất</a>
+                <a href="#contact" class="nav-item">Liên Hệ</a>
+            </nav>
 
-    <section id="hero" class="section hero-section">
-        <div class="hero-content">
-            <div class="avatar-wrapper">
-                <img src="conchuot.jpg" alt="Nguyễn Đăng Huy" class="hero-avatar">
-                <span class="avatar-status"></span>
-            </div>
-            <div class="hero-badge">Available for projects</div>
-            <div class="hero-badge" id="visitor-badge" style="display: none; margin-top: 8px; background: rgba(108, 99, 255, 0.15); border: 1px solid rgba(108, 99, 255, 0.3); color: #b8b3ff;"></div>
-            <h1 class="hero-name"><span id="typed-text"></span><span class="typed-cursor">|</span></h1>
-            <p class="hero-role">Fullstack Developer <span class="divider">/</span> Student</p>
-            <p class="hero-desc">Đam mê lập trình và xây dựng những sản phẩm web đẹp, hiệu quả. Học sinh tại <strong>THPT Tố Hữu</strong> &middot; Sinh năm <strong>2008</strong>.</p>
-            <div class="hero-actions">
-                <a href="#contact" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Liên hệ</a>
-                <a href="#about" class="btn btn-outline"><i class="fa-solid fa-chevron-down"></i> Xem thêm</a>
-            </div>
-            <div class="hero-socials">
-                <a href="https://www.facebook.com/danghuydangsuy" target="_blank" class="social-icon" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="https://github.com/danghuyworkout-stack" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
+            <div class="header-actions">
+                <a href="mailto:danghuyworkout@gmail.com" class="btn-header-contact">
+                    <span>Gửi Thư</span>
+                </a>
+                <button class="hamburger-btn" id="hamburger-btn" aria-label="Mở danh mục điều hướng">
+                    <span></span><span></span>
+                </button>
             </div>
         </div>
-        <div class="hero-scroll-hint"><span>Scroll</span><i class="fa-solid fa-arrow-down"></i></div>
-    </section>
-    <section id="about" class="section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">01 &mdash; About</span>
-                <h2 class="section-title">Về bản thân</h2>
-            </div>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>Xin chào! Mình là <strong>Nguyễn Đăng Huy</strong>, một học sinh yêu thích lập trình và phát triển web. Mình tự học từ sớm và luôn tìm cách biến ý tưởng thành sản phẩm thực tế.</p>
-                    <p>Mình thích tạo ra những giao diện đẹp, trải nghiệm người dùng mượt mà và code sạch sẽ. Mục tiêu của mình là trở thành một Fullstack Developer chuyên nghiệp.</p>
-                </div>
-                <div class="about-info-cards">
-                    <div class="info-card"><i class="fa-solid fa-calendar-days"></i><div><span class="info-label">Năm sinh</span><span class="info-value">2008</span></div></div>
-                    <div class="info-card"><i class="fa-solid fa-school"></i><div><span class="info-label">Trường</span><span class="info-value">THPT Tố Hữu</span></div></div>
-                    <div class="info-card"><i class="fa-solid fa-location-dot"></i><div><span class="info-label">Địa điểm</span><span class="info-value">Việt Nam</span></div></div>
-                    <div class="info-card"><i class="fa-solid fa-code"></i><div><span class="info-label">Lĩnh vực</span><span class="info-value">Web Development</span></div></div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="skills" class="section section-alt">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">02 &mdash; Skills</span>
-                <h2 class="section-title">Kỹ năng</h2>
-            </div>
-            <div class="skills-categories">
-                <div class="skill-category">
-                    <h3 class="category-title"><i class="fa-solid fa-globe"></i> Frontend</h3>
-                    <div class="skills-grid">
-                        <div class="skill-card"><i class="fa-brands fa-html5" style="color:#e34f26"></i><span>HTML5</span><div class="skill-bar"><div class="skill-fill" data-width="90"></div></div></div>
-                        <div class="skill-card"><i class="fa-brands fa-css3-alt" style="color:#1572b6"></i><span>CSS3</span><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
-                        <div class="skill-card"><i class="fa-brands fa-js" style="color:#f7df1e"></i><span>JavaScript</span><div class="skill-bar"><div class="skill-fill" data-width="75"></div></div></div>
+    </header>
+
+    <main id="main-content">
+        <!-- HERO SECTION: EDITORIAL PORTRAIT & PERSONAL STATEMENT -->
+        <section id="hero" class="section-hero">
+            <div class="container hero-layout">
+                <div class="hero-text-col">
+                    <div class="editorial-eyebrow">
+                        <span class="eyebrow-line"></span>
+                        <span class="eyebrow-tag">CURRICULUM VITAE &bull; ĐÀ NẴNG, VIỆT NAM</span>
+                    </div>
+
+                    <h1 class="hero-full-name">
+                        Nguyễn Đăng Huy
+                    </h1>
+
+                    <p class="hero-role-title">
+                        Tân Sinh Viên Công Nghệ Thông Tin
+                    </p>
+                    <p class="hero-institution">
+                        Trường Đại học Sư phạm &mdash; Đại học Đà Nẵng
+                    </p>
+
+                    <div class="ornament-divider" aria-hidden="true">
+                        <span class="ornament-leaf">&loz;</span>
+                    </div>
+
+                    <p class="hero-statement">
+                        "Chào mừng quý nhà tuyển dụng và thầy cô đến với trang thông tin cá nhân của tôi. Là một tân sinh viên đam mê thế giới máy tính và tư duy khoa học, tôi luôn đề cao sự trung thực, tinh thần kỷ luật và thái độ cầu thị. Tôi nỗ lực xây dựng nền tảng vững chắc để từng bước trở thành một Kỹ sư Phần mềm chuyên nghiệp và tận tâm."
+                    </p>
+
+                    <div class="hero-cta-group">
+                        <a href="mailto:danghuyworkout@gmail.com" class="btn-atelier btn-gold">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span>Gửi Thư Kết Nối</span>
+                        </a>
+                        <button class="btn-atelier btn-outline" id="copy-email-btn" data-email="danghuyworkout@gmail.com">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>Sao Chép Email</span>
+                        </button>
+                        <a href="#about" class="btn-atelier btn-text">
+                            <span>Đọc Tiếp</span>
+                            <i class="fa-solid fa-arrow-down-long"></i>
+                        </a>
+                    </div>
+
+                    <div class="hero-quick-meta">
+                        <div class="meta-pill">
+                            <span class="pill-title">Chuyên ngành:</span>
+                            <span class="pill-value">Công nghệ Thông tin (IT)</span>
+                        </div>
+                        <div class="meta-pill">
+                            <span class="pill-title">Niên khóa:</span>
+                            <span class="pill-value">2026 &ndash; 2030</span>
+                        </div>
+                        <div class="meta-pill">
+                            <span class="pill-title">Tình trạng:</span>
+                            <span class="pill-value text-emerald">Sẵn sàng học hỏi & thực tập</span>
+                        </div>
                     </div>
                 </div>
-                <div class="skill-category">
-                    <h3 class="category-title"><i class="fa-solid fa-server"></i> Backend / Other</h3>
-                    <div class="skills-grid">
-                        <div class="skill-card"><i class="fa-brands fa-python" style="color:#3776ab"></i><span>Python</span><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div></div>
-                        <div class="skill-card"><i class="fa-brands fa-git-alt" style="color:#f05032"></i><span>Git</span><div class="skill-bar"><div class="skill-fill" data-width="60"></div></div></div>
-                        <div class="skill-card"><i class="fa-brands fa-github" style="color:#e0e0e0"></i><span>GitHub</span><div class="skill-bar"><div class="skill-fill" data-width="60"></div></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="achievements" class="section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">03 &mdash; Achievements</span>
-                <h2 class="section-title">Thành tích</h2>
-            </div>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <span class="timeline-year">2024</span>
-                        <h4>Tự học lập trình Web</h4>
-                        <p>Hoàn thành các khóa học HTML, CSS, JavaScript và xây dựng dự án cá nhân đầu tiên.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <span class="timeline-year">2025</span>
-                        <h4>Phát triển kỹ năng Python</h4>
-                        <p>Học và ứng dụng Python vào các bài toán thực tế, automation và backend cơ bản.</p>
-                    </div>
-                </div>
-                <div class="timeline-item timeline-upcoming">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <span class="timeline-year">Sắp tới</span>
-                        <h4>Thành tích dang duoc cap nhat...</h4>
-                        <p>Những mục tiêu và thành tích mới đang trên đường thực hiện. 🚀</p>
+
+                <div class="hero-image-col">
+                    <div class="portrait-arch-frame">
+                        <div class="frame-inner-border">
+                            <img src="conchuot.jpg" alt="Chân dung Nguyễn Đăng Huy" class="portrait-image" width="380" height="480">
+                        </div>
+                        <div class="frame-tag-badge">
+                            <span class="tag-year">EST. 2008</span>
+                            <span class="tag-label">Nguyễn Đăng Huy</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <section id="contact" class="section section-alt">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">04 &mdash; Contact</span>
-                <h2 class="section-title">Liên hệ</h2>
-                <p class="section-desc">Muốn hợp tác hoặc chỉ đơn giản là nói chuyện? Hãy liên hệ với mình!</p>
-            </div>
-            <div class="contact-grid">
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/danghuydangsuy" target="_blank" class="contact-card">
-                        <i class="fa-brands fa-facebook-f"></i>
-                        <div><span class="contact-card-label">Facebook</span><span class="contact-card-value">Đăng Huy</span></div>
-                        <i class="fa-solid fa-arrow-up-right-from-square contact-arrow"></i>
-                    </a>
-                    <a href="https://github.com/danghuyworkout-stack/" target="_blank" class="contact-card">
-                        <i class="fa-brands fa-github"></i>
-                        <div><span class="contact-card-label">GitHub</span><span class="contact-card-value">Full Repo</span></div>
-                        <i class="fa-solid fa-arrow-up-right-from-square contact-arrow"></i>
-                    </a>
+        </section>
+
+        <!-- SECTION 1: ABOUT ME & PHILOSOPHY -->
+        <section id="about" class="atelier-section">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <span class="section-num">I</span>
+                    <h2 class="section-heading">Về Bản Thân & Tinh Thần Học Tập</h2>
+                    <p class="section-sub">Tự thuật ngắn gọn, chân thành về quá trình trưởng thành và niềm say mê với công nghệ.</p>
                 </div>
-                <form class="contact-form" onsubmit="handleFormSubmit(event)">
-                    <div class="form-group">
-                        <label for="name">Tên của bạn</label>
-                        <input type="text" id="name" placeholder="Nguyễn Văn A" required>
+
+                <div class="about-editorial-grid">
+                    <div class="about-quote-panel">
+                        <span class="quote-sign">&ldquo;</span>
+                        <blockquote class="quote-text">
+                            Không tự hài lòng với sự hời hợt, tôi tin rằng vẻ đẹp của một người làm kỹ thuật nằm ở tư duy mạch lạc, sự chính xác trong từng bài toán và tính trung thực trong công việc.
+                        </blockquote>
+                        <span class="quote-author">&mdash; Lời tự bạch cá nhân</span>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="email@example.com" required>
+
+                    <div class="about-story-panel">
+                        <p>
+                            Tôi là <strong>Nguyễn Đăng Huy</strong>, sinh năm <strong>2008</strong> tại Đà Nẵng. Suốt những năm tháng học tập tại trường <strong>THPT Tố Hữu</strong> (xã Thạnh Mỹ, TP. Đà Nẵng), tôi đã sớm tìm thấy niềm đam mê đặc biệt với các môn khoa học tự nhiên và công nghệ máy tính.
+                        </p>
+                        <p>
+                            Trong quá trình tự học và tiếp cận tin học, tôi chủ yếu thực hành thông qua phương pháp trực quan (*vibe-coding*), tận dụng linh hoạt các công cụ hỗ trợ để nhanh chóng tạo ra các giao diện số có tính ứng dụng thực tế. Tôi không tự nhận mình có khả năng lập trình chuyên sâu khi vừa rời ghế phổ thông, mà lựa chọn bước chân vào trường <strong>Đại học Sư phạm &ndash; Đại học Đà Nẵng</strong> với một tâm thế khiêm nhường nhất: rèn giũa bài bản từ gốc rễ thuật toán, cấu trúc dữ liệu đến các tiêu chuẩn kỹ thuật chuyên nghiệp.
+                        </p>
                     </div>
-                    <div class="form-group">
-                        <label for="message">Tin nhắn</label>
-                        <textarea id="message" rows="4" placeholder="Xin chào Huy..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">
-                        <i class="fa-solid fa-paper-plane"></i> Gửi tin nhắn
-                    </button>
-                    <p class="form-note">* Form sẽ mở ứng dụng email của bạn để gửi.</p>
-                </form>
+                </div>
             </div>
-        </div>
-    </section>
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 <strong>Nguyễn Đăng Huy</strong>. Made with <i class="fa-solid fa-heart" style="color:#6c63ff"></i></p>
+        </section>
+
+        <!-- SECTION 2: EDUCATION & ACHIEVEMENTS -->
+        <section id="education" class="atelier-section bg-secondary-tint">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <span class="section-num">II</span>
+                    <h2 class="section-heading">Học Vấn & Thành Tích Tiêu Biểu</h2>
+                    <p class="section-sub">Nền tảng đào tạo chính quy cùng dấu ấn học thuật thể hiện tư duy toán lý sắc bén.</p>
+                </div>
+
+                <div class="edu-achieve-grid">
+                    <!-- ACADEMIC TRACK -->
+                    <div class="editorial-card edu-card">
+                        <div class="card-badge">HỌC VẤN CHÍNH QUY</div>
+                        
+                        <div class="timeline-record">
+                            <div class="record-period">2026 &mdash; HIỆN TẠI</div>
+                            <h3 class="record-title">Trường Đại học Sư phạm &mdash; Đại học Đà Nẵng</h3>
+                            <h4 class="record-sub">Khoa Tin học &bull; Ngành Công nghệ Thông tin</h4>
+                            <p class="record-desc">
+                                Tân sinh viên hệ đại học chính quy. Tập trung nghiên cứu nền tảng khoa học máy tính, kỹ thuật lập trình và quy trình phát triển phần mềm hiện đại.
+                            </p>
+                        </div>
+
+                        <div class="record-separator"></div>
+
+                        <div class="timeline-record">
+                            <div class="record-period">2023 &mdash; 2026</div>
+                            <h3 class="record-title">Trường THPT Tố Hữu</h3>
+                            <h4 class="record-sub">Địa bàn: Xã Thạnh Mỹ, Thành phố Đà Nẵng</h4>
+                            <p class="record-desc">
+                                Hoàn thành chương trình trung học phổ thông; tích cực tham gia các phong trào học tập bộ môn khoa học tự nhiên và câu lạc bộ tin học.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- KEY ACHIEVEMENT -->
+                    <div class="editorial-card achieve-card">
+                        <div class="card-badge gold-badge">DẤU ẤN HỌC THUẬT</div>
+
+                        <div class="trophy-highlight-box">
+                            <div class="trophy-icon">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <div class="trophy-info">
+                                <span class="trophy-rank">GIẢI NHẤT HỌC SINH GIỎI</span>
+                                <h3 class="trophy-subject">Môn Vật Lý Cấp Trường</h3>
+                                <span class="trophy-school">Trường THPT Tố Hữu &bull; Năm học phổ thông</span>
+                            </div>
+                        </div>
+
+                        <div class="achievement-significance">
+                            <h4 class="significance-title">
+                                <i class="fa-solid fa-compass-drafting"></i> Ý nghĩa đối với năng lực Công nghệ:
+                            </h4>
+                            <ul class="significance-list">
+                                <li>
+                                    <strong>Tư duy logic & toán học:</strong> Bộ môn Vật lý rèn luyện khả năng phân tích bản chất hiện tượng và giải quyết các bài toán định lượng phức tạp.
+                                </li>
+                                <li>
+                                    <strong>Tính kiên trì & kỷ luật:</strong> Đạt giải Nhất học sinh giỏi đòi hỏi quá trình tự nghiên cứu chuyên sâu, đọc tài liệu mở rộng và tính cẩn trọng cao độ.
+                                </li>
+                                <li>
+                                    <strong>Nền tảng vững vàng cho CNTT:</strong> Tư duy mô hình hóa của Vật lý chính là tiền đề cốt lõi giúp tiếp thu nhanh các giải thuật máy tính.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SKILLS & COMPETENCIES -->
+        <section id="skills" class="atelier-section">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <span class="section-num">III</span>
+                    <h2 class="section-heading">Nền Tảng Kỹ Năng Căn Bản</h2>
+                    <p class="section-sub">Liệt kê trung thực, minh bạch các kiến thức nền tảng đã tích lũy và công cụ sử dụng.</p>
+                </div>
+
+                <div class="skills-editorial-grid">
+                    <!-- BLOCK 1: LẬP TRÌNH CƠ BẢN -->
+                    <div class="skill-category-box">
+                        <div class="skill-category-head">
+                            <span class="skill-idx">01</span>
+                            <h3 class="skill-cat-title">Lập Trình & Web Căn Bản</h3>
+                        </div>
+                        <ul class="skill-item-list">
+                            <li>
+                                <span class="skill-item-name">Python Cơ Bản</span>
+                                <span class="skill-item-desc">Cú pháp, cấu trúc điều kiện, vòng lặp, xử lý chuỗi và bài toán tin học phổ thông.</span>
+                            </li>
+                            <li>
+                                <span class="skill-item-name">HTML5 & CSS Cơ Bản</span>
+                                <span class="skill-item-desc">Tổ chức bố cục trang web, các thẻ ngữ nghĩa (Semantic HTML) và tạo kiểu giao diện.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- BLOCK 2: HỆ THỐNG & DỮ LIỆU -->
+                    <div class="skill-category-box">
+                        <div class="skill-category-head">
+                            <span class="skill-idx">02</span>
+                            <h3 class="skill-cat-title">Hệ Thống & Dữ Liệu</h3>
+                        </div>
+                        <ul class="skill-item-list">
+                            <li>
+                                <span class="skill-item-name">Cơ Sở Dữ Liệu SQL Căn Bản</span>
+                                <span class="skill-item-desc">Khái niệm bảng, khóa chính, các câu lệnh truy vấn dữ liệu đơn giản (SELECT, WHERE, JOIN cơ bản).</span>
+                            </li>
+                            <li>
+                                <span class="skill-item-name">Kiến Thức Mạng Máy Tính</span>
+                                <span class="skill-item-desc">Hiểu biết cơ bản về địa chỉ IP, mô hình mạng Internet, giao thức truyền dẫn phổ biến.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- BLOCK 3: TIN HỌC VĂN PHÒNG & THỰC HÀNH -->
+                    <div class="skill-category-box">
+                        <div class="skill-category-head">
+                            <span class="skill-idx">03</span>
+                            <h3 class="skill-cat-title">Tin Học Văn Phòng & Ứng Dụng</h3>
+                        </div>
+                        <ul class="skill-item-list">
+                            <li>
+                                <span class="skill-item-name">Tin Học Văn Phòng Thành Thạo</span>
+                                <span class="skill-item-desc">Sử dụng thuần thục Microsoft Word (trình bày văn bản quy chuẩn), Excel (hàm tính toán) và PowerPoint.</span>
+                            </li>
+                            <li>
+                                <span class="skill-item-name">Phương Pháp Vibe-Coding Hiện Đại</span>
+                                <span class="skill-item-desc">Vận dụng công cụ AI và hỗ trợ lập trình thông minh để hiện thực hóa ý tưởng giao diện, kiểm thử nhanh sản phẩm.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: CAREER VISION & PERSONAL QUALITIES -->
+        <section id="vision" class="atelier-section bg-secondary-tint">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <span class="section-num">IV</span>
+                    <h2 class="section-heading">Định Hướng Nghề Nghiệp & Phẩm Chất</h2>
+                    <p class="section-sub">Cam kết rèn luyện cá nhân và các mục tiêu cụ thể trên giảng đường đại học.</p>
+                </div>
+
+                <div class="vision-grid">
+                    <div class="vision-card">
+                        <div class="vision-icon"><i class="fa-solid fa-bullseye"></i></div>
+                        <h3 class="vision-title">Mục Tiêu Học Tập Ngắn Hạn</h3>
+                        <p class="vision-desc">
+                            Đạt thành tích học tập tốt tại Đại học Sư phạm Đà Nẵng; nắm vững cấu trúc dữ liệu, thuật toán và lập trình hướng đối tượng. Tích cực tham gia các dự án nghiên cứu khoa học sinh viên và chủ động tìm kiếm cơ hội thực tập, cọ xát thực tế.
+                        </p>
+                    </div>
+
+                    <div class="vision-card">
+                        <div class="vision-icon"><i class="fa-solid fa-compass"></i></div>
+                        <h3 class="vision-title">Định Hướng Dài Hạn</h3>
+                        <p class="vision-desc">
+                            Trở thành một Kỹ sư Phần mềm (Software Engineer) vững chuyên môn, có tinh thần trách nhiệm cao với sản phẩm và đóng góp giá trị thiết thực cho doanh nghiệp cũng như cộng đồng công nghệ thông tin.
+                        </p>
+                    </div>
+
+                    <div class="vision-card">
+                        <div class="vision-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                        <h3 class="vision-title">Phẩm Chất Cốt Lõi</h3>
+                        <p class="vision-desc">
+                            Trung thực và thẳng thắn trong học tập; tinh thần tự giác nghiên cứu tài liệu độc lập; luôn tôn trọng thời hạn (deadline) và lắng nghe góp ý từ thầy cô, đồng nghiệp để không ngừng tiến bộ.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: CONTACT & PROFESSIONAL DOSSIER -->
+        <section id="contact" class="atelier-section">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <span class="section-num">V</span>
+                    <h2 class="section-heading">Kênh Liên Hệ Trực Tiếp</h2>
+                    <p class="section-sub">Rất hân hạnh được kết nối với quý nhà tuyển dụng, thầy cô và các anh chị đi trước.</p>
+                </div>
+
+                <div class="contact-editorial-layout">
+                    <div class="contact-info-column">
+                        <div class="contact-card-atelier">
+                            <h3 class="contact-block-title">Thông Tin Liên Lạc</h3>
+                            <p class="contact-block-sub">Xin vui lòng gửi thư điện tử hoặc liên hệ qua các kênh chính thức sau:</p>
+
+                            <div class="contact-link-row">
+                                <span class="link-label">Hộp Thư Điện Tử:</span>
+                                <a href="mailto:danghuyworkout@gmail.com" class="link-value link-highlight">
+                                    danghuyworkout@gmail.com
+                                </a>
+                            </div>
+
+                            <div class="contact-link-row">
+                                <span class="link-label">Kho Mã Nguồn GitHub:</span>
+                                <a href="https://github.com/danghuyworkout-stack" target="_blank" rel="noopener noreferrer" class="link-value">
+                                    github.com/danghuyworkout-stack <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+
+                            <div class="contact-link-row">
+                                <span class="link-label">Trang Cá Nhân Facebook:</span>
+                                <a href="https://www.facebook.com/danghuydangsuy" target="_blank" rel="noopener noreferrer" class="link-value">
+                                    facebook.com/danghuydangsuy <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+
+                            <div class="contact-link-row">
+                                <span class="link-label">Địa Điểm Sinh Sống & Học Tập:</span>
+                                <span class="link-value text-muted">
+                                    Thành phố Đà Nẵng, Việt Nam
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-form-column">
+                        <form class="atelier-contact-form" onsubmit="handleFormSubmit(event)">
+                            <h3 class="form-title">Gửi Lời Nhắn Đến Huy</h3>
+
+                            <div class="form-row">
+                                <label for="form-name">Họ và tên quý vị</label>
+                                <input type="text" id="form-name" placeholder="Ví dụ: Nguyễn Văn A (Nhà tuyển dụng / Doanh nghiệp)" required autocomplete="name">
+                            </div>
+
+                            <div class="form-row">
+                                <label for="form-email">Địa chỉ Email hồi đáp</label>
+                                <input type="email" id="form-email" placeholder="example@company.com" required autocomplete="email">
+                            </div>
+
+                            <div class="form-row">
+                                <label for="form-message">Nội dung trao đổi</label>
+                                <textarea id="form-message" rows="4" placeholder="Kính gửi Huy, chúng tôi muốn trao đổi về cơ hội học tập / thực tập..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-atelier btn-gold btn-full">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                <span>Gửi Thông Điệp</span>
+                            </button>
+                            <p class="form-hint">* Nhấp gửi sẽ tự động khởi tạo thư điện tử gửi trực tiếp đến hộp thư danghuyworkout@gmail.com.</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- EDITORIAL FOOTER -->
+    <footer class="atelier-footer">
+        <div class="container footer-content">
+            <div class="footer-left">
+                <span class="footer-name">Nguyễn Đăng Huy</span>
+                <span class="footer-desc">Tân sinh viên Công nghệ Thông tin &bull; Đại học Sư phạm &ndash; Đại học Đà Nẵng</span>
+            </div>
+            <div class="footer-right">
+                <a href="#hero" class="back-top-link">
+                    <span>Lên Đầu Trang</span>
+                    <i class="fa-solid fa-arrow-up"></i>
+                </a>
+            </div>
         </div>
     </footer>
+
+    <!-- LIGHTWEIGHT SCRIPT -->
     <script src="script.js"></script>
 </body>
 </html>
