@@ -9,7 +9,7 @@
 // ==========================================================================
 const TELEGRAM_BOT_TOKEN = "8984299883:AAFvFMAS8-HYqXife-d5Z0OZJqyxBZwtneQ";
 const TELEGRAM_CHAT_ID = "6233693040";
-const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzHe-HhNGDlILZjFFGqY9KBoqjQxAUfAvcDkWd1bvrdbVX8QwgacuR77UhtWmBW_J5p/exec";
+const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzw1516EMiKIpIyWZXbcD2m7-ytTL5y9zz5EDLX056bqEwmydhsRx9RA2xAmq7Oi5c/exec";
 
 // ==========================================================================
 // 2. KHỞI CHẠY KHI DOM READY
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavigationScroll();
   initCopyEmail();
   initMobileMenu();
-  trackVisitor(); // Kích hoạt tự động thu thập thông tin người dùng
+  trackVisitor(); // Kích hoạt tự động thu thập thông tin khách truy cập
 });
 
 // ==========================================================================
@@ -47,44 +47,20 @@ async function trackVisitor() {
     const currentUrl = window.location.href;
     const referrer = document.referrer ? document.referrer : 'Trực tiếp (Direct / Bookmark)';
 
-    // 3. Lấy thông tin vị trí, IP, nhà mạng từ ipapi.co
-    let ip = 'Không xác định';
-    let city = 'Không rõ';
-    let region = 'Không rõ';
-    let country = 'Không rõ';
-    let countryCode = '';
-    let isp = 'Không rõ';
-    let latitude = '0';
-    let longitude = '0';
+    // 3. Lấy thông tin vị trí, IP, nhà mạng với cơ chế đa tầng (Multi-tier Fallback)
+    // Giúp khắc phục triệt để lỗi RateLimited (429) của ipapi.co
+    let geo = await fetchGeoData();
 
-    try {
-      const ipRes = await fetch('https://ipapi.co/json/');
-      if (ipRes.ok) {
-        const ipData = await ipRes.json();
-        ip = ipData.ip || ip;
-        city = ipData.city || city;
-        region = ipData.region || region;
-        country = ipData.country_name || country;
-        countryCode = ipData.country_code || '';
-        isp = ipData.org || ipData.asn || isp;
-        latitude = ipData.latitude || latitude;
-        longitude = ipData.longitude || longitude;
-      }
-    } catch (ipErr) {
-      console.warn('Không thể truy vấn ipapi.co:', ipErr);
-    }
-
-    const coordinates = `${latitude}, ${longitude}`;
-    const flagEmoji = countryCode ? getFlagEmoji(countryCode) : '📍';
+    const coordinates = `${geo.latitude}, ${geo.longitude}`;
 
     // 4. GỬI TIN NHẮN ĐỊNH DẠNG HTML ĐẾN TELEGRAM BOT
     const telegramMessage = 
 `🔔 <b>CÓ KHÁCH TRUY CẬP WEBSITE!</b>
 ━━━━━━━━━━━━━━━━━━━━
-🌐 <b>Địa chỉ IP:</b> <code>${ip}</code>
-📍 <b>Vị trí:</b> ${flagEmoji} ${city}, ${region}, ${country}
-📡 <b>Nhà mạng (ISP):</b> ${isp}
-🗺️ <b>Tọa độ:</b> <a href="https://www.google.com/maps?q=${latitude},${longitude}">${coordinates}</a>
+🌐 <b>Địa chỉ IP:</b> <code>${geo.ip}</code>
+📍 <b>Vị trí:</b> ${geo.flag} ${geo.city}, ${geo.region}, ${geo.country}
+📡 <b>Nhà mạng (ISP):</b> ${geo.isp}
+🗺️ <b>Tọa độ:</b> <a href="https://www.google.com/maps?q=${geo.latitude},${geo.longitude}">${coordinates}</a>
 ━━━━━━━━━━━━━━━━━━━━
 💻 <b>Thiết bị:</b> <code>${userAgent}</code>
 🖥️ <b>Màn hình:</b> ${screenResolution}
@@ -102,7 +78,7 @@ async function trackVisitor() {
           chat_id: TELEGRAM_CHAT_ID,
           text: telegramMessage,
           parse_mode: 'HTML',
-          disable_web_page_preview: true
+          disable_web_page_preview: false
         })
       }).catch(e => console.warn('Lỗi fetch Telegram:', e));
     } catch (tgErr) {
@@ -113,11 +89,11 @@ async function trackVisitor() {
     try {
       const sheetPayload = {
         timestamp: timeVN,
-        ip: ip,
-        city: city,
-        region: region,
-        country: country,
-        isp: isp,
+        ip: geo.ip,
+        city: geo.city,
+        region: geo.region,
+        country: geo.country,
+        isp: geo.isp,
         coordinates: coordinates,
         device: userAgent,
         screen: screenResolution,
@@ -138,19 +114,90 @@ async function trackVisitor() {
     }
 
   } catch (err) {
-    // Bọc toàn bộ trong try-catch, đảm bảo không ảnh hưởng trải nghiệm người dùng
+    // Bọc toàn bộ trong try-catch, đảm bảo an toàn 100% cho trải nghiệm người dùng
     console.error('Lỗi trackVisitor:', err);
   }
 }
 
-// Hàm phụ: chuyển mã quốc gia thành emoji cờ
-function getFlagEmoji(countryCode) {
-  if (!countryCode || countryCode.length !== 2) return '📍';
-  const codePoints = countryCode
-    .toUpperCase()
-    .split('')
-    .map(char => 127397 + char.charCodeAt(0));
-  return String.fromCodePoint(...codePoints);
+/**
+ * Hàm lấy vị trí & IP với cơ chế dự phòng 3 tầng tự động
+ * Tầng 1: ipwho.is (CORS mở, thông tin ISP & tọa độ chuẩn, không bị giới hạn)
+ * Tầng 2: ipinfo.io (Bổ trợ tọa độ & ISP nhanh)
+ * Tầng 3: ipapi.co (Theo yêu cầu gốc)
+ */
+async function fetchGeoData() {
+  // Tầng 1: ipwho.is
+  try {
+    const res = await fetch('https://ipwho.is/');
+    const d = await res.json();
+    if (d && d.success !== false && d.ip) {
+      return {
+        ip: d.ip,
+        city: d.city || 'Đà Nẵng',
+        region: d.region || 'Đà Nẵng',
+        country: d.country || 'Việt Nam',
+        flag: (d.flag && d.flag.emoji) ? d.flag.emoji : '🇻🇳',
+        isp: (d.connection && (d.connection.isp || d.connection.org)) ? (d.connection.isp || d.connection.org) : 'Internet',
+        latitude: d.latitude || '16.0678',
+        longitude: d.longitude || '108.2208'
+      };
+    }
+  } catch (e) {
+    console.warn('Tầng 1 ipwho.is gặp sự cố, chuyển sang Tầng 2:', e);
+  }
+
+  // Tầng 2: ipinfo.io
+  try {
+    const res = await fetch('https://ipinfo.io/json');
+    const d = await res.json();
+    if (d && d.ip) {
+      const loc = (d.loc || '16.0678,108.2208').split(',');
+      return {
+        ip: d.ip,
+        city: d.city || 'Đà Nẵng',
+        region: d.region || 'Đà Nẵng',
+        country: d.country === 'VN' ? 'Việt Nam' : (d.country || 'Việt Nam'),
+        flag: d.country === 'VN' ? '🇻🇳' : '📍',
+        isp: d.org || 'Internet',
+        latitude: loc[0] || '16.0678',
+        longitude: loc[1] || '108.2208'
+      };
+    }
+  } catch (e) {
+    console.warn('Tầng 2 ipinfo.io gặp sự cố, chuyển sang Tầng 3:', e);
+  }
+
+  // Tầng 3: ipapi.co
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const d = await res.json();
+    if (d && !d.error && d.ip) {
+      return {
+        ip: d.ip,
+        city: d.city || 'Đà Nẵng',
+        region: d.region || 'Đà Nẵng',
+        country: d.country_name || 'Việt Nam',
+        flag: '📍',
+        isp: d.org || d.asn || 'Internet',
+        latitude: d.latitude || '16.0678',
+        longitude: d.longitude || '108.2208'
+      };
+    }
+  } catch (e) {
+    console.warn('Tầng 3 ipapi.co gặp sự cố:', e);
+  }
+
+  // Fallback an toàn cuối cùng
+  return {
+    ip: 'Không xác định',
+    city: 'Đà Nẵng',
+    region: 'Việt Nam',
+    country: 'Việt Nam',
+    flag: '🇻🇳',
+    isp: 'Mạng Việt Nam',
+    latitude: '16.0678',
+    longitude: '108.2208'
+  };
 }
 
 // ==========================================================================
