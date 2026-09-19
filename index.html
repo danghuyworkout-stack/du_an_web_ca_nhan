@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="dark">
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-J2MMLP8ENY"></script>
@@ -11,407 +11,670 @@
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Nguyễn Đăng Huy — Tân sinh viên ngành Công nghệ Thông tin tại Trường Đại học Sư phạm - Đại học Đà Nẵng. Hồ sơ giới thiệu bản thân thanh lịch, chuyên nghiệp dành cho nhà tuyển dụng.">
-    <meta name="theme-color" content="#faf8f5">
-
-    <title>Nguyễn Đăng Huy &mdash; Hồ Sơ Cá Nhân &bull; Đại Học Sư Phạm Đà Nẵng</title>
-
-    <!-- Google Fonts: Cormorant Garamond & Playfair Display (European Fine-Dining Serif) + Plus Jakarta Sans -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyễn Đăng Huy — Software Engineer</title>
+    <meta name="description" content="Portfolio của Nguyễn Đăng Huy - Fullstack Developer & Python Enthusiast tại THPT Tố Hữu.">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Stylesheet -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- SUBTLE PAPER & LINEN TEXTURE OVERLAY -->
-    <div class="paper-texture-overlay" aria-hidden="true"></div>
 
-    <!-- NOTIFICATION TOAST FOR ACTIONS -->
-    <div id="toast-notice" class="toast-notice" role="alert" aria-live="polite"></div>
+    <!-- Background Matrix / Radar Mesh -->
+    <div class="spotlight-layer" id="spotlight"></div>
+    <div class="grid-mesh-bg"></div>
+    <canvas id="ambient-canvas"></canvas>
 
-    <!-- MAIN EDITORIAL HEADER -->
-    <header class="atelier-header" id="header">
-        <div class="container header-container">
-            <a href="#hero" class="brand-monogram">
-                <span class="monogram-letter">H</span>
-                <span class="monogram-dot">&bull;</span>
-                <span class="monogram-text">NDH Dossier</span>
-            </a>
-
-            <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Menu chính">
-                <a href="#about" class="nav-item">Về Bản Thân</a>
-                <a href="#education" class="nav-item">Học Vấn & Thành Tích</a>
-                <a href="#skills" class="nav-item">Nền Tảng Kỹ Năng</a>
-                <a href="#vision" class="nav-item">Mục Tiêu & Phẩm Chất</a>
-                <a href="#contact" class="nav-item">Liên Hệ</a>
-            </nav>
-
-            <div class="header-actions">
-                <a href="mailto:danghuyworkout@gmail.com" class="btn-header-contact">
-                    <span>Gửi Thư</span>
-                </a>
-                <button class="hamburger-btn" id="hamburger-btn" aria-label="Mở danh mục điều hướng">
-                    <span></span><span></span>
+    <!-- TOP TELEMETRY BAR -->
+    <header class="top-telemetry">
+        <div class="telemetry-inner">
+            <div class="telemetry-left">
+                <span class="pulse-indicator"></span>
+                <span class="telemetry-item mono">SYS.STATUS: <strong class="status-ok">OPERATIONAL</strong></span>
+                <span class="telemetry-divider">/</span>
+                <span class="telemetry-item mono"><i class="fa-solid fa-location-crosshairs"></i> HUE_VN [16.4637° N, 107.5909° E]</span>
+            </div>
+            <div class="telemetry-right">
+                <span class="telemetry-item mono"><i class="fa-regular fa-clock"></i> <span id="live-clock">--:--:-- GMT+7</span></span>
+                <span class="telemetry-divider">/</span>
+                <button class="kbd-trigger" onclick="openCmdPalette()" title="Mở Command Palette (Ctrl + K)">
+                    <span class="cmd-icon">⌘</span>
+                    <span class="cmd-text">Ctrl K</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <main id="main-content">
-        <!-- HERO SECTION: EDITORIAL PORTRAIT & PERSONAL STATEMENT -->
-        <section id="hero" class="section-hero">
-            <div class="container hero-layout">
-                <div class="hero-text-col">
-                    <div class="editorial-eyebrow">
-                        <span class="eyebrow-line"></span>
-                        <span class="eyebrow-tag">CURRICULUM VITAE &bull; ĐÀ NẴNG, VIỆT NAM</span>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a class="nav-logo" href="#hero">
+                <span class="logo-bracket">[</span><span class="logo-text">huy.dev</span><span class="logo-bracket">]</span>
+                <span class="logo-cursor">_</span>
+            </a>
+
+            <div class="nav-links-wrapper">
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a class="nav-link" href="#overview"><span class="nav-idx">01</span> // Overview</a></li>
+                    <li><a class="nav-link" href="#tech-stack"><span class="nav-idx">02</span> // Stack</a></li>
+                    <li><a class="nav-link" href="#projects"><span class="nav-idx">03</span> // Projects</a></li>
+                    <li><a class="nav-link" href="#timeline"><span class="nav-idx">04</span> // Changelog</a></li>
+                    <li><a class="nav-link" href="#contact"><span class="nav-idx">05</span> // Terminal</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-actions">
+                <a href="https://github.com/danghuyworkout-stack" target="_blank" class="nav-social-btn" title="GitHub Profile">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://www.facebook.com/danghuydangsuy" target="_blank" class="nav-social-btn" title="Facebook">
+                    <i class="fa-brands fa-facebook"></i>
+                </a>
+                <button class="hamburger" id="hamburger" aria-label="Toggle Navigation">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- ============================================
+             SECTION 0: HERO / COMMAND DECK
+             ============================================ -->
+        <section id="hero" class="hero-section">
+            <div class="container hero-container">
+                <div class="hero-left">
+                    <div class="status-chip mono">
+                        <span class="status-dot"></span>
+                        <span>DEVELOPER / HIGH SCHOOL STUDENT @ THPT TỐ HỮU</span>
                     </div>
 
-                    <h1 class="hero-full-name">
-                        Nguyễn Đăng Huy
+                    <h1 class="hero-title">
+                        <span class="hero-greeting">Hi, I'm</span>
+                        <span class="hero-name-gradient">Nguyễn Đăng Huy</span>
                     </h1>
 
-                    <p class="hero-role-title">
-                        Tân Sinh Viên Công Nghệ Thông Tin
-                    </p>
-                    <p class="hero-institution">
-                        Trường Đại học Sư phạm &mdash; Đại học Đà Nẵng
-                    </p>
-
-                    <div class="ornament-divider" aria-hidden="true">
-                        <span class="ornament-leaf">&loz;</span>
+                    <div class="hero-role-container">
+                        <span class="role-prompt mono">$ role --active</span>
+                        <div class="role-typing-box mono">
+                            <span id="typed-text"></span>
+                            <span class="typed-cursor">█</span>
+                        </div>
                     </div>
 
-                    <p class="hero-statement">
-                        "Chào mừng quý nhà tuyển dụng và thầy cô đến với trang thông tin cá nhân của tôi. Là một tân sinh viên đam mê thế giới máy tính và tư duy khoa học, tôi luôn đề cao sự trung thực, tinh thần kỷ luật và thái độ cầu thị. Tôi nỗ lực xây dựng nền tảng vững chắc để từng bước trở thành một Kỹ sư Phần mềm chuyên nghiệp và tận tâm."
+                    <p class="hero-description">
+                        Đam mê kiến trúc phần mềm, hệ sinh thái web hiện đại và tự động hóa với Python. 
+                        Tập trung tối ưu hiệu năng, clean code và thiết kế giao diện mang tính ứng dụng cao.
                     </p>
 
                     <div class="hero-cta-group">
-                        <a href="mailto:danghuyworkout@gmail.com" class="btn-atelier btn-gold">
-                            <i class="fa-solid fa-envelope"></i>
-                            <span>Gửi Thư Kết Nối</span>
+                        <a href="#projects" class="btn btn-primary">
+                            <i class="fa-solid fa-terminal"></i>
+                            <span>Explore Systems</span>
                         </a>
-                        <button class="btn-atelier btn-outline" id="copy-email-btn" data-email="danghuyworkout@gmail.com">
+                        <a href="#contact" class="btn btn-secondary">
+                            <i class="fa-solid fa-code-commit"></i>
+                            <span>Get in Touch</span>
+                        </a>
+                        <button class="btn btn-outline mono" onclick="copyGitHubLink()">
                             <i class="fa-regular fa-copy"></i>
-                            <span>Sao Chép Email</span>
+                            <span id="copy-btn-text">git clone profile</span>
                         </button>
-                        <a href="#about" class="btn-atelier btn-text">
-                            <span>Đọc Tiếp</span>
-                            <i class="fa-solid fa-arrow-down-long"></i>
+                    </div>
+
+                    <div class="hero-metrics-bar mono">
+                        <div class="metric-item">
+                            <span class="metric-val">2008</span>
+                            <span class="metric-lbl">BORN / Y.O.B</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-val">100%</span>
+                            <span class="metric-lbl">SELF-DRIVEN</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-val">Python/JS</span>
+                            <span class="metric-lbl">CORE ARSENAL</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-val">24/7</span>
+                            <span class="metric-lbl">BUILDING MODE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-right">
+                    <!-- Interactive Terminal Card -->
+                    <div class="terminal-deck">
+                        <div class="terminal-deck-header">
+                            <div class="terminal-deck-dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <span class="terminal-deck-title mono">bash — huy@archlinux: ~</span>
+                            <span class="terminal-badge mono">v2.4.0</span>
+                        </div>
+                        <div class="terminal-deck-body mono">
+                            <div class="term-line"><span class="term-prompt">❯</span> <span class="term-cmd">neofetch --json</span></div>
+                            <div class="term-output-grid">
+                                <div class="term-avatar-wrap">
+                                    <img src="conchuot.jpg" alt="Avatar Nguyễn Đăng Huy" class="term-avatar">
+                                    <div class="avatar-corner tl"></div>
+                                    <div class="avatar-corner tr"></div>
+                                    <div class="avatar-corner bl"></div>
+                                    <div class="avatar-corner br"></div>
+                                </div>
+                                <div class="term-info-text">
+                                    <p><span class="term-key">Identity:</span> <span class="term-val bold">Nguyễn Đăng Huy</span></p>
+                                    <p><span class="term-key">Class / Age:</span> <span class="term-val">Gen-Z (2008)</span></p>
+                                    <p><span class="term-key">Academy:</span> <span class="term-val highlight">THPT Tố Hữu</span></p>
+                                    <p><span class="term-key">Location:</span> <span class="term-val">Huế, Việt Nam</span></p>
+                                    <p><span class="term-key">Shell:</span> <span class="term-val">zsh 5.9 (x86_64)</span></p>
+                                    <p><span class="term-key">Status:</span> <span class="term-val green">● Open to collaborate</span></p>
+                                </div>
+                            </div>
+
+                            <div class="term-line mt-3"><span class="term-prompt">❯</span> <span class="term-cmd">cat runtime_stats.log</span></div>
+                            <div class="term-code-block">
+                                <code>{ "focus": "Web Eng", "uptime": "99.98%", "coffee": "overflow" }</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             SECTION 1: BENTO OVERVIEW
+             ============================================ -->
+        <section id="overview" class="section">
+            <div class="container">
+                <div class="section-tag mono">
+                    <span class="tag-hash">#</span> MODULE_01 // ARCHITECTURE & OVERVIEW
+                </div>
+                <h2 class="section-heading">Kỹ thuật & Hệ thống Bản thân</h2>
+                <p class="section-subheading">Tổng quan năng lực thực thi, kiến trúc hệ sinh thái và phương châm công nghệ.</p>
+
+                <div class="bento-grid">
+                    <!-- Bento Item 1: About Big Card -->
+                    <div class="bento-card bento-col-8">
+                        <div class="card-glow"></div>
+                        <div class="card-header-flex">
+                            <span class="card-chip mono"><i class="fa-solid fa-fingerprint"></i> BIO.MANIFEST</span>
+                            <span class="card-meta mono">SRC: HUY_PROFILE</span>
+                        </div>
+                        <h3 class="bento-title">Học hỏi không ngừng, kiến tạo sản phẩm thực tế</h3>
+                        <p class="bento-text">
+                            Tôi là <strong>Nguyễn Đăng Huy</strong>, học sinh tại <strong>THPT Tố Hữu</strong>. Tiếp cận với lập trình từ sớm, 
+                            tôi định hình phong cách làm việc dựa trên tính kỷ luật, sự gọn gàng trong tư duy thuật toán và khả năng tự nghiên cứu các công nghệ mới.
+                        </p>
+                        <p class="bento-text">
+                            Không dừng lại ở lý thuyết, tôi luôn hướng đến việc build các ứng dụng giải quyết bài toán thực tế, tối ưu hóa trải nghiệm người dùng và khai thác sức mạnh của hệ sinh thái mã nguồn mở.
+                        </p>
+                        <div class="badge-row">
+                            <span class="tech-badge mono"><i class="fa-solid fa-code"></i> Fullstack Mindset</span>
+                            <span class="tech-badge mono"><i class="fa-brands fa-python"></i> Python Automation</span>
+                            <span class="tech-badge mono"><i class="fa-solid fa-bolt"></i> Fast Prototyping</span>
+                            <span class="tech-badge mono"><i class="fa-solid fa-shield-halved"></i> Security Aware</span>
+                        </div>
+                    </div>
+
+                    <!-- Bento Item 2: Quick Stat / Timezone -->
+                    <div class="bento-card bento-col-4">
+                        <div class="card-glow"></div>
+                        <div class="card-header-flex">
+                            <span class="card-chip mono"><i class="fa-solid fa-satellite"></i> TELEMETRY</span>
+                        </div>
+                        <div class="telemetry-widget">
+                            <div class="telemetry-gauge">
+                                <span class="gauge-value mono">UTC+7</span>
+                                <span class="gauge-label mono">Vietnam Standard Time</span>
+                            </div>
+                            <div class="divider-line"></div>
+                            <div class="stat-row mono">
+                                <span>COMMITS / YR</span>
+                                <span class="stat-highlight">240+</span>
+                            </div>
+                            <div class="stat-row mono">
+                                <span>CLEAN CODE RATIO</span>
+                                <span class="stat-highlight">99.4%</span>
+                            </div>
+                            <div class="stat-row mono">
+                                <span>LATENCY TO VERCEL</span>
+                                <span class="stat-highlight" id="ping-metric">~28ms</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bento Item 3: GitHub Link Card -->
+                    <div class="bento-card bento-col-4">
+                        <div class="card-glow"></div>
+                        <div class="card-header-flex">
+                            <span class="card-chip mono"><i class="fa-brands fa-github"></i> REPOSITORIES</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square meta-icon"></i>
+                        </div>
+                        <h4 class="bento-sub-title">GitHub Ecosystem</h4>
+                        <p class="bento-text-sm">Khám phá các repository, dự án cá nhân và công cụ mã nguồn mở tôi xây dựng.</p>
+                        <a href="https://github.com/danghuyworkout-stack" target="_blank" class="card-action-link mono">
+                            <span>github.com/danghuyworkout-stack</span>
+                            <i class="fa-solid fa-arrow-right"></i>
                         </a>
                     </div>
 
-                    <div class="hero-quick-meta">
-                        <div class="meta-pill">
-                            <span class="pill-title">Chuyên ngành:</span>
-                            <span class="pill-value">Công nghệ Thông tin (IT)</span>
+                    <!-- Bento Item 4: Education & Goal -->
+                    <div class="bento-card bento-col-8">
+                        <div class="card-glow"></div>
+                        <div class="card-header-flex">
+                            <span class="card-chip mono"><i class="fa-solid fa-graduation-cap"></i> EDUCATION & HORIZON</span>
+                            <span class="card-meta mono">TARGET: CS DEGREE</span>
                         </div>
-                        <div class="meta-pill">
-                            <span class="pill-title">Niên khóa:</span>
-                            <span class="pill-value">2026 &ndash; 2030</span>
-                        </div>
-                        <div class="meta-pill">
-                            <span class="pill-title">Tình trạng:</span>
-                            <span class="pill-value text-emerald">Sẵn sàng học hỏi & thực tập</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="hero-image-col">
-                    <div class="portrait-arch-frame">
-                        <div class="frame-inner-border">
-                            <img src="conchuot.jpg" alt="Chân dung Nguyễn Đăng Huy" class="portrait-image" width="380" height="480">
-                        </div>
-                        <div class="frame-tag-badge">
-                            <span class="tag-year">EST. 2008</span>
-                            <span class="tag-label">Nguyễn Đăng Huy</span>
+                        <div class="edu-grid">
+                            <div class="edu-item">
+                                <span class="edu-year mono">2023 — HIỆN TẠI</span>
+                                <h4 class="edu-school">Trường THPT Tố Hữu</h4>
+                                <p class="edu-desc">Tập trung nền tảng Toán học, Khoa học Tự nhiên và trau dồi các kiến thức chuyên sâu về lập trình phần mềm.</p>
+                            </div>
+                            <div class="edu-item">
+                                <span class="edu-year mono">ĐỊNH HƯỚNG TƯƠNG LAI</span>
+                                <h4 class="edu-school">Kỹ sư Phần mềm (Software Engineer)</h4>
+                                <p class="edu-desc">Mục tiêu phát triển chuyên sâu vào kiến trúc hệ thống phân tán, DevOps và xây dựng các sản phẩm công nghệ phục vụ cộng đồng.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 1: ABOUT ME & PHILOSOPHY -->
-        <section id="about" class="atelier-section">
+        <!-- ============================================
+             SECTION 2: TECH STACK MATRIX
+             ============================================ -->
+        <section id="tech-stack" class="section section-dark">
             <div class="container">
-                <div class="section-title-wrap">
-                    <span class="section-num">I</span>
-                    <h2 class="section-heading">Về Bản Thân & Tinh Thần Học Tập</h2>
-                    <p class="section-sub">Tự thuật ngắn gọn, chân thành về quá trình trưởng thành và niềm say mê với công nghệ.</p>
+                <div class="section-tag mono">
+                    <span class="tag-hash">#</span> MODULE_02 // ARSENAL & FRAMEWORKS
                 </div>
+                <h2 class="section-heading">Ngôn ngữ & Công cụ Thực chiến</h2>
+                <p class="section-subheading">Hệ thống công nghệ tôi sử dụng để thiết kế, phát triển và triển khai sản phẩm.</p>
 
-                <div class="about-editorial-grid">
-                    <div class="about-quote-panel">
-                        <span class="quote-sign">&ldquo;</span>
-                        <blockquote class="quote-text">
-                            Không tự hài lòng với sự hời hợt, tôi tin rằng vẻ đẹp của một người làm kỹ thuật nằm ở tư duy mạch lạc, sự chính xác trong từng bài toán và tính trung thực trong công việc.
-                        </blockquote>
-                        <span class="quote-author">&mdash; Lời tự bạch cá nhân</span>
+                <div class="stack-matrix-grid">
+                    <!-- Category: Frontend -->
+                    <div class="stack-category-card">
+                        <div class="stack-cat-header">
+                            <div class="cat-icon-box"><i class="fa-solid fa-layer-group"></i></div>
+                            <div>
+                                <h3 class="cat-name">Frontend Architecture</h3>
+                                <span class="cat-desc mono">User Interface & Client Engines</span>
+                            </div>
+                        </div>
+                        <div class="stack-items-list">
+                            <div class="stack-item">
+                                <div class="item-head">
+                                    <span class="item-title"><i class="fa-brands fa-html5" style="color: #e34f26;"></i> HTML5 Semantic</span>
+                                    <span class="item-pct mono">95%</span>
+                                </div>
+                                <div class="meter-bar"><div class="meter-fill" style="width: 95%;"></div></div>
+                            </div>
+                            <div class="stack-item">
+                                <div class="item-head">
+                                    <span class="item-title"><i class="fa-brands fa-css3-alt" style="color: #1572b6;"></i> Modern CSS3 / Flex / Grid</span>
+                                    <span class="item-pct mono">90%</span>
+                                </div>
+                                <div class="meter-bar"><div class="meter-fill" style="width: 90%;"></div></div>
+                            </div>
+                            <div class="stack-item">
+                                <div class="item-head">
+                                    <span class="item-title"><i class="fa-brands fa-js" style="color: #f7df1e;"></i> JavaScript (ES6+ / Async)</span>
+                                    <span class="item-pct mono">85%</span>
+                                </div>
+                                <div class="meter-bar"><div class="meter-fill" style="width: 85%;"></div></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="about-story-panel">
-                        <p>
-                            Tôi là <strong>Nguyễn Đăng Huy</strong>, sinh năm <strong>2008</strong> tại Đà Nẵng. Suốt những năm tháng học tập tại trường <strong>THPT Tố Hữu</strong> (xã Thạnh Mỹ, TP. Đà Nẵng), tôi đã sớm tìm thấy niềm đam mê đặc biệt với các môn khoa học tự nhiên và công nghệ máy tính.
-                        </p>
-                        <p>
-                            Trong quá trình tự học và tiếp cận tin học, tôi chủ yếu thực hành thông qua phương pháp trực quan (*vibe-coding*), tận dụng linh hoạt các công cụ hỗ trợ để nhanh chóng tạo ra các giao diện số có tính ứng dụng thực tế. Tôi không tự nhận mình có khả năng lập trình chuyên sâu khi vừa rời ghế phổ thông, mà lựa chọn bước chân vào trường <strong>Đại học Sư phạm &ndash; Đại học Đà Nẵng</strong> với một tâm thế khiêm nhường nhất: rèn giũa bài bản từ gốc rễ thuật toán, cấu trúc dữ liệu đến các tiêu chuẩn kỹ thuật chuyên nghiệp.
-                        </p>
+                    <!-- Category: Backend & Scripting -->
+                    <div class="stack-category-card">
+                        <div class="stack-cat-header">
+                            <div class="cat-icon-box"><i class="fa-solid fa-server"></i></div>
+                            <div>
+                                <h3 class="cat-name">Backend & Automation</h3>
+                                <span class="cat-desc mono">Server Runtime & Scripting</span>
+                            </div>
+                        </div>
+                        <div class="stack-items-list">
+                            <div class="stack-item">
+                                <div class="item-head">
+                                    <span class="item-title"><i class="fa-brands fa-python" style="color: #3776ab;"></i> Python 3 (Scripts & Logic)</span>
+                                    <span class="item-pct mono">85%</span>
+                                </div>
+                                <div class="meter-bar"><div class="meter-fill" style="width: 85%;"></div></div>
+                            </div>
+                            <div class="stack-item">
+                                <div class="item-head">
+                                    <span class="item-title"><i class="fa-solid fa-plug"></i> RESTful APIs & Data Scraping</span>
+                                    <span class="item-pct mono">80%</span>
+                                </div>
+                                <div class="meter-bar"><div class="meter-fill" style="width: 80%;"></div></div>
+                            </div>
+                            <div class="stack-item">
+                                <div class="item-head">
+                                    <span class="item-title"><i class="fa-brands fa-node-js" style="color: #68a063;"></i> Node.js Tooling</span>
+                                    <span class="item-pct mono">75%</span>
+                                </div>
+                                <div class="meter-bar"><div class="meter-fill" style="width: 75%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category: DevOps & Workflows -->
+                    <div class="stack-category-card">
+                        <div class="stack-cat-header">
+                            <div class="cat-icon-box"><i class="fa-solid fa-terminal"></i></div>
+                            <div>
+                                <h3 class="cat-name">DevOps & Tooling</h3>
+                                <span class="cat-desc mono">Version Control & Edge Hosting</span>
+                            </div>
+                        </div>
+                        <div class="stack-items-list">
+                            <div class="stack-item">
+                                <div class="item-head">
+                                    <span class="item-title"><i class="fa-brands fa-git-alt" style="color: #f05032;"></i> Git Flow & Branching</span>
+                                    <span class="item-pct mono">85%</span>
+                                </div>
+                                <div class="meter-bar"><div class="meter-fill" style="width: 85%;"></div></div>
+                            </div>
+                            <div class="stack-item">
+                                <div class="item-head">
+                                    <span class="item-title"><i class="fa-brands fa-github"></i> GitHub CI/CD Actions</span>
+                                    <span class="item-pct mono">80%</span>
+                                </div>
+                                <div class="meter-bar"><div class="meter-fill" style="width: 80%;"></div></div>
+                            </div>
+                            <div class="stack-item">
+                                <div class="item-head">
+                                    <span class="item-title"><i class="fa-solid fa-cloud-arrow-up" style="color: #00f2fe;"></i> Vercel Edge Deployment</span>
+                                    <span class="item-pct mono">90%</span>
+                                </div>
+                                <div class="meter-bar"><div class="meter-fill" style="width: 90%;"></div></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 2: EDUCATION & ACHIEVEMENTS -->
-        <section id="education" class="atelier-section bg-secondary-tint">
+        <!-- ============================================
+             SECTION 3: PROJECTS SHOWCASE
+             ============================================ -->
+        <section id="projects" class="section">
             <div class="container">
-                <div class="section-title-wrap">
-                    <span class="section-num">II</span>
-                    <h2 class="section-heading">Học Vấn & Thành Tích Tiêu Biểu</h2>
-                    <p class="section-sub">Nền tảng đào tạo chính quy cùng dấu ấn học thuật thể hiện tư duy toán lý sắc bén.</p>
+                <div class="section-tag mono">
+                    <span class="tag-hash">#</span> MODULE_03 // REPOSITORIES & SHOWCASE
+                </div>
+                <div class="projects-header-flex">
+                    <div>
+                        <h2 class="section-heading">Dự án & Hệ thống Tiêu biểu</h2>
+                        <p class="section-subheading">Các sản phẩm và công cụ đã xây dựng với toàn bộ mã nguồn minh bạch.</p>
+                    </div>
+
+                    <!-- Project Filters -->
+                    <div class="project-filters mono" id="project-filters">
+                        <button class="filter-btn active" data-filter="all">ALL [4]</button>
+                        <button class="filter-btn" data-filter="web">WEB APPS</button>
+                        <button class="filter-btn" data-filter="python">PYTHON & SCRIPTS</button>
+                    </div>
                 </div>
 
-                <div class="edu-achieve-grid">
-                    <!-- ACADEMIC TRACK -->
-                    <div class="editorial-card edu-card">
-                        <div class="card-badge">HỌC VẤN CHÍNH QUY</div>
-                        
-                        <div class="timeline-record">
-                            <div class="record-period">2026 &mdash; HIỆN TẠI</div>
-                            <h3 class="record-title">Trường Đại học Sư phạm &mdash; Đại học Đà Nẵng</h3>
-                            <h4 class="record-sub">Khoa Tin học &bull; Ngành Công nghệ Thông tin</h4>
-                            <p class="record-desc">
-                                Tân sinh viên hệ đại học chính quy. Tập trung nghiên cứu nền tảng khoa học máy tính, kỹ thuật lập trình và quy trình phát triển phần mềm hiện đại.
+                <div class="projects-grid" id="projects-container">
+                    <!-- Project 1 -->
+                    <article class="project-card" data-category="web">
+                        <div class="project-header">
+                            <div class="project-meta-left mono">
+                                <i class="fa-regular fa-folder"></i>
+                                <span>du_an_web_ca_nhan</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/danghuyworkout-stack/du_an_web_ca_nhan" target="_blank" title="View Source"><i class="fa-brands fa-github"></i></a>
+                                <a href="https://toitenhuy.vercel.app/" target="_blank" title="Live Preview"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            </div>
+                        </div>
+                        <h3 class="project-name">Neo-Engineer Portfolio System</h3>
+                        <p class="project-description">
+                            Website portfolio cá nhân theo phong cách Senior Software Engineer (Vercel & Linear aesthetic). Tích hợp Command Palette (Ctrl+K), Live Telemetry, Bento Grid và Canvas background.
+                        </p>
+                        <div class="project-tech-tags mono">
+                            <span>HTML5</span>
+                            <span>CSS3</span>
+                            <span>Vanilla JS</span>
+                            <span>Vercel Edge</span>
+                        </div>
+                        <div class="project-footer mono">
+                            <span class="deploy-status ok">● DEPLOYED / PRODUCTION</span>
+                            <span class="commit-id">#main-latest</span>
+                        </div>
+                    </article>
+
+                    <!-- Project 2 -->
+                    <article class="project-card" data-category="python">
+                        <div class="project-header">
+                            <div class="project-meta-left mono">
+                                <i class="fa-regular fa-folder"></i>
+                                <span>python-automation-toolkit</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/danghuyworkout-stack" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                        <h3 class="project-name">Automation & Web Scraping Engine</h3>
+                        <p class="project-description">
+                            Bộ công cụ Python tự động hóa trích xuất dữ liệu web, phân tích nội dung tự động và hỗ trợ các tác vụ xử lý file hàng loạt với hiệu năng cao.
+                        </p>
+                        <div class="project-tech-tags mono">
+                            <span>Python 3</span>
+                            <span>Requests</span>
+                            <span>BeautifulSoup</span>
+                            <span>Asyncio</span>
+                        </div>
+                        <div class="project-footer mono">
+                            <span class="deploy-status ok">● COMPLETED</span>
+                            <span class="commit-id">v1.2.0</span>
+                        </div>
+                    </article>
+
+                    <!-- Project 3 -->
+                    <article class="project-card" data-category="web">
+                        <div class="project-header">
+                            <div class="project-meta-left mono">
+                                <i class="fa-regular fa-folder"></i>
+                                <span>vietnam-uni-search</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/danghuyworkout-stack" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                        <h3 class="project-name">Vietnam University Search Engine</h3>
+                        <p class="project-description">
+                            Giao diện tra cứu thông tin trường đại học tại Việt Nam, lọc theo điểm chuẩn, ngành học và khu vực địa lý với tính năng tìm kiếm tức thì.
+                        </p>
+                        <div class="project-tech-tags mono">
+                            <span>JavaScript</span>
+                            <span>JSON DB</span>
+                            <span>Responsive UI</span>
+                        </div>
+                        <div class="project-footer mono">
+                            <span class="deploy-status ok">● ACTIVE</span>
+                            <span class="commit-id">v0.9.4</span>
+                        </div>
+                    </article>
+
+                    <!-- Project 4 -->
+                    <article class="project-card" data-category="python">
+                        <div class="project-header">
+                            <div class="project-meta-left mono">
+                                <i class="fa-regular fa-folder"></i>
+                                <span>system-telemetry-monitor</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/danghuyworkout-stack" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                        <h3 class="project-name">Lightweight Telemetry Sandbox</h3>
+                        <p class="project-description">
+                            Dự án nghiên cứu đo lường độ trễ mạng, mô phỏng terminal socket và phân tích gói tin mạng cơ bản phục vụ học tập kiến trúc mạng máy tính.
+                        </p>
+                        <div class="project-tech-tags mono">
+                            <span>Python</span>
+                            <span>WebSockets</span>
+                            <span>Network API</span>
+                        </div>
+                        <div class="project-footer mono">
+                            <span class="deploy-status pending">◐ IN LAB</span>
+                            <span class="commit-id">experimental</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             SECTION 4: CHANGELOG & MILESTONES
+             ============================================ -->
+        <section id="timeline" class="section section-dark">
+            <div class="container">
+                <div class="section-tag mono">
+                    <span class="tag-hash">#</span> MODULE_04 // SYSTEM CHANGELOG
+                </div>
+                <h2 class="section-heading">Lịch sử Phát triển & Hành trình</h2>
+                <p class="section-subheading">Các mốc son quan trọng trong quá trình học tập và hoàn thiện kỹ năng kỹ sư.</p>
+
+                <div class="changelog-stream">
+                    <!-- Milestone 1 -->
+                    <div class="log-entry">
+                        <div class="log-marker mono">
+                            <span class="log-tag">v2025.2</span>
+                            <span class="log-dot"></span>
+                        </div>
+                        <div class="log-card">
+                            <div class="log-head mono">
+                                <span class="log-date"><i class="fa-regular fa-calendar"></i> 2025 — HIỆN TẠI</span>
+                                <span class="log-badge">EXPANSION</span>
+                            </div>
+                            <h3 class="log-title">Chinh phục Kiến trúc Fullstack & Python Chuyên sâu</h3>
+                            <p class="log-text">
+                                Xây dựng các ứng dụng web phức tạp hơn, tối ưu SEO, áp dụng CI/CD GitHub Actions và triển khai trên hạ tầng Vercel Edge. Nghiên cứu sâu về cấu trúc dữ liệu và giải thuật.
                             </p>
                         </div>
+                    </div>
 
-                        <div class="record-separator"></div>
-
-                        <div class="timeline-record">
-                            <div class="record-period">2023 &mdash; 2026</div>
-                            <h3 class="record-title">Trường THPT Tố Hữu</h3>
-                            <h4 class="record-sub">Địa bàn: Xã Thạnh Mỹ, Thành phố Đà Nẵng</h4>
-                            <p class="record-desc">
-                                Hoàn thành chương trình trung học phổ thông; tích cực tham gia các phong trào học tập bộ môn khoa học tự nhiên và câu lạc bộ tin học.
+                    <!-- Milestone 2 -->
+                    <div class="log-entry">
+                        <div class="log-marker mono">
+                            <span class="log-tag">v2024.1</span>
+                            <span class="log-dot"></span>
+                        </div>
+                        <div class="log-card">
+                            <div class="log-head mono">
+                                <span class="log-date"><i class="fa-regular fa-calendar"></i> 2024</span>
+                                <span class="log-badge">GENESIS</span>
+                            </div>
+                            <h3 class="log-title">Đặt nền móng Web Development & Python</h3>
+                            <p class="log-text">
+                                Tự học bài bản HTML5, CSS3, JavaScript hiện đại và ngôn ngữ lập trình Python. Hoàn thành các dự án web tĩnh đầu tiên và phát triển đam mê xây dựng phần mềm.
                             </p>
                         </div>
                     </div>
 
-                    <!-- KEY ACHIEVEMENT -->
-                    <div class="editorial-card achieve-card">
-                        <div class="card-badge gold-badge">DẤU ẤN HỌC THUẬT</div>
-
-                        <div class="trophy-highlight-box">
-                            <div class="trophy-icon">
-                                <i class="fa-solid fa-award"></i>
-                            </div>
-                            <div class="trophy-info">
-                                <span class="trophy-rank">GIẢI NHẤT HỌC SINH GIỎI</span>
-                                <h3 class="trophy-subject">Môn Vật Lý Cấp Trường</h3>
-                                <span class="trophy-school">Trường THPT Tố Hữu &bull; Năm học phổ thông</span>
-                            </div>
+                    <!-- Milestone 3 -->
+                    <div class="log-entry upcoming">
+                        <div class="log-marker mono">
+                            <span class="log-tag">v2026.NEXT</span>
+                            <span class="log-dot"></span>
                         </div>
-
-                        <div class="achievement-significance">
-                            <h4 class="significance-title">
-                                <i class="fa-solid fa-compass-drafting"></i> Ý nghĩa đối với năng lực Công nghệ:
-                            </h4>
-                            <ul class="significance-list">
-                                <li>
-                                    <strong>Tư duy logic & toán học:</strong> Bộ môn Vật lý rèn luyện khả năng phân tích bản chất hiện tượng và giải quyết các bài toán định lượng phức tạp.
-                                </li>
-                                <li>
-                                    <strong>Tính kiên trì & kỷ luật:</strong> Đạt giải Nhất học sinh giỏi đòi hỏi quá trình tự nghiên cứu chuyên sâu, đọc tài liệu mở rộng và tính cẩn trọng cao độ.
-                                </li>
-                                <li>
-                                    <strong>Nền tảng vững vàng cho CNTT:</strong> Tư duy mô hình hóa của Vật lý chính là tiền đề cốt lõi giúp tiếp thu nhanh các giải thuật máy tính.
-                                </li>
-                            </ul>
+                        <div class="log-card">
+                            <div class="log-head mono">
+                                <span class="log-date"><i class="fa-regular fa-compass"></i> TƯƠNG LAI</span>
+                                <span class="log-badge highlight">UPCOMING MILESTONE</span>
+                            </div>
+                            <h3 class="log-title">Kỳ thi Tốt nghiệp THPT & Đại học Ngành CNTT</h3>
+                            <p class="log-text">
+                                Đặt mục tiêu đạt kết quả cao tại THPT Tố Hữu, bước chân vào giảng đường Đại học chuyên ngành Khoa học Máy tính / Công nghệ Thông tin.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: SKILLS & COMPETENCIES -->
-        <section id="skills" class="atelier-section">
+        <!-- ============================================
+             SECTION 5: TERMINAL CONTACT & DISPATCH
+             ============================================ -->
+        <section id="contact" class="section">
             <div class="container">
-                <div class="section-title-wrap">
-                    <span class="section-num">III</span>
-                    <h2 class="section-heading">Nền Tảng Kỹ Năng Căn Bản</h2>
-                    <p class="section-sub">Liệt kê trung thực, minh bạch các kiến thức nền tảng đã tích lũy và công cụ sử dụng.</p>
+                <div class="section-tag mono">
+                    <span class="tag-hash">#</span> MODULE_05 // DISPATCH & CONTACT
                 </div>
+                <h2 class="section-heading">Khởi tạo Kết nối Trực tiếp</h2>
+                <p class="section-subheading">Sẵn sàng trao đổi về các cơ hội hợp tác, dự án hoặc giao lưu học thuật.</p>
 
-                <div class="skills-editorial-grid">
-                    <!-- BLOCK 1: LẬP TRÌNH CƠ BẢN -->
-                    <div class="skill-category-box">
-                        <div class="skill-category-head">
-                            <span class="skill-idx">01</span>
-                            <h3 class="skill-cat-title">Lập Trình & Web Căn Bản</h3>
-                        </div>
-                        <ul class="skill-item-list">
-                            <li>
-                                <span class="skill-item-name">Python Cơ Bản</span>
-                                <span class="skill-item-desc">Cú pháp, cấu trúc điều kiện, vòng lặp, xử lý chuỗi và bài toán tin học phổ thông.</span>
-                            </li>
-                            <li>
-                                <span class="skill-item-name">HTML5 & CSS Cơ Bản</span>
-                                <span class="skill-item-desc">Tổ chức bố cục trang web, các thẻ ngữ nghĩa (Semantic HTML) và tạo kiểu giao diện.</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- BLOCK 2: HỆ THỐNG & DỮ LIỆU -->
-                    <div class="skill-category-box">
-                        <div class="skill-category-head">
-                            <span class="skill-idx">02</span>
-                            <h3 class="skill-cat-title">Hệ Thống & Dữ Liệu</h3>
-                        </div>
-                        <ul class="skill-item-list">
-                            <li>
-                                <span class="skill-item-name">Cơ Sở Dữ Liệu SQL Căn Bản</span>
-                                <span class="skill-item-desc">Khái niệm bảng, khóa chính, các câu lệnh truy vấn dữ liệu đơn giản (SELECT, WHERE, JOIN cơ bản).</span>
-                            </li>
-                            <li>
-                                <span class="skill-item-name">Kiến Thức Mạng Máy Tính</span>
-                                <span class="skill-item-desc">Hiểu biết cơ bản về địa chỉ IP, mô hình mạng Internet, giao thức truyền dẫn phổ biến.</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- BLOCK 3: TIN HỌC VĂN PHÒNG & THỰC HÀNH -->
-                    <div class="skill-category-box">
-                        <div class="skill-category-head">
-                            <span class="skill-idx">03</span>
-                            <h3 class="skill-cat-title">Tin Học Văn Phòng & Ứng Dụng</h3>
-                        </div>
-                        <ul class="skill-item-list">
-                            <li>
-                                <span class="skill-item-name">Tin Học Văn Phòng Thành Thạo</span>
-                                <span class="skill-item-desc">Sử dụng thuần thục Microsoft Word (trình bày văn bản quy chuẩn), Excel (hàm tính toán) và PowerPoint.</span>
-                            </li>
-                            <li>
-                                <span class="skill-item-name">Phương Pháp Vibe-Coding Hiện Đại</span>
-                                <span class="skill-item-desc">Vận dụng công cụ AI và hỗ trợ lập trình thông minh để hiện thực hóa ý tưởng giao diện, kiểm thử nhanh sản phẩm.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 4: CAREER VISION & PERSONAL QUALITIES -->
-        <section id="vision" class="atelier-section bg-secondary-tint">
-            <div class="container">
-                <div class="section-title-wrap">
-                    <span class="section-num">IV</span>
-                    <h2 class="section-heading">Định Hướng Nghề Nghiệp & Phẩm Chất</h2>
-                    <p class="section-sub">Cam kết rèn luyện cá nhân và các mục tiêu cụ thể trên giảng đường đại học.</p>
-                </div>
-
-                <div class="vision-grid">
-                    <div class="vision-card">
-                        <div class="vision-icon"><i class="fa-solid fa-bullseye"></i></div>
-                        <h3 class="vision-title">Mục Tiêu Học Tập Ngắn Hạn</h3>
-                        <p class="vision-desc">
-                            Đạt thành tích học tập tốt tại Đại học Sư phạm Đà Nẵng; nắm vững cấu trúc dữ liệu, thuật toán và lập trình hướng đối tượng. Tích cực tham gia các dự án nghiên cứu khoa học sinh viên và chủ động tìm kiếm cơ hội thực tập, cọ xát thực tế.
-                        </p>
-                    </div>
-
-                    <div class="vision-card">
-                        <div class="vision-icon"><i class="fa-solid fa-compass"></i></div>
-                        <h3 class="vision-title">Định Hướng Dài Hạn</h3>
-                        <p class="vision-desc">
-                            Trở thành một Kỹ sư Phần mềm (Software Engineer) vững chuyên môn, có tinh thần trách nhiệm cao với sản phẩm và đóng góp giá trị thiết thực cho doanh nghiệp cũng như cộng đồng công nghệ thông tin.
-                        </p>
-                    </div>
-
-                    <div class="vision-card">
-                        <div class="vision-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
-                        <h3 class="vision-title">Phẩm Chất Cốt Lõi</h3>
-                        <p class="vision-desc">
-                            Trung thực và thẳng thắn trong học tập; tinh thần tự giác nghiên cứu tài liệu độc lập; luôn tôn trọng thời hạn (deadline) và lắng nghe góp ý từ thầy cô, đồng nghiệp để không ngừng tiến bộ.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 5: CONTACT & PROFESSIONAL DOSSIER -->
-        <section id="contact" class="atelier-section">
-            <div class="container">
-                <div class="section-title-wrap">
-                    <span class="section-num">V</span>
-                    <h2 class="section-heading">Kênh Liên Hệ Trực Tiếp</h2>
-                    <p class="section-sub">Rất hân hạnh được kết nối với quý nhà tuyển dụng, thầy cô và các anh chị đi trước.</p>
-                </div>
-
-                <div class="contact-editorial-layout">
-                    <div class="contact-info-column">
-                        <div class="contact-card-atelier">
-                            <h3 class="contact-block-title">Thông Tin Liên Lạc</h3>
-                            <p class="contact-block-sub">Xin vui lòng gửi thư điện tử hoặc liên hệ qua các kênh chính thức sau:</p>
-
-                            <div class="contact-link-row">
-                                <span class="link-label">Hộp Thư Điện Tử:</span>
-                                <a href="mailto:danghuyworkout@gmail.com" class="link-value link-highlight">
-                                    danghuyworkout@gmail.com
-                                </a>
+                <div class="contact-terminal-grid">
+                    <!-- Left: Contact Quick Channels -->
+                    <div class="contact-channels">
+                        <a href="https://www.facebook.com/danghuydangsuy" target="_blank" class="channel-card">
+                            <div class="channel-icon fb"><i class="fa-brands fa-facebook-f"></i></div>
+                            <div class="channel-info">
+                                <span class="channel-lbl mono">SOCIAL CHANNEL</span>
+                                <h4 class="channel-val">Facebook / danghuydangsuy</h4>
                             </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square channel-arrow"></i>
+                        </a>
 
-                            <div class="contact-link-row">
-                                <span class="link-label">Kho Mã Nguồn GitHub:</span>
-                                <a href="https://github.com/danghuyworkout-stack" target="_blank" rel="noopener noreferrer" class="link-value">
-                                    github.com/danghuyworkout-stack <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                </a>
+                        <a href="https://github.com/danghuyworkout-stack" target="_blank" class="channel-card">
+                            <div class="channel-icon gh"><i class="fa-brands fa-github"></i></div>
+                            <div class="channel-info">
+                                <span class="channel-lbl mono">GIT REPOSITORIES</span>
+                                <h4 class="channel-val">GitHub / danghuyworkout-stack</h4>
                             </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square channel-arrow"></i>
+                        </a>
 
-                            <div class="contact-link-row">
-                                <span class="link-label">Trang Cá Nhân Facebook:</span>
-                                <a href="https://www.facebook.com/danghuydangsuy" target="_blank" rel="noopener noreferrer" class="link-value">
-                                    facebook.com/danghuydangsuy <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                </a>
-                            </div>
-
-                            <div class="contact-link-row">
-                                <span class="link-label">Địa Điểm Sinh Sống & Học Tập:</span>
-                                <span class="link-value text-muted">
-                                    Thành phố Đà Nẵng, Việt Nam
-                                </span>
+                        <div class="channel-card info-only">
+                            <div class="channel-icon loc"><i class="fa-solid fa-location-dot"></i></div>
+                            <div class="channel-info">
+                                <span class="channel-lbl mono">LOCATION & TIMEZONE</span>
+                                <h4 class="channel-val">Huế, Việt Nam (UTC+7)</h4>
                             </div>
                         </div>
                     </div>
 
-                    <div class="contact-form-column">
-                        <form class="atelier-contact-form" onsubmit="handleFormSubmit(event)">
-                            <h3 class="form-title">Gửi Lời Nhắn Đến Huy</h3>
-
+                    <!-- Right: Interactive Terminal Form -->
+                    <div class="contact-console">
+                        <div class="console-head mono">
+                            <span><i class="fa-solid fa-terminal"></i> message_payload_sender.sh</span>
+                            <span class="console-status">READY</span>
+                        </div>
+                        <form class="console-body" onsubmit="handleDispatchMessage(event)">
                             <div class="form-row">
-                                <label for="form-name">Họ và tên quý vị</label>
-                                <input type="text" id="form-name" placeholder="Ví dụ: Nguyễn Văn A (Nhà tuyển dụng / Doanh nghiệp)" required autocomplete="name">
+                                <label for="sender-name" class="mono"><span class="prompt-arrow">❯</span> NAME:</label>
+                                <input type="text" id="sender-name" placeholder="Nguyễn Văn A" required autocomplete="off">
                             </div>
-
                             <div class="form-row">
-                                <label for="form-email">Địa chỉ Email hồi đáp</label>
-                                <input type="email" id="form-email" placeholder="example@company.com" required autocomplete="email">
+                                <label for="sender-email" class="mono"><span class="prompt-arrow">❯</span> EMAIL:</label>
+                                <input type="email" id="sender-email" placeholder="your_email@domain.com" required autocomplete="off">
                             </div>
-
                             <div class="form-row">
-                                <label for="form-message">Nội dung trao đổi</label>
-                                <textarea id="form-message" rows="4" placeholder="Kính gửi Huy, chúng tôi muốn trao đổi về cơ hội học tập / thực tập..." required></textarea>
+                                <label for="sender-msg" class="mono"><span class="prompt-arrow">❯</span> PAYLOAD:</label>
+                                <textarea id="sender-msg" rows="4" placeholder="Nhập nội dung tin nhắn hoặc đề xuất của bạn tại đây..." required></textarea>
                             </div>
-
-                            <button type="submit" class="btn-atelier btn-gold btn-full">
+                            <button type="submit" class="btn btn-primary btn-full mono">
                                 <i class="fa-solid fa-paper-plane"></i>
-                                <span>Gửi Thông Điệp</span>
+                                <span>EXECUTE DISPATCH MESSAGE</span>
                             </button>
-                            <p class="form-hint">* Nhấp gửi sẽ tự động khởi tạo thư điện tử gửi trực tiếp đến hộp thư danghuyworkout@gmail.com.</p>
+                            <p class="console-note mono">* Form sẽ kích hoạt trình gửi email của bạn với nội dung payload đã định dạng.</p>
                         </form>
                     </div>
                 </div>
@@ -419,23 +682,85 @@
         </section>
     </main>
 
-    <!-- EDITORIAL FOOTER -->
-    <footer class="atelier-footer">
-        <div class="container footer-content">
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container footer-container mono">
             <div class="footer-left">
-                <span class="footer-name">Nguyễn Đăng Huy</span>
-                <span class="footer-desc">Tân sinh viên Công nghệ Thông tin &bull; Đại học Sư phạm &ndash; Đại học Đà Nẵng</span>
+                <span class="footer-copy">© 2026 Nguyễn Đăng Huy. Crafted with precision.</span>
+                <span class="footer-env">ENVIRONMENT: PRODUCTION / VERCEL EDGE</span>
             </div>
             <div class="footer-right">
-                <a href="#hero" class="back-top-link">
-                    <span>Lên Đầu Trang</span>
-                    <i class="fa-solid fa-arrow-up"></i>
-                </a>
+                <a href="#hero" class="back-to-top"><i class="fa-solid fa-arrow-up"></i> TOP</a>
             </div>
         </div>
     </footer>
 
-    <!-- LIGHTWEIGHT SCRIPT -->
+    <!-- ============================================
+         COMMAND PALETTE (CTRL + K)
+         ============================================ -->
+    <div class="cmd-palette-backdrop" id="cmd-backdrop" onclick="closeCmdPaletteOnBackdrop(event)">
+        <div class="cmd-palette-modal">
+            <div class="cmd-palette-search">
+                <i class="fa-solid fa-magnifying-glass cmd-search-icon"></i>
+                <input type="text" id="cmd-input" placeholder="Type a command or jump to section..." autocomplete="off">
+                <span class="cmd-esc-badge mono">ESC</span>
+            </div>
+            <div class="cmd-palette-results mono" id="cmd-results">
+                <div class="cmd-group-title">NAVIGATION</div>
+                <div class="cmd-item" onclick="cmdJumpTo('#hero')">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Jump to Hero Command Deck</span>
+                    <span class="cmd-key-hint">#00</span>
+                </div>
+                <div class="cmd-item" onclick="cmdJumpTo('#overview')">
+                    <i class="fa-solid fa-cube"></i>
+                    <span>Jump to Architecture & Bento</span>
+                    <span class="cmd-key-hint">#01</span>
+                </div>
+                <div class="cmd-item" onclick="cmdJumpTo('#tech-stack')">
+                    <i class="fa-solid fa-code"></i>
+                    <span>Jump to Arsenal & Stack</span>
+                    <span class="cmd-key-hint">#02</span>
+                </div>
+                <div class="cmd-item" onclick="cmdJumpTo('#projects')">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Jump to Projects Showcase</span>
+                    <span class="cmd-key-hint">#03</span>
+                </div>
+                <div class="cmd-item" onclick="cmdJumpTo('#timeline')">
+                    <i class="fa-solid fa-timeline"></i>
+                    <span>Jump to System Changelog</span>
+                    <span class="cmd-key-hint">#04</span>
+                </div>
+                <div class="cmd-item" onclick="cmdJumpTo('#contact')">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>Jump to Contact Terminal</span>
+                    <span class="cmd-key-hint">#05</span>
+                </div>
+
+                <div class="cmd-group-title">EXTERNAL CHANNELS</div>
+                <div class="cmd-item" onclick="cmdOpenUrl('https://github.com/danghuyworkout-stack')">
+                    <i class="fa-brands fa-github"></i>
+                    <span>Open GitHub Profile</span>
+                    <span class="cmd-key-hint">↗</span>
+                </div>
+                <div class="cmd-item" onclick="cmdOpenUrl('https://www.facebook.com/danghuydangsuy')">
+                    <i class="fa-brands fa-facebook"></i>
+                    <span>Open Facebook Profile</span>
+                    <span class="cmd-key-hint">↗</span>
+                </div>
+            </div>
+            <div class="cmd-palette-footer mono">
+                <span>Navigate: <kbd>↑</kbd> <kbd>↓</kbd></span>
+                <span>Select: <kbd>↵</kbd></span>
+                <span>Close: <kbd>ESC</kbd></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast mono"></div>
+
     <script src="script.js"></script>
 </body>
 </html>
