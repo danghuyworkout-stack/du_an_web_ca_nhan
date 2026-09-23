@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Xác Nhận Điểm Danh — Lớp 26CTT2 UED</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: radial-gradient(circle at top, #111827 0%, #090d16 100%);
+      color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .checkin-card-mobile {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 32px 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(16px);
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .form-control {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+    .form-control:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+    .btn-submit:hover {
+      transform: translateY(-1px);
+    }
+    .result-alert {
+      display: none;
+      padding: 18px;
+      border-radius: 14px;
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .result-alert.success {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+    }
+    .result-alert.error {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="checkin-card-mobile">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <span style="background: rgba(37, 99, 235, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;">
+        26CTT2 &bull; UED
+      </span>
+      <h1 style="font-size: 22px; font-weight: 800; margin-top: 10px; color: #fff;">Điểm Danh Sinh Viên</h1>
+      <p style="font-size: 13px; color: #94a3b8; margin-top: 4px;">
+        Hệ thống xác thực trực tuyến qua 4G/Wi-Fi
+      </p>
+    </div>
+
+    <!-- Form Điểm Danh -->
+    <form id="attendanceForm">
+      <div class="form-group">
+        <label class="form-label" for="selectStudent">1. Chọn Họ và Tên của bạn:</label>
+        <select id="selectStudent" class="form-control" required style="background: #1e293b; color: #fff;">
+          <option value="">-- Bấm để chọn tên bạn --</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="mssvInput">2. Mã sinh viên (MSSV):</label>
+        <input type="text" id="mssvInput" class="form-control" placeholder="Tự động điền theo tên" readonly style="color: #93c5fd; font-family: 'JetBrains Mono', monospace; font-weight: 600;">
+      </div>
+
+      <button type="submit" id="btnCheckinSubmit" class="btn-submit">
+        <i class="fa-solid fa-circle-check"></i> Xác Nhận Có Mặt
+      </button>
+    </form>
+
+    <div id="checkinResult" class="result-alert"></div>
+
+    <div style="margin-top: 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+      <p style="font-size: 11px; color: #64748b; line-height: 1.5;">
+        Mỗi sinh viên và mỗi thiết bị chỉ được điểm danh 1 lần.<br>
+        Lớp trưởng: <b style="color: #cbd5e1;">Nguyễn Đăng Huy</b> &bull; <a href="https://github.com/danghuyworkout-stack" target="_blank" style="color: #60a5fa; text-decoration: none;">GitHub</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Danh sách 54 thành viên lớp 26CTT2 UED -->
+  <script src="students-data.js"></script>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session');
+
+    // Cấu hình Telegram Bot & Google Sheet của Huy
+    const TELEGRAM_BOT_TOKEN = "8984299883:AAFvFMAS8-HYqXife-d5Z0OZJqyxBZwtneQ";
+    const TELEGRAM_CHAT_ID = "6233693040";
+    const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzw1516EMiKIpIyWZXbcD2m7-ytTL5y9zz5EDLX056bqEwmydhsRx9RA2xAmq7Oi5c/exec";
+
+    const selectEl = document.getElementById('selectStudent');
+    const mssvInput = document.getElementById('mssvInput');
+    const form = document.getElementById('attendanceForm');
+    const resultBox = document.getElementById('checkinResult');
+    const btnSubmit = document.getElementById('btnCheckinSubmit');
+
+    // Tạo Fingerprint thiết bị
+    function getDeviceFingerprint() {
+      let token = localStorage.getItem('ued_student_device');
+      if (!token) {
+        token = 'DEV_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        localStorage.setItem('ued_student_device', token);
+      }
+      return token;
+    }
+
+    // Nạp 54 bạn vào dropdown
+    function loadStudents() {
+      const students = window.CLASS_STUDENTS || [];
+      students.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = `${s.name} — ${s.id} ${s.note ? '(' + s.note + ')' : ''}`;
+        opt.dataset.name = s.name;
+        selectEl.appendChild(opt);
+      });
+
+      selectEl.addEventListener('change', () => {
+        mssvInput.value = selectEl.value;
+      });
+    }
+
+    loadStudents();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!sessionId) {
+        showMsg('Mã QR này thiếu mã phiên hợp lệ. Vui lòng quét lại mã QR trên màn hình Lớp trưởng!', false);
+        return;
+      }
+
+      // 1. Kiểm tra trạng thái khoá phiên
+      const isLocked = localStorage.getItem('ued_session_locked') === 'true';
+      if (isLocked) {
+        showMsg('Lớp trưởng Nguyễn Đăng Huy đã KHOÁ phiên điểm danh này! Không thể điểm danh thêm.', false);
+        return;
+      }
+
+      const studentId = selectEl.value.trim();
+      const studentName = selectEl.options[selectEl.selectedIndex].dataset.name;
+      const deviceToken = getDeviceFingerprint();
+
+      // 2. Chống gian lận: Kiểm tra mỗi MSSV chỉ điểm danh 1 lần
+      const storageKey = 'ued_attendance_records_' + sessionId;
+      let records = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+      if (records[studentId]) {
+        showMsg(`Sinh viên [${studentName} - ${studentId}] đã điểm danh lúc ${records[studentId].time}. Mỗi bạn chỉ được điểm danh 1 lần duy nhất!`, false);
+        return;
+      }
+
+      // 3. Kiểm tra thiết bị đã điểm danh cho ai khác chưa
+      const usedDeviceKey = 'ued_device_used_' + sessionId;
+      const usedDeviceStudent = localStorage.getItem(usedDeviceKey);
+      if (usedDeviceStudent && usedDeviceStudent !== studentId) {
+        showMsg(`Thiết bị này đã được dùng để điểm danh cho sinh viên khác rồi! Không thể điểm danh hộ.`, false);
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xác nhận...';
+
+      const now = new Date();
+      const timeVN = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      // Lưu vào bộ nhớ phiên
+      records[studentId] = {
+        name: studentName,
+        time: timeVN,
+        device: deviceToken
+      };
+      localStorage.setItem(storageKey, JSON.stringify(records));
+      localStorage.setItem(usedDeviceKey, studentId);
+
+      // 4. Bắn thông báo ngay lập tức về Telegram Bot của Huy
+      const tgMsg = 
+`✅ <b>[26CTT2 - ĐIỂM DANH THÀNH CÔNG]</b>
+━━━━━━━━━━━━━━━━━━━━
+👤 <b>Họ và Tên:</b> ${studentName}
+🆔 <b>Mã SV:</b> <code>${studentId}</code>
+⏰ <b>Thời gian:</b> ${timeVN}
+📱 <b>Thiết bị:</b> ${navigator.userAgent.slice(0, 50)}...
+━━━━━━━━━━━━━━━━━━━━
+🎯 Lớp trưởng: Nguyễn Đăng Huy`;
+
+      try {
+        fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: tgMsg,
+            parse_mode: 'HTML'
+          })
+        }).catch(err => console.warn('TG dispatch warn:', err));
+      } catch(e) {}
+
+      // 5. Gửi lên Google Sheet
+      try {
+        fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            timestamp: timeVN,
+            studentId: studentId,
+            studentName: studentName,
+            status: 'Có mặt'
+          })
+        }).catch(err => console.warn('Sheet dispatch warn:', err));
+      } catch(e) {}
+
+      // Hiển thị thành công cho sinh viên
+      showMsg(`
+        <div style="font-size: 36px; margin-bottom: 8px;">🎉</div>
+        <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">ĐIỂM DANH THÀNH CÔNG!</div>
+        <div>Xin chào <b>${studentName}</b> (${studentId})</div>
+        <div style="font-size: 12px; margin-top: 6px; opacity: 0.8;">Thời gian ghi nhận: ${timeVN}</div>
+      `, true);
+
+      form.style.display = 'none';
+    });
+
+    function showMsg(html, isSuccess) {
+      resultBox.innerHTML = html;
+      resultBox.className = 'result-alert ' + (isSuccess ? 'success' : 'error');
+      resultBox.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

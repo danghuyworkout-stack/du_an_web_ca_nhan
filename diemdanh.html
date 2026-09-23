@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Điều Hành Điểm Danh Lớp 26CTT2 — UED | Nguyễn Đăng Huy</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Thư viện sinh mã QR Client-side (Không cần server) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    .dd-dashboard {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .dd-card {
+      background: rgba(18, 24, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+    }
+    .dd-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    @media (max-width: 900px) {
+      .dd-grid { grid-template-columns: 1fr; }
+    }
+    .qr-box-inner {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px auto;
+      width: 280px;
+      height: 280px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .qr-box-inner img {
+      margin: 0 auto;
+    }
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .stat-num.active { color: #10b981; }
+    .stat-num.inactive { color: #ef4444; }
+    .stat-num.total { color: #60a5fa; }
+    .table-responsive {
+      max-height: 480px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      margin-top: 16px;
+    }
+    table.dd-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    table.dd-table th {
+      background: rgba(15, 23, 42, 0.95);
+      position: sticky;
+      top: 0;
+      padding: 12px 16px;
+      text-align: left;
+      color: #94a3b8;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    table.dd-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .tag-present {
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.12);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .tag-absent {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.12);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body style="background: #090d16; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif;">
+
+  <!-- Header Mini Navigation -->
+  <header style="border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(11,15,25,0.8); backdrop-filter: blur(10px); padding: 14px 24px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <a href="index.html" style="color: #94a3b8; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-arrow-left"></i> Về Portfolio
+        </a>
+        <span style="color: rgba(255,255,255,0.2);">/</span>
+        <span style="font-weight: 700; color: #60a5fa; font-size: 14px; letter-spacing: 0.05em;">26CTT2 - UED ATTENDANCE</span>
+      </div>
+      <div>
+        <a href="https://github.com/danghuyworkout-stack" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none;">
+          <i class="fa-brands fa-github"></i> danghuyworkout-stack
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="dd-dashboard">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -0.02em;">Bảng Điều Hành Điểm Danh Lớp 26CTT2</h1>
+        <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">
+          Đại học Sư phạm - ĐH Đà Nẵng &bull; Lớp trưởng: <b style="color: #fff;">Nguyễn Đăng Huy</b>
+        </p>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button id="btnNewSession" class="btn btn-primary" onclick="initNewSession()">
+          <i class="fa-solid fa-bolt"></i> Tạo phiên mới
+        </button>
+        <button id="btnLockSession" class="btn btn-secondary" onclick="toggleLockSession()">
+          <i class="fa-solid fa-lock"></i> Khoá phiên
+        </button>
+      </div>
+    </div>
+
+    <div class="dd-grid">
+      <!-- Cột Trái: Mã QR Trực tiếp cho cả lớp quét bằng 4G -->
+      <div class="dd-card" style="text-align: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h2 style="font-size: 16px; font-weight: 700;">Mã QR Điểm Danh</h2>
+          <span id="sessionStatusBadge" class="tag-present">Đang mở</span>
+        </div>
+
+        <div class="qr-box-inner" id="qrcode"></div>
+
+        <p style="font-size: 13px; color: #94a3b8; margin-top: 10px;">
+          Sinh viên mở <b>Zalo</b> hoặc <b>Camera</b> quét mã bằng <b>4G / Wi-Fi bất kỳ</b>
+        </p>
+        
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 8px; margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #93c5fd; word-break: break-all;" id="linkUrlDisplay">
+          https://toitenhuy.vercel.app/checkin.html
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px;">
+          <button class="btn btn-secondary" style="font-size: 13px; padding: 10px;" onclick="exportCSV()">
+            <i class="fa-solid fa-file-excel"></i> Xuất CSV
+          </button>
+          <button class="btn btn-secondary" style="font-size: 13px; padding: 10px;" onclick="copyTelegramReport()">
+            <i class="fa-solid fa-copy"></i> Copy Báo Cáo
+          </button>
+        </div>
+      </div>
+
+      <!-- Cột Phải: Bảng Tiến độ trực tiếp & Thống kê -->
+      <div class="dd-card">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+          <div class="stat-pill">
+            <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase;">Tổng Sĩ Số</div>
+            <div class="stat-num total" id="totalStudentsCount">54</div>
+          </div>
+          <div class="stat-pill">
+            <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase;">Có Mặt</div>
+            <div class="stat-num active" id="presentCount">0</div>
+          </div>
+          <div class="stat-pill">
+            <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase;">Vắng</div>
+            <div class="stat-num inactive" id="absentCount">54</div>
+          </div>
+        </div>
+
+        <!-- Tìm kiếm & Bộ lọc -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; gap: 12px;">
+          <input type="text" id="filterInput" placeholder="Tìm kiếm theo MSSV hoặc Tên..." 
+                 style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 14px; color: #fff; font-size: 13px; width: 240px; outline: none;"
+                 oninput="renderStudentTable()">
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px;" onclick="setTableFilter('all')">Tất cả</button>
+            <button class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px;" onclick="setTableFilter('present')">Có mặt</button>
+            <button class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px;" onclick="setTableFilter('absent')">Vắng</button>
+          </div>
+        </div>
+
+        <!-- Bảng danh sách -->
+        <div class="table-responsive">
+          <table class="dd-table">
+            <thead>
+              <tr>
+                <th style="width: 45px;">STT</th>
+                <th>MSSV</th>
+                <th>Họ và Tên</th>
+                <th>Thời Gian</th>
+                <th style="text-align: right;">Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody id="studentTableBody">
+              <!-- Render động -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Database sinh viên 26CTT2 UED -->
+  <script src="students-data.js"></script>
+
+  <script>
+    let currentSessionId = localStorage.getItem('ued_active_session') || ('SES_' + Date.now());
+    let isSessionLocked = localStorage.getItem('ued_session_locked') === 'true';
+    let checkedInMap = JSON.parse(localStorage.getItem('ued_attendance_records_' + currentSessionId) || '{}');
+    let activeFilter = 'all';
+    let qrGenerator = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initQR();
+      renderStudentTable();
+      updateLockUI();
+
+      // Lắng nghe cập nhật chéo giữa các tab/cửa sổ hoặc sync
+      window.addEventListener('storage', (e) => {
+        if (e.key && e.key.startsWith('ued_attendance_records_')) {
+          checkedInMap = JSON.parse(localStorage.getItem('ued_attendance_records_' + currentSessionId) || '{}');
+          renderStudentTable();
+        }
+      });
+      // Polling refresh 2s
+      setInterval(() => {
+        checkedInMap = JSON.parse(localStorage.getItem('ued_attendance_records_' + currentSessionId) || '{}');
+        renderStudentTable();
+      }, 2000);
+    });
+
+    function initQR() {
+      const qrContainer = document.getElementById('qrcode');
+      qrContainer.innerHTML = '';
+
+      // Tự động nhận diện host: nếu chạy trên toitenhuy.vercel.app sẽ sinh link online cho cả lớp
+      const origin = window.location.origin;
+      const checkinUrl = `${origin}/checkin.html?session=${currentSessionId}`;
+
+      document.getElementById('linkUrlDisplay').textContent = checkinUrl;
+
+      qrGenerator = new QRCode(qrContainer, {
+        text: checkinUrl,
+        width: 250,
+        height: 250,
+        colorDark: "#0f172a",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+
+    function initNewSession() {
+      if (confirm('Bạn có chắc chắn muốn mở phiên điểm danh mới? Dữ liệu phiên cũ sẽ được lưu lại lịch sử.')) {
+        currentSessionId = 'SES_' + Date.now();
+        localStorage.setItem('ued_active_session', currentSessionId);
+        isSessionLocked = false;
+        localStorage.setItem('ued_session_locked', 'false');
+        checkedInMap = {};
+        localStorage.setItem('ued_attendance_records_' + currentSessionId, JSON.stringify(checkedInMap));
+
+        initQR();
+        updateLockUI();
+        renderStudentTable();
+      }
+    }
+
+    function toggleLockSession() {
+      isSessionLocked = !isSessionLocked;
+      localStorage.setItem('ued_session_locked', isSessionLocked ? 'true' : 'false');
+      updateLockUI();
+    }
+
+    function updateLockUI() {
+      const badge = document.getElementById('sessionStatusBadge');
+      const btn = document.getElementById('btnLockSession');
+      if (isSessionLocked) {
+        badge.className = 'tag-absent';
+        badge.textContent = 'Đã khoá phiên';
+        btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Mở khoá phiên';
+      } else {
+        badge.className = 'tag-present';
+        badge.textContent = 'Đang mở';
+        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Khoá phiên';
+      }
+    }
+
+    function setTableFilter(filter) {
+      activeFilter = filter;
+      renderStudentTable();
+    }
+
+    function renderStudentTable() {
+      const tbody = document.getElementById('studentTableBody');
+      const searchVal = (document.getElementById('filterInput').value || '').trim().toLowerCase();
+      const students = window.CLASS_STUDENTS || [];
+
+      let presentCount = 0;
+      const rows = [];
+
+      students.forEach((s, idx) => {
+        const checkinInfo = checkedInMap[s.id];
+        const isPresent = !!checkinInfo;
+        if (isPresent) presentCount++;
+
+        // Filter
+        if (activeFilter === 'present' && !isPresent) return;
+        if (activeFilter === 'absent' && isPresent) return;
+
+        if (searchVal) {
+          const matchId = s.id.toLowerCase().includes(searchVal);
+          const matchName = s.name.toLowerCase().includes(searchVal);
+          if (!matchId && !matchName) return;
+        }
+
+        const statusTag = isPresent
+          ? `<span class="tag-present"><i class="fa-solid fa-check"></i> Có mặt</span>`
+          : `<span class="tag-absent">Vắng</span>`;
+
+        const timeStr = isPresent ? checkinInfo.time : '-';
+
+        rows.push(`
+          <tr>
+            <td style="color: #64748b; font-family: 'JetBrains Mono', monospace;">${idx + 1}</td>
+            <td style="font-weight: 600; color: #93c5fd; font-family: 'JetBrains Mono', monospace;">${s.id}</td>
+            <td>
+              <span style="font-weight: 500;">${s.name}</span>
+              ${s.note ? `<span style="font-size: 11px; color: #94a3b8; margin-left: 6px;">(${s.note})</span>` : ''}
+            </td>
+            <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">${timeStr}</td>
+            <td style="text-align: right;">${statusTag}</td>
+          </tr>
+        `);
+      });
+
+      document.getElementById('totalStudentsCount').textContent = students.length;
+      document.getElementById('presentCount').textContent = presentCount;
+      document.getElementById('absentCount').textContent = students.length - presentCount;
+
+      tbody.innerHTML = rows.join('');
+    }
+
+    function exportCSV() {
+      const students = window.CLASS_STUDENTS || [];
+      let csv = '\uFEFFSTT,Mã Sinh Viên,Họ và Tên,Ghi Chú,Trạng Thái,Thời Gian Điểm Danh\n';
+      students.forEach((s, idx) => {
+        const isPresent = !!checkedInMap[s.id];
+        const time = isPresent ? checkedInMap[s.id].time : '';
+        csv += `${idx + 1},"${s.id}","${s.name}","${s.note}","${isPresent ? 'Có mặt' : 'Vắng'}","${time}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `DiemDanh_26CTT2_${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+    }
+
+    function copyTelegramReport() {
+      const students = window.CLASS_STUDENTS || [];
+      const present = students.filter(s => !!checkedInMap[s.id]);
+      const absent = students.filter(s => !checkedInMap[s.id]);
+
+      const now = new Date().toLocaleString('vi-VN');
+      let report = `[BÁO CÁO ĐIỂM DANH LỚP 26CTT2 - UED]\n`;
+      report += `Thời gian: ${now}\n`;
+      report += `Sĩ số: ${present.length}/${students.length} (Có mặt: ${present.length}, Vắng: ${absent.length})\n`;
+      if (absent.length > 0) {
+        report += `\nDanh sách vắng (${absent.length} bạn):\n`;
+        absent.forEach((s, i) => {
+          report += `${i + 1}. ${s.name} (${s.id})\n`;
+        });
+      } else {
+        report += `\nLớp đi học đầy đủ 100%.\n`;
+      }
+      report += `\nLớp trưởng: Nguyễn Đăng Huy`;
+
+      navigator.clipboard.writeText(report).then(() => {
+        alert('Đã copy báo cáo điểm danh vào bộ nhớ tạm để gửi Giảng viên!');
+      });
+    }
+  </script>
+</body>
+</html>
