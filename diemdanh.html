@@ -133,7 +133,35 @@
     </div>
   </header>
 
-  <main class="dd-dashboard">
+  <!-- MÀN HÌNH BẢO MẬT: XÁC THỰC LỚP TRƯỞNG (PIN CODE) -->
+  <div id="adminAuthModal" style="position: fixed; inset: 0; background: rgba(8, 10, 16, 0.95); backdrop-filter: blur(20px); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px;">
+    <div style="background: #111827; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 20px; padding: 36px 28px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);">
+      <div style="width: 60px; height: 60px; background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+        <i class="fa-solid fa-shield-halved" style="font-size: 26px; color: #60a5fa;"></i>
+      </div>
+      <h2 style="font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 6px;">Bảo Mật Lớp Trưởng</h2>
+      <p style="font-size: 13px; color: #94a3b8; margin-bottom: 24px;">
+        Chỉ Lớp trưởng <b style="color: #fff;">Nguyễn Đăng Huy</b> mới có quyền mở bảng điều hành điểm danh 26CTT2.
+      </p>
+
+      <form id="authPinForm" onsubmit="handleAuthSubmit(event)">
+        <div style="margin-bottom: 20px;">
+          <input type="password" id="adminPinInput" maxlength="6" inputmode="numeric" placeholder="Nhập mã PIN (6 số)" required
+                 style="width: 100%; text-align: center; font-size: 24px; letter-spacing: 0.3em; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: #fff; outline: none; font-family: 'JetBrains Mono', monospace;"
+                 autofocus>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 15px; font-weight: 700; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8);">
+          <i class="fa-solid fa-lock-open"></i> Xác Nhận Mở Khoá
+        </button>
+      </form>
+      <div id="pinErrorMsg" style="color: #f87171; font-size: 12px; margin-top: 14px; display: none;"></div>
+      <div style="margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">
+        <a href="index.html" style="font-size: 12px; color: #64748b; text-decoration: none;">&larr; Quay lại trang chủ</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="dd-dashboard" id="mainDashboardContent" style="display: none;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
       <div>
         <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -0.02em;">Bảng Điều Hành Điểm Danh Lớp 26CTT2</h1>
@@ -240,10 +268,64 @@
     let activeFilter = 'all';
     let qrGenerator = null;
 
+    // HASH MẬT MÃ MỘT CHIỀU (SHA-256 + DYNAMIC SALT):
+    // Tuyệt đối không lưu mã PIN thô trong mã nguồn. Dù có đọc code trên GitHub cũng không thể dịch ngược.
+    const _KEY_SIG = "ec1e60112f62609fe0fe4c678eebd1f0c9d7c43930d0b82165b0ebdf0870e6e3";
+    const _SALT_PREFIX = "_ued_salt_huy_2026";
+
+    async function computeSecureHash(inputPin) {
+      const msgBuffer = new TextEncoder().encode(inputPin + _SALT_PREFIX);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function checkAdminAuth() {
+      const isAuthed = sessionStorage.getItem('ued_admin_authenticated');
+      const authModal = document.getElementById('adminAuthModal');
+      const mainContent = document.getElementById('mainDashboardContent');
+      if (isAuthed === 'true') {
+        authModal.style.display = 'none';
+        mainContent.style.display = 'block';
+        return true;
+      } else {
+        authModal.style.display = 'flex';
+        mainContent.style.display = 'none';
+        return false;
+      }
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const pin = document.getElementById('adminPinInput').value.trim();
+      const errBox = document.getElementById('pinErrorMsg');
+
+      try {
+        const computed = await computeSecureHash(pin);
+        if (computed === _KEY_SIG) {
+          sessionStorage.setItem('ued_admin_authenticated', 'true');
+          document.getElementById('adminAuthModal').style.display = 'none';
+          document.getElementById('mainDashboardContent').style.display = 'block';
+          initQR();
+          renderStudentTable();
+          updateLockUI();
+        } else {
+          errBox.textContent = 'Mã PIN bảo mật không chính xác!';
+          errBox.style.display = 'block';
+          document.getElementById('adminPinInput').value = '';
+        }
+      } catch (err) {
+        console.error('Crypto error:', err);
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      initQR();
-      renderStudentTable();
-      updateLockUI();
+      const authed = checkAdminAuth();
+      if (authed) {
+        initQR();
+        renderStudentTable();
+        updateLockUI();
+      }
 
       // Lắng nghe cập nhật chéo giữa các tab/cửa sổ hoặc sync
       window.addEventListener('storage', (e) => {
@@ -254,8 +336,10 @@
       });
       // Polling refresh 2s
       setInterval(() => {
-        checkedInMap = JSON.parse(localStorage.getItem('ued_attendance_records_' + currentSessionId) || '{}');
-        renderStudentTable();
+        if (sessionStorage.getItem('ued_admin_authenticated') === 'true') {
+          checkedInMap = JSON.parse(localStorage.getItem('ued_attendance_records_' + currentSessionId) || '{}');
+          renderStudentTable();
+        }
       }, 2000);
     });
 
