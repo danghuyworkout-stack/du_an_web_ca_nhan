@@ -231,23 +231,78 @@
       const now = new Date();
       const timeVN = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
+      // 3. Lấy vị trí toạ độ địa lý (GPS HTML5 + IP Fallback)
+      let locationData = {
+        coords: '16.0718, 108.1504', // UED Campus default
+        city: 'ĐH Sư Phạm - UED',
+        isp: 'Internet',
+        method: 'Mặc định'
+      };
+
+      try {
+        // Thử lấy toạ độ GPS chính xác từ thiết bị
+        if ("geolocation" in navigator) {
+          const gpsPromise = new Promise((resolve) => {
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                const lat = pos.coords.latitude.toFixed(5);
+                const lon = pos.coords.longitude.toFixed(5);
+                resolve({
+                  coords: `${lat}, ${lon}`,
+                  city: 'Toạ độ GPS máy',
+                  isp: 'GPS Hardware',
+                  method: 'GPS'
+                });
+              },
+              () => resolve(null),
+              { timeout: 3500, enableHighAccuracy: true }
+            );
+          });
+
+          const gpsRes = await gpsPromise;
+          if (gpsRes) {
+            locationData = gpsRes;
+          } else {
+            // Fallback sang IP Geolocation
+            const ipRes = await fetch('https://ipwho.is/').then(r => r.json()).catch(() => null);
+            if (ipRes && ipRes.success !== false) {
+              locationData = {
+                coords: `${ipRes.latitude}, ${ipRes.longitude}`,
+                city: `${ipRes.city || 'Đà Nẵng'}, ${ipRes.country || 'Việt Nam'}`,
+                isp: (ipRes.connection && ipRes.connection.isp) || '4G/Wi-Fi',
+                method: 'IP Geo'
+              };
+            }
+          }
+        }
+      } catch (locErr) {
+        console.warn('Location fetch:', locErr);
+      }
+
       // Lưu vào bộ nhớ phiên
       records[studentId] = {
         name: studentName,
         time: timeVN,
-        device: deviceToken
+        device: deviceToken,
+        coords: locationData.coords,
+        city: locationData.city,
+        isp: locationData.isp,
+        method: locationData.method
       };
       localStorage.setItem(storageKey, JSON.stringify(records));
       localStorage.setItem(usedDeviceKey, studentId);
 
-      // 4. Bắn thông báo ngay lập tức về Telegram Bot của Huy
+      // 4. Bắn thông báo ngay lập tức về Telegram Bot của Huy kèm Google Maps link
+      const mapLink = `https://www.google.com/maps?q=${locationData.coords}`;
       const tgMsg = 
 `✅ <b>[26CTT2 - ĐIỂM DANH THÀNH CÔNG]</b>
 ━━━━━━━━━━━━━━━━━━━━
 👤 <b>Họ và Tên:</b> ${studentName}
 🆔 <b>Mã SV:</b> <code>${studentId}</code>
 ⏰ <b>Thời gian:</b> ${timeVN}
-📱 <b>Thiết bị:</b> ${navigator.userAgent.slice(0, 50)}...
+📍 <b>Vị trí:</b> <a href="${mapLink}">${locationData.coords}</a> (${locationData.city})
+📡 <b>Kết nối:</b> ${locationData.isp} [${locationData.method}]
+📱 <b>Thiết bị:</b> <code>${navigator.userAgent.slice(0, 45)}...</code>
 ━━━━━━━━━━━━━━━━━━━━
 🎯 Lớp trưởng: Nguyễn Đăng Huy`;
 
@@ -273,7 +328,9 @@
             timestamp: timeVN,
             studentId: studentId,
             studentName: studentName,
-            status: 'Có mặt'
+            status: 'Có mặt',
+            coordinates: locationData.coords,
+            location: locationData.city
           })
         }).catch(err => console.warn('Sheet dispatch warn:', err));
       } catch(e) {}
