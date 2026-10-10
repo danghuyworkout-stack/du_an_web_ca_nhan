@@ -1,5 +1,5 @@
 /**
- * NEO-ENGINEER CLIENT RUNTIME SCRIPT
+ * 90S RETRO HIP-HOP & STREET GRAFFITI CLIENT RUNTIME
  * Author: Nguyễn Đăng Huy (toitenhuy.vercel.app)
  * Integrated: Realtime Telegram Bot Notification & Google Sheets WebApp Sync
  */
@@ -13,9 +13,10 @@ const GOOGLE_SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzw151
 
 document.addEventListener('DOMContentLoaded', () => {
   initLiveClock();
+  initTapeTrackCounter();
   initTypingEffect();
   initSpotlight();
-  initAmbientCanvas();
+  initSprayParticleCanvas();
   initProjectFilters();
   initNavbarScrollSpy();
   initMobileMenu();
@@ -53,7 +54,7 @@ async function trackVisitor() {
 
     // 1. GỬI TIN NHẮN ĐẾN TELEGRAM BOT
     const telegramMessage = 
-`⚡ <b>[NEO-ENGINEER] CÓ KHÁCH TRUY CẬP WEBSITE!</b>
+`📻 <b>[90S GRAFFITI DECK] CÓ KHÁCH TRUY CẬP!</b>
 ━━━━━━━━━━━━━━━━━━━━
 🌐 <b>Địa chỉ IP:</b> <code>${geo.ip}</code>
 📍 <b>Vị trí:</b> ${geo.flag} ${geo.city}, ${geo.region}, ${geo.country}
@@ -194,7 +195,7 @@ async function fetchGeoData() {
 }
 
 /* ==========================================================================
-   3. LIVE TELEMETRY CLOCK (GMT+7)
+   3. LIVE TELEMETRY CLOCK & TAPE COUNTER
    ========================================================================== */
 function initLiveClock() {
   const clockEl = document.getElementById('live-clock');
@@ -217,6 +218,19 @@ function initLiveClock() {
   setInterval(update, 1000);
 }
 
+function initTapeTrackCounter() {
+  const counterEl = document.getElementById('tape-track-counter');
+  if (!counterEl) return;
+
+  let seconds = 260;
+  setInterval(() => {
+    seconds++;
+    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    counterEl.textContent = `${m}:${s}`;
+  }, 1000);
+}
+
 /* ==========================================================================
    4. DYNAMIC MULTI-ROLE TYPING EFFECT
    ========================================================================== */
@@ -226,17 +240,17 @@ function initTypingEffect() {
 
   const roles = [
     'Fullstack Developer & Student',
-    'Python & Automation Enthusiast',
+    'Python & Automation Crafter',
     'High Schooler @ THPT Tố Hữu',
-    'Building Scalable Web Systems'
+    '90s Underground Tech Builder'
   ];
 
   let roleIdx = 0;
   let charIdx = 0;
   let isDeleting = false;
-  const typeSpeed = 80;
-  const deleteSpeed = 40;
-  const pauseTime = 2000;
+  const typeSpeed = 75;
+  const deleteSpeed = 35;
+  const pauseTime = 2200;
 
   function loop() {
     const current = roles[roleIdx];
@@ -245,7 +259,7 @@ function initTypingEffect() {
       : current.substring(0, charIdx + 1);
 
     typedEl.textContent = displayText;
-    document.title = displayText ? `${displayText} — Nguyễn Đăng Huy` : 'Nguyễn Đăng Huy — Software Engineer';
+    document.title = displayText ? `${displayText} — Nguyễn Đăng Huy` : 'Nguyễn Đăng Huy — 90s Underground Deck';
 
     if (!isDeleting) {
       charIdx++;
@@ -267,7 +281,7 @@ function initTypingEffect() {
     }
   }
 
-  setTimeout(loop, 400);
+  setTimeout(loop, 300);
 }
 
 /* ==========================================================================
@@ -286,10 +300,10 @@ function initSpotlight() {
 }
 
 /* ==========================================================================
-   6. AMBIENT CYBER PARTICLES CANVAS
+   6. SPRAY PAINT PARTICLES & SPLATTER CANVAS
    ========================================================================== */
-function initAmbientCanvas() {
-  const canvas = document.getElementById('ambient-canvas');
+function initSprayParticleCanvas() {
+  const canvas = document.getElementById('spray-particle-canvas');
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
@@ -301,17 +315,19 @@ function initAmbientCanvas() {
     height = canvas.height = window.innerHeight;
   });
 
-  const particleCount = window.innerWidth < 768 ? 40 : 85;
+  const colors = ['#ffea00', '#ff007f', '#00f2fe', '#00ff66', '#ff5500'];
+  const particleCount = window.innerWidth < 768 ? 45 : 90;
   const particles = [];
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: Math.random() * 0.6 + 0.3,
-      size: Math.random() * 1.5 + 0.8,
-      alpha: Math.random() * 0.5 + 0.2
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: Math.random() * 0.8 + 0.4,
+      size: Math.random() * 2.5 + 1,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: Math.random() * 0.6 + 0.2
     });
   }
 
@@ -323,9 +339,10 @@ function initAmbientCanvas() {
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0, 242, 254, ${p.alpha})`;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = 'rgba(0, 242, 254, 0.5)';
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = p.color;
       ctx.fill();
 
       p.x += p.vx;
@@ -339,6 +356,7 @@ function initAmbientCanvas() {
       if (p.x > width) p.x = 0;
     }
 
+    ctx.globalAlpha = 1;
     requestAnimationFrame(render);
   }
 
@@ -346,11 +364,11 @@ function initAmbientCanvas() {
 }
 
 /* ==========================================================================
-   7. PROJECT CATEGORY FILTERS
+   7. TRACKLIST PROJECT CATEGORY FILTERS
    ========================================================================== */
 function initProjectFilters() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const projectCards = document.querySelectorAll('.project-card');
+  const filterBtns = document.querySelectorAll('.track-btn');
+  const projectCards = document.querySelectorAll('.track-card');
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -424,7 +442,7 @@ function initMobileMenu() {
 }
 
 /* ==========================================================================
-   10. COMMAND PALETTE (CTRL + K / CMD + K)
+   10. MIXTAPE COMMAND PALETTE (CTRL + K)
    ========================================================================== */
 function initCommandPalette() {
   const backdrop = document.getElementById('cmd-backdrop');
@@ -504,16 +522,16 @@ function cmdOpenUrl(url) {
 }
 
 /* ==========================================================================
-   11. QUICK ACTIONS & UTILITIES
+   11. QUICK ACTIONS & DISPATCH
    ========================================================================== */
 function copyGitHubLink() {
   const url = 'https://github.com/danghuyworkout-stack';
   navigator.clipboard.writeText(url).then(() => {
-    showToast('✓ Đã sao chép liên kết GitHub của Huy vào bộ nhớ tạm!');
+    showToast('✓ ĐÃ SAO CHÉP LINK GITHUB VÀO CLIPBOARD!');
     const btnText = document.getElementById('copy-btn-text');
     if (btnText) {
       const old = btnText.textContent;
-      btnText.textContent = 'Copied to clipboard!';
+      btnText.textContent = 'COPIED TO TAPE!';
       setTimeout(() => { btnText.textContent = old; }, 2000);
     }
   });
@@ -536,9 +554,9 @@ function handleDispatchMessage(e) {
   const email = document.getElementById('sender-email').value;
   const msg = document.getElementById('sender-msg').value;
 
-  const subject = encodeURIComponent(`[DISPATCH] Tin nhắn từ ${name} qua Portfolio`);
+  const subject = encodeURIComponent(`[90S DISPATCH] Lời nhắn từ ${name}`);
   const body = encodeURIComponent(
-    `SYSTEM PAYLOAD RECEIPT:\n` +
+    `MIXTAPE PAYLOAD RECORD:\n` +
     `----------------------------------------\n` +
     `SENDER: ${name}\n` +
     `EMAIL : ${email}\n` +
@@ -548,7 +566,7 @@ function handleDispatchMessage(e) {
   );
 
   window.location.href = `mailto:danghuydangsuy@gmail.com?subject=${subject}&body=${body}`;
-  showToast('✓ Đang khởi động trình gửi email payload...');
+  showToast('✓ Đang khởi động trình gửi thư điện tử...');
 }
 
 function measurePing() {
