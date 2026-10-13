@@ -31,10 +31,12 @@
   --tape-border: rgba(234, 179, 8, 0.4);
   
   /* Fonts */
+  --font-beyonders: 'Beyonders', sans-serif;
+  --font-sigvar: 'SFU Sigvar', 'Plus Jakarta Sans', sans-serif;
   --font-marker: 'Permanent Marker', cursive, sans-serif;
   --font-graffiti: 'Sedgwick Ave Display', cursive, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'SFU Sigvar', 'Plus Jakarta Sans', sans-serif;
   
   /* Heights */
   --tape-header-height: 38px;
@@ -45,6 +47,36 @@
   --hard-shadow-pink: 5px 5px 0px #ff007f;
   --hard-shadow-cyan: 5px 5px 0px #00f2fe;
   --hard-shadow-black: 6px 6px 0px rgba(0, 0, 0, 0.9);
+}
+
+/* --- CUSTOM LOCAL FONTS --- */
+@font-face {
+  font-family: 'Beyonders';
+  src: url('fonts/Beyonders.otf') format('opentype'),
+       url('fonts/Beyonders.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Beyonders';
+  src: url('fonts/Beyonders Italic.otf') format('opentype'),
+       url('fonts/Beyonders Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SFU Sigvar';
+  src: url('fonts/SFU-Sigvar.ttf') format('truetype'),
+       url('fonts/SFUSigvar.ttf') format('truetype'),
+       local('SFU Sigvar'),
+       local('Sigvar');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 /* --- RESET & GLOBAL SETTINGS --- */
@@ -86,6 +118,15 @@ button {
 .marker {
   font-family: var(--font-marker);
   letter-spacing: 0.5px;
+}
+
+.font-beyonders {
+  font-family: var(--font-beyonders);
+  letter-spacing: 1px;
+}
+
+.font-sigvar {
+  font-family: var(--font-sigvar);
 }
 
 .mono {
@@ -321,7 +362,9 @@ button {
 }
 
 .logo-spray-tag {
-  font-size: 1.4rem;
+  font-family: var(--font-beyonders), var(--font-marker);
+  font-size: 1.25rem;
+  letter-spacing: 1px;
   color: var(--spray-yellow);
   text-shadow: 2px 2px 0px #000, 0 0 10px rgba(255, 234, 0, 0.4);
 }
@@ -450,7 +493,9 @@ button {
 }
 
 .section-graffiti-heading {
-  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-family: var(--font-beyonders), var(--font-marker);
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 1.5px;
   color: #fff;
   text-shadow: 3px 3px 0px #000, 0 0 15px rgba(255, 0, 127, 0.4);
   line-height: 1.15;
