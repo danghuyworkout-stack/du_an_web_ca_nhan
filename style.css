@@ -31,12 +31,11 @@
   --tape-border: rgba(234, 179, 8, 0.4);
   
   /* Fonts */
-  --font-beyonders: 'Beyonders', sans-serif;
-  --font-sigvar: 'SFU Sigvar', 'Plus Jakarta Sans', sans-serif;
   --font-marker: 'Permanent Marker', cursive, sans-serif;
   --font-graffiti: 'Sedgwick Ave Display', cursive, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-sans: 'SFU Sigvar', 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-sigvar: 'SFU Sigvar', 'Plus Jakarta Sans', sans-serif;
   
   /* Heights */
   --tape-header-height: 38px;
@@ -50,24 +49,6 @@
 }
 
 /* --- CUSTOM LOCAL FONTS --- */
-@font-face {
-  font-family: 'Beyonders';
-  src: url('fonts/Beyonders.otf') format('opentype'),
-       url('fonts/Beyonders.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Beyonders';
-  src: url('fonts/Beyonders Italic.otf') format('opentype'),
-       url('fonts/Beyonders Italic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: italic;
-  font-display: swap;
-}
-
 @font-face {
   font-family: 'SFU Sigvar';
   src: url('fonts/SFU-Sigvar.ttf') format('truetype'),
@@ -95,28 +76,12 @@ html {
 body {
   background-color: var(--bg-wall);
   color: var(--text-white);
-  font-family: var(--font-sigvar);
+  font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
-}
-
-h1, h2, h3, h4, h5, h6,
-.section-graffiti-heading,
-.hero-street-title,
-.hero-name-graffiti,
-.card-street-title,
-.card-street-sub,
-.can-title,
-.track-title,
-.mural-title,
-.sticker-title,
-.label-title,
-.edu-heading {
-  font-family: var(--font-beyonders), var(--font-marker), sans-serif;
-  letter-spacing: 1px;
 }
 
 a {
@@ -132,13 +97,8 @@ button {
 }
 
 .marker {
-  font-family: var(--font-beyonders), var(--font-marker);
-  letter-spacing: 0.8px;
-}
-
-.font-beyonders {
-  font-family: var(--font-beyonders), var(--font-marker);
-  letter-spacing: 1px;
+  font-family: var(--font-marker);
+  letter-spacing: 0.5px;
 }
 
 .font-sigvar {
@@ -146,7 +106,7 @@ button {
 }
 
 .mono {
-  font-family: var(--font-sigvar), var(--font-mono);
+  font-family: var(--font-mono);
 }
 
 .container {
@@ -378,7 +338,7 @@ button {
 }
 
 .logo-spray-tag {
-  font-family: var(--font-beyonders), var(--font-marker);
+  font-family: var(--font-marker);
   font-size: 1.25rem;
   letter-spacing: 1px;
   color: var(--spray-yellow);
@@ -509,7 +469,7 @@ button {
 }
 
 .section-graffiti-heading {
-  font-family: var(--font-beyonders), var(--font-marker);
+  font-family: var(--font-sigvar), var(--font-marker);
   font-size: clamp(2rem, 4vw, 3rem);
   letter-spacing: 1.5px;
   color: #fff;
@@ -570,7 +530,7 @@ button {
 
 /* Giữ nguyên chữ thường Nguyễn Đăng Huy */
 .hero-name-graffiti {
-  font-family: var(--font-beyonders), var(--font-marker);
+  font-family: var(--font-marker);
   color: #ffffff;
   text-shadow: 
     4px 4px 0px #000,
