@@ -95,12 +95,28 @@ html {
 body {
   background-color: var(--bg-wall);
   color: var(--text-white);
-  font-family: var(--font-sans);
+  font-family: var(--font-sigvar);
   font-size: 15px;
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6,
+.section-graffiti-heading,
+.hero-street-title,
+.hero-name-graffiti,
+.card-street-title,
+.card-street-sub,
+.can-title,
+.track-title,
+.mural-title,
+.sticker-title,
+.label-title,
+.edu-heading {
+  font-family: var(--font-beyonders), var(--font-marker), sans-serif;
+  letter-spacing: 1px;
 }
 
 a {
@@ -116,12 +132,12 @@ button {
 }
 
 .marker {
-  font-family: var(--font-marker);
-  letter-spacing: 0.5px;
+  font-family: var(--font-beyonders), var(--font-marker);
+  letter-spacing: 0.8px;
 }
 
 .font-beyonders {
-  font-family: var(--font-beyonders);
+  font-family: var(--font-beyonders), var(--font-marker);
   letter-spacing: 1px;
 }
 
@@ -130,7 +146,7 @@ button {
 }
 
 .mono {
-  font-family: var(--font-mono);
+  font-family: var(--font-sigvar), var(--font-mono);
 }
 
 .container {
@@ -554,7 +570,7 @@ button {
 
 /* Giữ nguyên chữ thường Nguyễn Đăng Huy */
 .hero-name-graffiti {
-  font-family: var(--font-marker);
+  font-family: var(--font-beyonders), var(--font-marker);
   color: #ffffff;
   text-shadow: 
     4px 4px 0px #000,
@@ -562,7 +578,7 @@ button {
     1px -1px 0px #00f2fe,
     -1px 1px 0px #ffea00;
   display: inline-block;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .role-cassette-box {
